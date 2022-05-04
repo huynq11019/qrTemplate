@@ -1,0 +1,208 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span>{{ "model.ticket.advancedSearch" | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-6 mb-3">
+            <label>{{ "model.ticket.buildingCode" | translate }}</label>
+            <nz-select
+              [nzShowArrow]="true"
+              nzShowSearch
+              nzMode="multiple"
+              [nzMaxTagCount]="2"
+              formControlName="buildingIds"
+              nzAllowClear
+              (ngModelChange)="initDataFromBuilding($event)"
+              nzPlaceHolder="{{
+                'model.ticket.selectBuildingCode' | translate
+              }}"
+            >
+              <nz-option
+                [nzCustomContent]="true"
+                *ngFor="let building of buildings"
+                [nzLabel]="this.limitText(building.code!, 15)"
+                [nzValue]="building.id"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="building.code! + ' '+ building.name"
+                >
+                  {{ building.code! }} - {{ building.name! }}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-6 mb-3">
+            <label>{{ "model.ticket.floor" | translate }}</label>
+            <nz-select
+              [nzShowArrow]="true"
+              nzShowSearch
+              removeOptionTitle
+              nzMode="multiple"
+              [nzMaxTagCount]="2"
+              formControlName="floorIds"
+              nzAllowClear
+              nzPlaceHolder="{{ 'model.ticket.selectFloor' | translate }}"
+            >
+              <nz-option
+                [nzCustomContent]="true"
+                *ngFor="let floor of floors"
+                [nzLabel]="floor.name!"
+                [nzValue]="floor.id"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="floor.name!"
+                >
+                  {{ floor.name! }}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 mb-3">
+            <label>{{ "model.ticket.service.name" | translate }}</label>
+            <nz-select
+              [nzShowArrow]="true"
+              nzShowSearch
+              removeOptionTitle
+              formControlName="serviceType"
+              nzAllowClear
+              nzPlaceHolder="{{ 'model.ticket.selectService' | translate }}"
+            >
+              <nz-option
+                [nzCustomContent]="true"
+                *ngFor="let service of TICKET_SERVICE"
+                [nzLabel]="service.label | translate"
+                [nzValue]="service.value"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="service.label! | translate"
+                >
+                  {{ service.label! | translate }}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-6 mb-3">
+            <label>{{ "model.ticket.requestSender" | translate }}</label>
+            <nz-select
+              [nzShowArrow]="true"
+              nzServerSearch
+              removeOptionTitle
+              nzShowSearch
+              debounceKeyUp
+              (ngModelChange)="getUserId($event)"
+              (onEvent)="getCustomersFormBuilding($event, 'keyword', true)"
+              formControlName="issuedUserId"
+              nzAllowClear
+              nzPlaceHolder="{{ 'model.ticket.requestSender' | translate }}"
+            >
+              <nz-option
+                [nzCustomContent]="true"
+                *ngFor="let customer of customers"
+                [nzLabel]="customer.fullName!"
+                [nzValue]="customer.id"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="customer.fullName!"
+                >
+                  {{ customer.fullName! }}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 mb-3">
+            <label>{{ "model.ticket.status.title" | translate }}</label>
+            <nz-select
+              [nzShowArrow]="true"
+              nzShowSearch
+              removeOptionTitle
+              formControlName="status"
+              nzAllowClear
+              nzPlaceHolder="{{
+                'model.user.service.selectStatus' | translate
+              }}"
+            >
+              <nz-option
+                [nzCustomContent]="true"
+                *ngFor="let status of TICKET_STATUS"
+                [nzLabel]="status.label | translate"
+                [nzValue]="status.value"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="status.label | translate"
+                >
+                  {{ status.label! | translate }}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label>{{ "model.ticket.requestDate" | translate }}</label>
+          <div class="col-6">
+            <div>
+              <nz-date-picker
+                formControlName="startAt"
+                [nzId]="'startDatePicker'"
+                (keyup.enter)="enterStartDatePicker($event)"
+                [nzFormat]="'dd/MM/yyyy'"
+                #startDatePicker
+                nzPlaceHolder="{{ 'action.fromDate' | translate }}"
+              >
+              </nz-date-picker>
+            </div>
+          </div>
+          <div class="col-6">
+            <div>
+              <nz-date-picker
+                formControlName="endAt"
+                (keyup.enter)="enterEndDatePicker($event)"
+                [nzDisabledDate]="disabledBeforeStartDate"
+                [nzFormat]="'dd/MM/yyyy'"
+                #endDatePicker
+                nzPlaceHolder="{{ 'action.toDate' | translate }}"
+              >
+              </nz-date-picker>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" class="mr-2" (click)="onReset()">
+        {{ "action.reset" | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSearch()">
+        {{ "common.search" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

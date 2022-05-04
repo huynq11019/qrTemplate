@@ -1,0 +1,99 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span>{{ 'model.ticket.advancedSearch' | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row mt-3">
+          <div class="col-6">
+            <label>{{ 'model.survey.selectBuilding' | translate }}</label>
+            <nz-select formControlName="buildingIds" nzAllowClear nzMode="multiple"
+                       [nzShowArrow]="true" [nzMaxTagCount]="1" removeOptionTitle nzShowSearch
+                       nzPlaceHolder="{{ 'common.building' | translate }}">
+              <nz-option *ngFor="let building of buildings" [nzCustomContent]="true"
+                         [nzValue]="building.id" [nzLabel]="getLimitLength(building.code! + ' - ' + building.name!)">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="getLimitLength(building.code! + ' - ' + building.name!)">
+                  {{getLimitLength(building.code! + ' - ' + building.name!)}}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-6">
+            <label>{{ 'model.survey.results.averageScore' | translate }}</label>
+            <nz-select formControlName="averageScore" nzAllowClear removeOptionTitle
+                       nzPlaceHolder="{{ 'model.survey.results.averageScore' | translate }}">
+              <nz-option *ngFor="let averageScore of averageScores" [nzCustomContent]="true"
+                         [nzValue]="averageScore" [nzLabel]="averageScore!">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="averageScore">{{averageScore!}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="row mt-3" *ngIf="surveyResultRequest.type === COMPANY">
+          <div class="col-12">
+            <label>{{ 'common.company' | translate }}</label>
+            <nz-select formControlName="organizationIds" nzAllowClear
+                       nzShowSearch nzServerSearch nzMode="multiple" removeOptionTitle
+                       [nzShowArrow]="true" [nzMaxTagCount]="1"
+                       nzPlaceHolder="{{ 'common.company' | translate }}">
+              <nz-option *ngFor="let organization of organizations" [nzCustomContent]="true"
+                         [nzValue]="organization.id" [nzLabel]="getLimitLength(organization.name!, 60)">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="organization.name">{{organization.name!}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+          <!--          <div class="col-6">-->
+          <!--            <label>{{ 'model.survey.results.represent' | translate }}</label>-->
+          <!--            <nz-select formControlName="representIds" nzAllowClear-->
+          <!--                       nzPlaceHolder="{{ 'model.survey.results.represent' | translate }}">-->
+          <!--              <nz-option *ngFor="let represent of customerContacts"-->
+          <!--                         [nzValue]="represent.id" [nzLabel]="represent.fullName!">-->
+          <!--              </nz-option>-->
+          <!--            </nz-select>-->
+          <!--          </div>-->
+        </div>
+        <div class="row mt-3">
+          <label>{{ 'model.survey.timeSurvey' | translate }}</label>
+          <div class="col-6 mb-2">
+            <nz-date-picker formControlName="startAt"
+                            [nzFormat]="'dd/MM/yyyy'" [nzId]="'startPicker'"
+                            (keyup.enter)="enterDatePicker($event, 'startAt')"
+                            #startPicker
+                            nzPlaceHolder="{{ 'model.ticket.from' | translate }}"
+            >
+            </nz-date-picker>
+          </div>
+          <div class="col-6 mb-2">
+            <nz-date-picker formControlName="endAt"
+                            [nzFormat]="'dd/MM/yyyy'"
+                            (keyup.enter)="enterDatePicker($event, 'endAt')"
+                            [nzDisabledDate]="disabledBeforeStartAt"
+                            [nzDefaultPickerValue]="startAt"
+                            #endPicker
+                            nzPlaceHolder="{{ 'model.ticket.to' | translate }}"
+            >
+            </nz-date-picker>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" class="mr-2" (click)="resetForm()">
+        {{ 'action.reset' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="save()"
+      >
+        {{ ('common.search') | translate }}
+      </button>
+    </div>
+  </div>
+</div>

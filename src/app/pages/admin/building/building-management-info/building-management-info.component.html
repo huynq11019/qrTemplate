@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="col-12">
+    <nz-table
+      #table
+      [nzData]="buildingManagers"
+      [nzNoResult]="noDataResult"
+      [nzTableLayout]="'auto'"
+      [nzTitle]="title"
+      (nzQueryParams)="onQueryParamsChange($event)">
+      <thead>
+      <tr>
+        <th nzAlign="center">{{'common.index' | translate}}</th>
+        <th nzAlign="left" nzColumnKey="employeeCode" [nzSortFn]="true">{{ getTranslate('employeeCode') }}</th>
+        <th nzAlign="left" nzColumnKey="fullName" [nzSortFn]="true">{{ getTranslate('fullName') }}</th>
+        <th nzAlign="left" >{{ getTranslate('department') }}</th>
+        <th nzAlign="left" nzColumnKey="title" [nzSortFn]="true">{{ getTranslate('employeeTitle') }}</th>
+        <th nzAlign="center">{{ getTranslate('phoneNumber') }}</th>
+        <th nzAlign="left">{{ getTranslate('email') }}</th>
+        <th nzAlign="center">{{'action.msg' | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of  this.buildingManagers; let i = index">
+        <tr>
+          <td nzAlign="center">{{ getIndex(i) }}</td>
+          <td nzAlign="left">{{ item.employeeCode }}</td>
+          <td nzAlign="left">{{ item.fullName  }}</td>
+          <td nzAlign="left">{{ item.departmentName  }}</td>
+          <td nzAlign="left">{{ item.title }}</td>
+          <td nzAlign="center">{{ item.phoneNumber }}</td>
+          <td nzAlign="left">{{ item.email }}</td>
+          <td nzAlign="center">
+            <mb-button-action
+              [action]="'edit'"
+              nzTooltipTitle="{{'action.update' | translate}}"
+              nzTooltipPlacement="top"
+              nz-tooltip
+              (click)="redirectToUpdateAccount(item?.id,item?.accountType)">
+            </mb-button-action>
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </nz-table>
+    <mb-pagination [pageIndex]="this.managerQuery.pageIndex"
+                   [pageSize]="this.managerQuery.pageSize"
+                   [total]="total"
+                   (onChange)="onQuerySearch($event)">
+    </mb-pagination>
+  </div>
+</div>
+
+<ng-template #title>
+  <div class="row mt-3 mb-4">
+    <div class="col-3">
+      <nz-input-group [nzPrefix]="suffixIconSearch">
+        <input type="text" nz-input
+
+               (keyup.enter)="search($event)"
+               [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

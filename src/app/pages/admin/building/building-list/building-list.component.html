@@ -1,0 +1,151 @@
+<div class="content">
+  <mb-table-title [title]="'model.building.list'"></mb-table-title>
+  <ng-container>
+    <div class="row mt-3">
+      <div class="col-3">
+        <nz-input-group nzPrefixIcon="search">
+          <input
+            type="text"
+            nz-input
+            [value]="keyword"
+            (keyup.enter)="search($event)"
+            [placeholder]="'action.search' | translate"
+          />
+        </nz-input-group>
+      </div>
+      <div class="col-9 d-flex justify-content-end">
+        <!--          *ngIf="this.hasUserLevel()"-->
+        <mb-button
+          *hasUserLevel="[USER_LEVEL_CENTER]"
+          id="createBuilding"
+          [type]="'primary'"
+          [icon]="'plus'"
+          [text]="'action.create'"
+          (click)="createBuilding()"
+        >
+          {{ "action.create" | translate }}
+        </mb-button>
+      </div>
+    </div>
+  </ng-container>
+  <div class="row mt-3">
+    <nz-table
+      [nzData]="buildings"
+      [nzNoResult]="noDataResult"
+      [nzTableLayout]="'auto'"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+      <tr>
+        <th nzAlign="center">{{ "common.index" | translate }}</th>
+        <th nzAlign="left" nzColumnKey="code" [nzSortFn]="true">
+          {{ "model.building.code" | translate }}
+        </th>
+        <th nzAlign="left" nzColumnKey="name" [nzSortFn]="true">
+          {{ "model.building.name" | translate }}
+        </th>
+        <th
+          class="col-buildingArea"
+          nzAlign="right"
+          nzColumnKey="area"
+          [nzSortFn]="true"
+        >
+          {{ "model.building.area" | translate }} (m<sup>2</sup>)
+        </th>
+        <th nzAlign="center" nzColumnKey="totalFloor" [nzSortFn]="true">
+          {{ "model.building.totalFloor" | translate }}
+        </th>
+        <th nzAlign="left" nzColumnKey="address" [nzSortFn]="true">
+          {{ "model.building.address" | translate }}
+        </th>
+        <th nzAlign="center">{{ "common.status" | translate }}</th>
+        <th class="building-action" nzAlign="center">
+          {{ "action.msg" | translate }}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of buildings; let i = index">
+        <tr>
+          <td nzAlign="center">{{ getIndex(i) }}</td>
+          <td nzAlign="left" [nz-tooltip]="item.code">
+            {{ this.limitText(item.code, 10) }}
+          </td>
+          <td nzAlign="left" [nz-tooltip]="item.name">
+            {{ this.limitText(item.name) }}
+          </td>
+          <td nzAlign="right">{{ item.area }}</td>
+          <td nzAlign="center">{{ item.totalFloor }}</td>
+          <td nzAlign="left" [nz-tooltip]="item.address">
+            {{ this.limitText(item.address, 30) }}
+          </td>
+          <td nzAlign="center">
+            <mb-badge
+              [hover]="true"
+              [color]="
+                  item.status === buildingStatus.ACTIVE.value
+                    ? 'badge-info'
+                    : 'badge-secondary'"
+              [text]="format(item.status, 'status')"
+            >
+            </mb-badge>
+          </td>
+          <td nzAlign="center">
+            <mb-button-action
+              *hasRoles="['building:update', 'building:create']"
+              [action]="'edit'"
+              [className]="this.hasUserLevel() ? 'first' : ''"
+              nzTooltipTitle="{{ 'action.update' | translate }}"
+              nzTooltipPlacement="top"
+              nz-tooltip
+              (click)="detailBuilding(item)"
+            >
+            </mb-button-action>
+            <mb-button-action
+              *ngIf="this.hasUserLevel()"
+              [action]="
+                  item.status === buildingStatus.ACTIVE.value
+                    ? 'lock'
+                    : 'unlock'
+                "
+              [className]="this.hasUserLevel() ? 'last' : ''"
+              nzTooltipTitle="{{
+                  (item.status === buildingStatus.ACTIVE.value
+                    ? 'action.lock'
+                    : 'action.unlock'
+                  ) | translate
+                }}"
+              nzTooltipPlacement="top"
+              nz-tooltip
+              (click)="openConfirmInvalid(item)"
+            >
+            </mb-button-action>
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </nz-table>
+    <mb-pagination
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [total]="total"
+      (onChange)="onQuerySearch($event)"
+    >
+    </mb-pagination>
+  </div>
+</div>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>
+
+<mb-modal
+  [title]="buildingGroupModal.title"
+  [content]="buildingGroupModal.content"
+  [okText]="buildingGroupModal.okText"
+  [btnCentered]="true"
+  [isVisible]="isVisible"
+  [callBack]="this.buildingGroupModal.callBack"
+  (emitter)="handleConfirmInvalidBuilding($event)"
+>
+</mb-modal>

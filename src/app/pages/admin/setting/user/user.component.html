@@ -1,0 +1,155 @@
+<div class="content">
+  <mb-table-title [title]="'model.user.list'"></mb-table-title>
+  <div class="row mt-3">
+    <div class="col-3 d-flex">
+      <mb-button [iconResource]="'filter'" class="mr-2" (click)="openAdvancedSearch()"
+                 *hasRoles="['user:view']"></mb-button>
+      <nz-input-group nzPrefixIcon="search" *hasRoles="['user:view']">
+        <input type="text" nz-input
+               [value]="keyword"
+               (keyup.enter)="search($event)"
+               [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+    </div>
+    <div class="col-9 text-right">
+      <mb-button nz-button nz-dropdown [nzDropdownMenu]="dropMenu" [type]="'primary'" *hasRoles="['user:create']"
+                 [icon]="'plus'"
+                 [text]="'action.create'"
+      >
+      </mb-button>
+      <!--<button nz-button (click)="delete(true)">-->
+      <!--{{ 'action.delete' | translate }}-->
+      <!--</button>-->
+      <nz-dropdown-menu #dropMenu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item (click)="create(userProfileInternal)">{{ 'action.createInternal' | translate }}</li>
+          <li nz-menu-item (click)="create(userProfileLdap)">{{ 'action.createLdap' | translate }}</li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="users"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+        <tr>
+          <!--<th-->
+          <!--*ngIf="true"-->
+          <!--nzWidth="60px"-->
+          <!--[nzLeft]="true"-->
+          <!--[nzIndeterminate]="indeterminate"-->
+          <!--[(nzChecked)]="allChecked"-->
+          <!--(nzCheckedChange)="checkAll($event)">-->
+          <!--</th>-->
+          <th nzAlign="center">{{'common.index' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="fullName" [nzSortFn]="true">{{'model.user.fullName' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="username" [nzSortFn]="true">{{'model.user.username' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="accountType" [nzSortFn]="true">{{'model.user.accountType' | translate}}</th>
+          <th nzAlign="center">{{'model.user.phoneNumber' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="email" [nzSortFn]="true">{{'model.user.email' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="employeeCode" [nzSortFn]="true">{{'model.user.employeeCodeSort' | translate}}
+          </th>
+          <th nzAlign="center" nzColumnKey="status" [nzSortFn]="true">{{'common.status' | translate}}</th>
+          <th nzAlign="center" [nzWidth]="'180px'" *hasRoles="['user:update']">{{'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of users; let i = index">
+          <tr>
+
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td nzAlign="left"
+                [nzTooltipTitle]="item.fullName"
+                nzTooltipPlacement="top"
+                nz-tooltip> {{ getLimitLength(item.fullName!) }}
+            </td>
+            <td nzAlign="left">{{ item.username }}</td>
+            <td nzAlign="left">{{ getAccountTypeTrans(item) }}</td>
+            <td nzAlign="center">{{ item.phoneNumber }}</td>
+            <td nzAlign="left"
+                [nzTooltipTitle]="item.email"
+                nzTooltipPlacement="top"
+                nz-tooltip> {{ item.email }}
+            </td>
+            <td nzAlign="left">{{ item.employeeCode }}</td>
+            <td nzAlign="center">
+              <mb-badge [color]="item.status === userActive ? 'badge-info' : 'badge-secondary'"
+                        [text]="format(item.status, 'status')"
+              >
+              </mb-badge>
+            </td>
+            <td nzAlign="center" *hasRoles="['user:update']">
+              <!--<i class="icon icon-edit"-->
+              <!--(click)="update(item)"-->
+              <!--nz-icon nzType="edit"-->
+              <!--nzTheme="fill"-->
+              <!--nzTooltipTitle="{{'action.update' | translate}}"-->
+              <!--nzTooltipPlacement="top"-->
+              <!--nz-tooltip></i>-->
+              <mb-button-action [action]="'edit'" *hasRoles="['user:update']"
+                                className="first"
+                                nzTooltipTitle="{{'action.update' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="update(item)">
+              </mb-button-action>
+              <mb-button-action [action]="item.status === userActive ? 'lock' : 'unlock'" *hasRoles="['user:update']"
+                                className="{{item.authenticationType === USER_INTERNAL ? 'center': 'last'}}"
+                                nzTooltipTitle="{{(item.status === userActive ? 'action.lock' : 'action.unlock') | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="lock(item)">
+                {{item.authenticationType | json}}
+              </mb-button-action>
+              <!--<nz-divider nzType="vertical"></nz-divider>-->
+              <!--<i class="icon icon-delete"-->
+              <!--(click)="delete(false, item)"-->
+              <!--nz-icon nzType="delete"-->
+              <!--nzTheme="fill"-->
+              <!--nzTooltipTitle="{{'action.delete' | translate}}"-->
+              <!--nzTooltipPlacement="top"-->
+              <!--nz-tooltip></i>-->
+              <!--<nz-divider nzType="vertical"></nz-divider>-->
+              <ng-container
+                *ngIf="item.authenticationType === USER_INTERNAL">
+                <mb-button-action [action]="'key'" *hasRoles="['user:update']"
+                                  className="last"
+                                  (click)="openChangePassword(item)"
+                                  nzTooltipTitle="{{'model.user.changePassword' | translate}}"
+                                  nzTooltipPlacement="top"
+                                  nz-tooltip>
+                </mb-button-action>
+              </ng-container>
+              <!--<nz-switch class="nzSwitch ml-2" [ngModel]="item.status === userActive" nzSize="small"-->
+              <!--[nzControl]="true" (click)="checkButton(i,item.id)"-->
+              <!--nz-tooltip="{{ (item.status === userActive ? 'common.active' : 'common.inactive') | translate}}"></nz-switch>-->
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="pageIndex"
+                     [pageSize]="pageSize"
+                     [total]="total"
+                     (onChange)="onQuerySearch($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</div>
+
+<mb-modal [title]="groupLockPopup.title"
+          [content]="groupLockPopup.content"
+          [okText]="groupLockPopup.okText"
+          [btnCentered]="true"
+          [isVisible]="isVisible"
+          (emitter)="onLockAndUnLock($event)">
+</mb-modal>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

@@ -1,0 +1,35 @@
+.ant-btn {
+  min-width: 38px;
+  border-radius: 8px;
+}
+
+.ant-btn-primary {
+  border: 1px solid #0054A5;
+  background: #0054A5;
+  color: #ffffff;
+}
+
+.btn-default {
+  border: 1px solid #F8F8F8;
+  background: #F8F8F8;
+  color: black;
+}
+
+.ant-btn[disabled], .ant-btn[disabled]:active, .ant-btn[disabled]:focus, .ant-btn[disabled]:hover {
+  border: 1px solid #0054A5;
+  background: #0054A5;
+  color: #ffffff;
+}
+
+.ant-btn-danger {
+  border: 1px solid red;
+  background: red;
+  color: #ffffff;
+}
+
+.ant-btn-dashed {
+  border: 1px solid red;
+  background: #ffffff;
+  color: red;
+  min-width: 100px;
+}

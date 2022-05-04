@@ -1,0 +1,93 @@
+<div class="customer-leasing">
+  <div *nzModalTitle>
+    <span>{{ (isUpdate ? 'action.update' : 'model.customer.createLeasing') | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-6 mb-2">
+            <label>{{ 'common.buildingCode' | translate }} <span class="text-danger">*</span></label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="{{ 'common.buildingCode' | translate }}"
+                       (nzOpenChange)="onChangeBuilding()" removeOptionTitle
+                       formControlName="buildingId">
+              <nz-option *ngFor="let item of buildings" [nzCustomContent]="true"
+                         [nzLabel]="(item?.code + ' - ' + item.name ) || ''"
+                         [nzValue]="item?.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0"
+                     [ngbTooltip]="(item?.code + ' - ' + item.name ) || ''">{{(item?.code + ' - ' + item.name) || ''}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-container *ngIf="form.get('buildingId')?.touched || form.get('buildingId')?.dirty">
+              <span class="text-danger" *ngIf="form.get('buildingId')?.hasError('required')">
+                <mb-not-blank [value]="'common.buildingCode'"></mb-not-blank>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'common.floor' | translate }} <span class="text-danger">*</span></label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="{{ 'common.floor' | translate }}"
+                       (nzOpenChange)="onChangeFloor()" removeOptionTitle
+                       formControlName="floorId">
+              <nz-option *ngFor="let item of floors"
+                         [nzLabel]="item?.name || ''" [nzCustomContent]="true"
+                         [nzDisabled]="(item.status) == buildingStatus.INACTIVE.value"
+                         [nzValue]="item?.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="item?.name || ''">{{item?.name || ''}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-container *ngIf="form.get('floorId')?.touched || form.get('floorId')?.dirty">
+              <span class="text-danger" *ngIf="form.get('floorId')?.hasError('required')">
+                <mb-not-blank [value]="'common.floor'"></mb-not-blank>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'common.unitCode' | translate }} <span class="text-danger">*</span></label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="{{ 'common.unitCode' | translate }}"
+                       formControlName="unitId" removeOptionTitle>
+              <nz-option *ngFor="let item of units" [nzCustomContent]="true"
+                         [nzLabel]="(item?.code + ' ('+ item.area+'m2)') || ''"
+                         [nzDisabled]="item.leasingStatus !== unitStatus.AVAILABLE.value"
+                         [nzValue]="item?.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(item?.code + ' ('+ item.area+'m2)') || ''">{{(item?.code + ' ('+ item.area+'m2)') || ''}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-container *ngIf="form.get('unitId')?.touched || form.get('unitId')?.dirty">
+              <span class="text-danger" *ngIf="form.get('unitId')?.hasError('required')">
+                <mb-not-blank [value]="'common.unitCode'"></mb-not-blank>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'common.status' | translate }} <span class="text-danger">*</span></label>
+            <nz-select nzPlaceHolder="{{ 'common.status' | translate }}"
+                       formControlName="leasingStatus" removeOptionTitle>
+              <nz-option *ngFor="let item of leasingStatus" [nzCustomContent]="true"
+                         [nzLabel]="item?.label! | translate"
+                         [nzValue]="item?.value">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="item?.label! | translate">{{item?.label! | translate}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="primary" (click)="onSubmit()"
+              [disabled]="!form.valid">
+        {{ 'action.save' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

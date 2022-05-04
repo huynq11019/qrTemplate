@@ -1,0 +1,156 @@
+<div class="content">
+  <div class="title mb-3">
+    <mb-table-title [showBack]="true" [title]="'model.survey.detailTitle'"
+    [url]="SURVEY_RESULT_URL"
+    [navigationExtras]="navigationExtras"
+    [beginStage]="beginStage"
+    [tabIndexSurvey]="tabIndex"></mb-table-title>
+  </div>
+</div>
+
+<ng-container *ngIf="type === STAGE">
+  <div class="row">
+    <div class="col-12">
+      <nz-table
+        [nzData]="surveys"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+        <tr>
+          <th nzAlign="center">{{ 'common.index' | translate }}</th>
+          <th nzAlign="left">{{ 'model.survey.company' | translate}}</th>
+          <th nzAlign="left">{{ 'model.survey.results.deputy' | translate }}</th>
+          <th nzAlign="center">{{ 'model.survey.results.mediumScore' | translate }}</th>
+          <th nzAlign="left">{{ 'model.survey.note' | translate }}</th>
+          <th nzAlign="center">{{ 'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of surveys; let i = index">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td nzAlign="left">{{ item.organization?.name || '' }}</td>
+            <td nzAlign="left">{{ item.organization?.legalRepresentative || ''}}</td>
+            <td nzAlign="center">{{ item?.averageScore | number : '1.0-2' }}</td>
+            <td nzAlign="left"
+                nzTooltipTitle="{{ showNoteTooltip(item?.otherOpinions) }}"
+                nzTooltipPlacement="top"
+                nz-tooltip>{{ showNoteTooltip(item?.otherOpinions) }}</td>
+            <td nzAlign="center">
+              <mb-button-action [action]="'view'"
+                                [className]="'first'"
+                                (click)="detail(item, COMPANY)"
+                                nzTooltipTitle="{{'action.detail' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip>
+              </mb-button-action>
+              <mb-button-action [action]="'file-export'"
+                                [className]="'last'"
+                                (click)="export(item, COMPANY)"
+                                nzTooltipTitle="{{'action.export' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip>
+              </mb-button-action>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="pageIndex"
+                     [pageSize]="pageSize"
+                     [total]="total"
+                     (onChange)="onQuerySearch($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="type === COMPANY">
+  <section class="content mt-3">
+    <div class="row">
+      <div class="col-6">
+        <div class="row">
+          <div class="col-12">
+            <h5>{{ 'model.customer.informationCustomer' | translate }}</h5>
+          </div>
+        </div>
+        <dl class="row mt-2">
+          <dt class="col-3"><p>{{ 'common.company' | translate}}</p></dt>
+          <dd class="col-1">:</dd>
+          <dd class="col-8">{{ companies?.organization?.name || '' }}</dd>
+
+          <dt class="col-3"><p>{{ 'model.survey.results.deputy' | translate }}</p></dt>
+          <dd class="col-1">:</dd>
+          <dd class="col-8">{{ companies?.organization?.legalRepresentative || '' }}</dd>
+
+          <dt class="col-3"><p>{{ 'common.building' | translate }}</p></dt>
+          <dd class="col-1">:</dd>
+          <dd class="col-8">{{ companies?.building?.name || '' }}</dd>
+
+          <dt class="col-3"><p>{{ 'action.evaluationDate' | translate }}</p></dt>
+          <dd class="col-1">:</dd>
+          <dd class="col-8">{{ formatDate(companies?.surveyAt || '') }}</dd>
+
+          <dt class="col-3"><p>{{ 'model.survey.results.mediumScore' | translate }}</p></dt>
+          <dd class="col-1">:</dd>
+          <dd class="col-8">{{ (companies?.averageScore || 0) | number : '1.0-2' }}</dd>
+
+        </dl>
+      </div>
+      <div class="col-6 text-right">
+        <mb-button [type]="'primary'"
+                   (click)="export(companies, COMPANY)"
+                   [icon]="'file-text'"
+                   [text]="'action.outputFile'">
+        </mb-button>
+      </div>
+    </div>
+    <div class="row mt-2 mb-5" *ngFor="let item of companies.questionGroups">
+      <div class="col-12">
+        <h5>{{ item?.title || '' }}</h5>
+        <nz-table
+          [nzData]="item?.questions || []"
+          [nzNoResult]="noDataResult"
+          [nzTableLayout]="'auto'">
+          <thead>
+          <tr>
+            <th nzAlign="center" [nzWidth]="'20px'">{{ 'common.index' | translate }}</th>
+            <th nzAlign="left" [nzWidth]="'80%'">{{ 'model.survey.question.title' | translate}}</th>
+            <th nzAlign="center">{{ 'model.survey.results.mediumScore' | translate }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let questionItem of item?.questions || []; let i = index">
+            <tr>
+              <td nzAlign="center">{{ getIndex(i) }}</td>
+              <td nzAlign="left">{{ questionItem?.question?.content || '' }}</td>
+              <td nzAlign="center">{{ (questionItem?.averageScore || 0) | number : '1.0-2' }}</td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+    <div class="row mt-5 mb-3">
+      <div class="col-12">
+        <h5>{{'model.survey.otherOpinion' | translate}}</h5>
+        <p class="introduction" [innerHTML]="getOpinions(companies?.otherOpinions)"></p>
+      </div>
+    </div>
+    <div class="row mt-5 mb-3">
+      <div class="col-12 text-center">
+        <button nz-button nzType="default" (click)="cancel()">
+          {{ 'action.cancel' | translate }}
+        </button>
+        <button class="ml-3" nz-button nzType="primary" (click)="export(companies, COMPANY)">
+          {{ 'action.outputFile' | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

@@ -1,0 +1,271 @@
+<div class="title mb-3">
+  <mb-table-title [showBack]="true" [title]="'model.qr-manager.title'"></mb-table-title>
+</div>
+
+<section class="content">
+  <nz-tabset>
+    <nz-tab [nzTitle]="this.getTranslate('generalInformation')">
+
+      <form [formGroup]="this.qrForm" *ngIf="!!this.qrForm">
+        <div class="row mt-3">
+          <div class="col">
+            <label>{{this.getTranslate('selectBuilding')}}<span class="text-danger">*</span></label>
+            <nz-select removeOptionTitle [nzAllowClear]="false"
+                       formControlName="buildingId"
+                       nzPlaceHolder="{{this.getTranslate('selectBuildingPlaceholder')}}"
+                       nzServerSearch [nzShowSearch]="true"
+                       debounceKeyUp
+                       (onEvent)="loadDataBuilding($event.target?.value)"
+                       (ngModelChange)="onBuildingChange($event)">
+              <nz-option *ngFor="let item of this.buildings" [nzValue]="item.id" [nzCustomContent]="true"
+                         nzLabel="{{item.code}} - {{item.name}}">
+                <div container="body" [animation]="false" [openDelay]="100" [closeDelay]="0" [ngbTooltip]="item.name">
+                  {{item.code}} - {{item.name}}
+                </div>
+              </nz-option>
+            </nz-select>
+            <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'buildingId'"
+                                 [form]="this.qrForm">
+            </mb-validate-message>
+          </div>
+          <div class="col-6">
+            <label>{{this.getTranslate('selectFloor')}}<span class="text-danger">*</span></label>
+            <nz-select
+              removeOptionTitle
+              [nzAllowClear]="true"
+              nzPlaceHolder="{{this.getTranslate('selectFloor')}}"
+              debounceKeyUp
+              (onEvent)="this.searchFloorAutoComplete($event)"
+              nzServerSearch
+              formControlName="floorId"
+              (ngModelChange)="onChangeFloor($event)"
+            >
+              <nz-option
+                *ngFor="let item of this.floors"
+                [nzValue]="item.id" [nzCustomContent]="true" nzLabel="{{item.name}}">
+                <div container="body" [animation]="false" [openDelay]="100" [closeDelay]="0" [ngbTooltip]="item.name">
+                  {{item.name}}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <label>{{this.getTranslate('complaintTempName')}}<span class="text-danger">*</span></label>
+            <input nz-input formControlName="title" [maxLength]="LENGTH_VALIDATOR.TITLE_MAX_LENGTH.MAX" class=""
+                   placeholder="{{this.getTranslate('complaintTempNamePlace')}}" required>
+            <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'title'" [form]="this.qrForm">
+            </mb-validate-message>
+          </div>
+          <div class="col mb-2">
+            <label>{{this.getTranslate('status')}}<span class="text-danger">*</span></label>
+            <nz-select removeOptionTitle formControlName="status"
+                       nzPlaceHolder="{{this.getTranslate('statusPlaceHolder')}}">
+              <nz-option [nzValue]="this.qrStatus.ACTIVE.value" [nzCustomContent]="true"
+                         nzLabel="{{this.qrStatus.ACTIVE.label | translate}}">
+                <div container="body" [animation]="false" [openDelay]="100" [closeDelay]="0"
+                     [ngbTooltip]="this.qrStatus.ACTIVE.label | translate">
+                  {{this.qrStatus.ACTIVE.label | translate}}
+                </div>
+              </nz-option>
+              <nz-option [nzValue]="this.qrStatus.INACTIVE.value" [nzCustomContent]="true"
+                         nzLabel="{{this.qrStatus.INACTIVE.label |translate}}">
+                <div container="body" [animation]="false" [openDelay]="100" [closeDelay]="0"
+                     [ngbTooltip]="this.qrStatus.INACTIVE.label |translate">
+                  {{this.qrStatus.INACTIVE.label |translate}}
+                </div>
+              </nz-option>
+            </nz-select>
+            <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'status'" [form]="this.qrForm">
+            </mb-validate-message>
+          </div>
+        </div>
+        <!--    <div class="row mt-3">-->
+        <!--      <div class="col">-->
+        <!--        <label>{{this.getTranslate('complaintContent')}} <span class="text-danger">*</span></label>-->
+        <!--        <textarea formControlName="content" nz-input [maxLength]="LENGTH_VALIDATOR.DESC_MAX_LENGTH.MAX" class=""-->
+        <!--          rows="4" placeholder="{{this.getTranslate('complaintContentPlace')}}"></textarea>-->
+        <!--        <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'content'" [form]="this.qrForm">-->
+        <!--        </mb-validate-message>-->
+        <!--      </div>-->
+        <!--    </div>-->
+        <div class="row mt-3">
+          <div class="col">
+            <label>{{this.getTranslate('note')}}</label>
+            <textarea nz-input [maxLength]="LENGTH_VALIDATOR.DESC_MAX_LENGTH.MAX" class="" rows="4"
+                      formControlName="note"
+                      placeholder="{{this.getTranslate('notePlaceHolder')}}"></textarea>
+            <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'note'" [form]="this.qrForm">
+            </mb-validate-message>
+          </div>
+        </div>
+      </form>
+      <div *ngIf="this.isUpdate">
+        <hr/>
+        <!--    <div *ngIf="!!this.qrCodeLink">-->
+        <!--      <div class="row mt-5 justify-content-center">-->
+        <!--        <div class="col-4 ">-->
+        <!--          <div class="row">-->
+        <!--            <div class="col text-center">-->
+        <!--              <qrcode #complaintQrCode [qrdata]="qrCodeLink" [width]="200" [margin]="0" [errorCorrectionLevel]="'M'">-->
+        <!--              </qrcode>-->
+        <!--            </div>-->
+        <!--            <div class="col-2 ">-->
+        <!--              <img class="download-qr" src="assets/images/qr_Download.svg" alt="download-qr"-->
+        <!--                   (click)="this.downloadQrCode()"/>-->
+        <!--            </div>-->
+        <!--            <div class="col-2 ">-->
+        <!--              <img class="download-qr btn-print" src="assets/images/icon/print_24px_rounded.svg" alt="print qr"-->
+        <!--                   (click)="this.printQrCode()"/>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <!--      </div>-->
+        <!--      <div class="d-flex justify-content-center mt-3 href-style">-->
+        <!--        <span>{{'common.href'| translate}}: </span>-->
+        <!--        <a [href]="this.qrCodeLink"> {{this.qrCodeLink}}</a>-->
+        <!--      </div>-->
+        <!--    </div>-->
+        <div class="row">
+          <div class="col-lg-7 pr-5">
+            <nz-skeleton [nzLoading]="!this.qrCodeLink" [nzActive]="true" [nzAvatar]="false">
+              <div class="link-public">
+                <span>{{'common.href'| translate}}: </span>
+                <a [href]="this.qrCodeLink"> {{this.qrCodeLink}}</a>
+              </div>
+              <div>
+          <span class="complaint-content">
+            <!--            Chào mừng quý khách hàng đến với hệ thống đánh giá góp ý của tòa nhà MB Liễu Giai. đây là hòm thư góp ý nhằm nâng cao chất lượng dịch vụ của tòa nhà giúp cho khách hàng  có trải nghiệm dịch vụ tốt hơn mỗi khi đén tòa nhà của chúng tôi nếu bạn có ý kiến cần góp ý nào vui lòng để lại phía dưới.-->
+            <p>
+              {{this.translatePath + 'inner-complaintContent' | translate: {'buildingName': this.getCurrentBuilding()?.name} }}
+            </p>
+            <p>
+              {{this.translatePath + 'inner-complaintContent2' | translate }}
+            </p>
+          </span>
+
+              </div>
+            </nz-skeleton>
+          </div>
+          <div class="col container">
+            <div class="row">
+              <div class="col ">
+                <div *ngIf="this.qrCodeLink; else noQrCode">
+                  <p class="title-qrCode">{{this.getTranslate('qrCode')}}:</p>
+                  <qrcode class="mt-2" #complaintQrCode [qrdata]="qrCodeLink" [width]="200" [margin]="0"
+                          [errorCorrectionLevel]="'M'">
+                  </qrcode>
+                </div>
+              </div>
+              <ng-template #noQrCode>
+                <nz-skeleton-element size="200" class="loading-qr" nzType="image" [nzActive]="true">
+                </nz-skeleton-element>
+              </ng-template>
+              <div class="col button-box">
+                <div class="text-bottom">
+                  <!--                  <div class="row ">-->
+                  <!--                    <button class="btn-action" nz-button nzType="default" (click)="this.downloadQrCode()">-->
+                  <!--                      <img class="download-icon" src="assets/images/qr_Download.svg" alt="download-qr"/>-->
+                  <!--                      <span>{{ ('action.download') | translate }}</span>-->
+                  <!--                    </button>-->
+                  <!--                  </div>-->
+                  <div class="row ">
+                    <button class="btn-action" nz-button nzType="default" (click)="this.generatePdf('download')">
+                      <img class="download-icon" src="assets/images/qr_Download.svg" alt="download-qr"/>
+                      <span>{{ ('action.download') | translate }}</span>
+                    </button>
+                  </div>
+<!--                  <div class="row mt-3">-->
+<!--                    <button class="btn-action" nz-button nzType="default" (click)="this.printQrCode2()">-->
+<!--                      <img class="print-icon" src="assets/images/icon/print_24px_rounded.svg" alt="print qr"/>-->
+<!--                      <span>{{ this.getTranslate('printCode')}}</span>-->
+<!--                    </button>-->
+<!--                  </div>-->
+                  <div class="row mt-3">
+                    <button class="btn-action" nz-button nzType="default" (click)="this.generatePdf('print')">
+                      <img class="print-icon" src="assets/images/icon/print_24px_rounded.svg" alt="print qr"/>
+                      <span>{{ this.getTranslate('printCode')}}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row text-center mt-5">
+        <div class="col-12">
+          <button class="mr-2" nz-button nzType="default" (click)="this.onCancel()">
+            {{ 'action.cancel' | translate }}
+          </button>
+
+          <ng-template #btnUpdate
+          >
+            <button
+              *hasRoles="['complaint_template:update']"
+              nz-button nzType="primary" [disabled]="this.qrForm.invalid" (click)="this.onUpdate()">
+              {{ ('action.update') | translate }}
+            </button>
+          </ng-template>
+          <button nz-button nzType="primary" (click)="this.onSubmit()" [disabled]="this.qrForm.invalid"
+                  *ngIf="!this.isUpdate; else btnUpdate">
+            {{ ('action.create') | translate }}
+          </button>
+        </div>
+      </div>
+    </nz-tab>
+    <nz-tab [nzTitle]="this.getTranslate('updateHistory')" [nzDisabled]="!this.isUpdate">
+      <nz-table
+        #table
+        [nzData]="this.histories"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onChangeQueryParams($event)"
+      >
+        <thead>
+        <tr>
+          <th nzAlign="center">{{ "common.index" | translate }}</th>
+          <th nzAlign="left"
+              nzColumnKey="action"
+              [nzSortFn]="true">{{ this.getTranslate('action') }}</th>
+          <th nzAlign="left"
+              >{{ this.getTranslate('updateBy') }}</th>
+          <th nzAlign="center"
+              nzColumnKey="lastModifiedAt"
+              [nzSortFn]="true">
+            {{this.getTranslate('updateTime')}}
+          </th>
+          <th
+            class="min-w-300"
+            nzAlign="left"
+          >
+            {{this.getTranslate('reason')}}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of this.histories; index as i">
+          <td nzAlign="center">{{this.getIndex(i)}}</td>
+          <td>{{this.getActionHistory(item?.action) | translate}}</td>
+          <td>{{item?.createdUserName}}</td>
+          <td nzAlign="center">{{this.formatDateString(item?.lastModifiedAt)}}</td>
+          <td [nz-tooltip]="item?.reason || ''"
+              [nzTooltipPlacement]="['topLeft', 'leftTop']">{{this.getLimitText(item?.reason || '')}}</td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <mb-pagination
+        [pageIndex]="this.historiesSearchRequest.pageIndex"
+        [pageSize]="this.historiesSearchRequest.pageSize"
+        [total]="this.totalHistories"
+        (onChange)="onQuerySearch($event)"
+      >
+      </mb-pagination>
+    </nz-tab>
+  </nz-tabset>
+</section>
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

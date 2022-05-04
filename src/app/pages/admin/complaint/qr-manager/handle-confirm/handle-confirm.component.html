@@ -1,0 +1,46 @@
+<div class="advanced-search">
+  <div *nzModalTitle>
+    <span *ngIf="this.complaintItem ; else confirmUpdateTitle">{{this.complaintItem?.status === QR_STATUS.ACTIVE.value
+      ? this.getTranslatePath('confirmLock')
+      : this.getTranslatePath('confirmUnLock') }}</span>
+    <ng-template #confirmUpdateTitle>
+      <span>{{this.getTranslatePath('confirmUpdate')}}</span>
+    </ng-template>
+  </div>
+  <form [formGroup]="this.form">
+    <div class="row">
+      <div class="col">
+        <p *ngIf="this.complaintItem">{{this.getTranslatePath('confirmMessage')}}</p>
+        <label>{{ this.getTranslatePath('reason') }}<span class="text-danger">*</span></label>
+        <textarea
+          nz-input
+          formControlName="reason"
+          rows="4" placeholder="{{this.getTranslatePath('contentInput')}}"
+          maxlength="{{this.MAX_DESCRIPTION_LENGTH}}"
+        >
+        </textarea>
+        <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'reason'" [form]="this.form">
+        </mb-validate-message>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="text-center" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onCancel()">
+        {{ 'action.cancel' | translate }}
+      </button>
+      <button *ngIf="this.complaintItem?.status === QR_STATUS.ACTIVE.value; else btnUnlock"
+              nz-button nzType="primary"
+              [disabled]="this.form.invalid" (click)="onSubmit()">
+        {{ 'action.lock' | translate }}
+      </button>
+      <ng-template #btnUnlock>
+        <button nz-button nzType="primary"
+                [disabled]="this.form.invalid"
+                (click)="onSubmit()">
+          {{ (this.complaintItem ? 'action.unlock' : 'action.update') | translate }}
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</div>

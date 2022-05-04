@@ -1,0 +1,15 @@
+<button nz-button
+        nz-tooltip
+        nzTooltipPlacement="top"
+        [disabled]="disabled"
+        [nzType]="type"
+        [ngClass]="type === 'primary' ? 'ant-btn-primary' : 'btn-default'"
+        [nzTooltipTitle]="tooltip | translate">
+  <i nz-icon class="mr-1"
+     [ngClass]="type === 'primary' ? 'text-white' : iconColor"
+     [nzTheme]="themeType"
+     [nzType]="icon">
+  </i>
+  <img *ngIf="iconResource.length > 0" [src]="getSource()" alt="action">
+  <span *ngIf="text.length > 0" class="ml-0">{{ text | translate }}</span>
+</button>

@@ -1,0 +1,158 @@
+<div class="advanced-search">
+  <div *nzModalTitle>
+    <span>{{ 'common.advancedSearch' | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-6 mb-3">
+            <label>{{ 'model.notification.list.code' | translate }}</label>
+            <nz-select nzShowSearch nzAllowClear [nzShowArrow]="true"
+                       nzPlaceHolder="{{ 'model.notification.list.code' | translate }}"
+                       nzMode="multiple" removeOptionTitle
+                       [nzMaxTagCount]="1"
+                       [nzMaxTagPlaceholder]="buildingTag"
+                       formControlName="buildingIds">
+              <nz-option *ngFor="let item of buildings" [nzCustomContent]="true"
+                         [nzLabel]="item?.code || ''"
+                         [nzValue]="item.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0"
+                     [ngbTooltip]="(item?.code + ' - ' + item?.name)">
+                  {{(item.code + ' - ' + this.limitText(item.name || '', 15))}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-template #buildingTag let-selectedList>
+              <span>{{ '+' + selectedList.length }} {{ 'common.building' | translate }}</span>
+            </ng-template>
+          </div>
+          <div class="col-6 mb-3" *ngIf="!isLeaderManagement">
+            <label>{{ 'common.sender' | translate }}</label>
+            <nz-select nzShowSearch nzAllowClear [nzShowArrow]="true"
+                       nzPlaceHolder="{{ 'common.sender' | translate }}"
+                       nzMode="multiple"
+                       debounceKeyUp removeOptionTitle
+                       (onEvent)="onSearchSender($event)"
+                       [nzMaxTagCount]="2"
+                       [nzMaxTagPlaceholder]="buildingTag"
+                       formControlName="senderIds">
+              <nz-option *ngFor="let item of users" [nzCustomContent]="true"
+                         [nzLabel]="item.fullName!"
+                         [nzValue]="item.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(item.fullName)">{{(item.fullName)}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-template #buildingTag let-selectedList>
+              <span>{{ '+' + selectedList.length }} {{ 'common.sender' | translate }}</span>
+            </ng-template>
+          </div>
+
+          <ng-container *ngIf="type === CUSTOMER">
+            <div class="col-6 mb-3">
+              <label>{{ 'model.notification.list.floor' | translate }}</label>
+              <nz-select nzShowSearch nzAllowClear [nzShowArrow]="true"
+                         [nzDisabled]="floors.length === 0"
+                         nzPlaceHolder="{{ 'model.notification.list.floor' | translate }}"
+                         nzMode="multiple" removeOptionTitle
+                         [nzMaxTagCount]="2"
+                         [nzMaxTagPlaceholder]="floorTag"
+                         formControlName="floorIds">
+                <nz-option *ngFor="let item of floors" [nzCustomContent]="true"
+                           [nzLabel]="item?.name || ''"
+                           [nzValue]="item.id">
+                  <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(item.name)">{{(item.name)}}</div>
+                </nz-option>
+              </nz-select>
+              <ng-template #floorTag let-selectedList>
+                <span>{{ '+' + selectedList.length }} {{ 'common.floor' | translate }}</span>
+              </ng-template>
+            </div>
+            <div class="col-6 mb-3">
+              <label>{{ 'model.notification.list.company' | translate }}</label>
+              <nz-select nzShowSearch nzAllowClear [nzShowArrow]="true"
+                         [nzDisabled]="organizations.length === 0"
+                         nzPlaceHolder="{{ 'model.notification.list.company' | translate }}"
+                         nzMode="multiple" removeOptionTitle
+                         [nzMaxTagCount]="2"
+                         [nzMaxTagPlaceholder]="companyTag"
+                         formControlName="organizationIds">
+                <nz-option *ngFor="let item of organizations" [nzCustomContent]="true"
+                           [nzLabel]="item?.name || ''"
+                           [nzValue]="item.id">
+                  <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(item?.name)">{{(item?.name)}}</div>
+                </nz-option>
+              </nz-select>
+              <ng-template #companyTag let-selectedList>
+                <span>{{ '+' + selectedList.length }} {{ 'common.company' | translate }}</span>
+              </ng-template>
+            </div>
+          </ng-container>
+
+          <div class="col-12 mb-3">
+            <label>{{ 'model.notification.list.sentDate' | translate }}</label>
+            <div class="row date-picker">
+              <div class="col-6">
+                <div class="row align-items-center">
+                  <div class="col-12">
+                    <nz-date-picker formControlName="startDate"
+                                    [nzId]="'startDatePicker'"
+                                    (keyup.enter)="enterStartDatePicker($event)"
+                                    [nzFormat]="'dd/MM/yyyy'"
+                                    #startDatePicker
+                                    nzPlaceHolder="{{ 'action.fromDate' | translate }}">
+                    </nz-date-picker>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="row align-items-center">
+                  <div class="col-12">
+                    <nz-date-picker formControlName="endDate"
+                                    (keyup.enter)="enterEndDatePicker($event)"
+                                    [nzDisabledDate]="disabledBeforeStartDate"
+                                    [nzFormat]="'dd/MM/yyyy'"
+                                    #endDatePicker
+                                    nzPlaceHolder="{{ 'action.toDate' | translate }}">
+                    </nz-date-picker>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mb-3">
+            <label>{{ 'common.status' | translate }}</label>
+            <nz-select nzPlaceHolder="{{ 'common.status' | translate }}"
+                       nzAllowClear removeOptionTitle
+                       formControlName="status">
+              <nz-option *ngFor="let item of statusList" [nzCustomContent]="true"
+                         [nzLabel]="(item?.label || '') | translate"
+                         [nzValue]="item.value">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(item?.label!) | translate">{{(item?.label!) | translate}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onReset()">
+        {{ 'action.reset' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSearch()">
+        {{ 'common.search' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

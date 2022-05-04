@@ -1,0 +1,64 @@
+<nz-layout class="app-layout" *ngIf="currentUser">
+  <nz-sider class="menu-sidebar ant-layout-sider-custom" nzCollapsible nzWidth="320px" nzBreakpoint="xxl"
+    [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+    <div class="sidebar-logo">
+      <a (click)="navigateDashboard()">
+        <img [ngClass]="isCollapsed ? 'sidebar-logo-default' : 'sidebar-logo-resize'" src="assets/images/amc-logo.svg"
+          alt="logo">
+      </a>
+    </div>
+    <app-sidebar [isCollapsed]="isCollapsed"></app-sidebar>
+  </nz-sider>
+  <nz-layout [ngClass]="isCollapsed ? 'ant-layout-has-sider-collapsed' : ''">
+    <nz-header>
+      <div class="app-header">
+        <div class="d-flex">
+          <div class="col">
+            <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+              <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+            </span>
+            <span class="layout-header-title">
+              {{ title | translate }}
+            </span>
+          </div>
+          <div class="col pr-3 text-right">
+            <div class="layout-header-information">
+              <button class="btn-language" nz-button nz-popover nzPopoverTrigger="click" [(nzPopoverVisible)]="visible"
+                [nzPopoverContent]="languageTemplate">
+                <img *ngIf="currentLanguage === LANGUAGES_CONST.VI.code" src="assets/images/icon/vietnam.png" alt="vi">
+                <img *ngIf="currentLanguage === LANGUAGES_CONST.EN.code" src="assets/images/icon/english.png" alt="en">
+              </button>
+              <ng-template #languageTemplate>
+                <div class="language-form">
+                  <p (click)="onChangeLanguage(LANGUAGES_CONST.VI.code)"><img src="assets/images/icon/vietnam.png"
+                      alt="vi">
+                    <span class="ml-2">{{ 'common.vi' | translate }}</span>
+                  </p>
+                  <p (click)="onChangeLanguage(LANGUAGES_CONST.EN.code)"><img src="assets/images/icon/english.png"
+                      alt="en">
+                    <span class="ml-2">{{ 'common.en' | translate }}</span>
+                  </p>
+                </div>
+              </ng-template>
+              <span>{{'common.hello' | translate}}</span>
+              <span class="font-weight-bold">{{getShortName(currentUser?.fullName)}}</span>
+              <nz-divider nzType="vertical"></nz-divider>
+              <button class="btn-logout" nz-button nzType="default">
+                <a (click)="logout()">
+                  {{ 'model.logout.title' | translate }}
+                </a>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nz-header>
+    <nz-content [ngClass]="isDashboard ? 'nz-content-dashboard' : ''">
+      <div class="inner-content">
+        <nz-spin [nzSpinning]="loadingService?.isLoading | async" [nzTip]="'common.spinningTip' | translate">
+          <router-outlet></router-outlet>
+        </nz-spin>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

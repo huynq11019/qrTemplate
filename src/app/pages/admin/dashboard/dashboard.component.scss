@@ -1,0 +1,131 @@
+.dashboard {
+  position: relative;
+}
+
+.image {
+  width: 100% !important;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.title {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  display: grid;
+}
+
+.qr-content {
+  position: absolute;
+  top: 25%;
+  left: 5%;
+}
+
+.mobile-app {
+  position: absolute;
+  top: 20%;
+  right: 3%;
+}
+
+.download {
+  display: flex;
+}
+
+.card-app-store {
+  background: #FFFFFF;
+  border-radius: 4px;
+  width: 110px;
+  padding: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.card-google-play {
+  background: #FFFFFF;
+  border-radius: 4px;
+  width: 110px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.background-dashboard {
+  background-image: url("../../../../assets/images/dashboard.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+}
+
+.title-content {
+  position: absolute;
+  top: 5%;
+  left: 45%;
+  text-align: center;
+}
+
+.slogan {
+  color: #282828;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.body-content {
+  position: absolute;
+  left: 5%;
+  top: 35%;
+}
+
+.body-content p {
+  margin: 0;
+}
+
+.footer-content {
+  position: absolute;
+  left: 5%;
+  top: 45%;
+  width: 80%;
+}
+
+.footer-content p {
+  font-weight: bold;
+  font-size: 80px;
+  color: rgba(232, 189, 147, 0.55);
+  margin: 0;
+}
+
+.footer-label {
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+p, h5, span {
+  color: #F8F8F8;
+}
+
+p {
+  font-size: 18px;
+}
+
+h5 {
+  font-size: 48px;
+}
+
+@media only screen and (max-width: 1920px) {
+  img.image {
+    height: 830px !important;
+  }
+}
+
+@media only screen and (max-width: 1600px) {
+  img.image {
+    height: 785px !important;
+  }
+}
+
+@media only screen and (max-width: 1366px) {
+  img.image {
+    height: 650px !important;
+  }
+}

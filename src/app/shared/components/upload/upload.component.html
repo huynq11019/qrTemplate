@@ -1,0 +1,38 @@
+<section class="content">
+  <div *nzModalTitle>
+    <span>{{ 'action.import' | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <nz-upload
+        nzType="drag"
+        [nzMultiple]="multiple"
+        [nzAccept]="acceptFiles"
+        [nzShowUploadList]="false"
+        [(nzFileList)]="filesUpload"
+        [nzCustomRequest]="handleCustomUploadReq"
+        [nzBeforeUpload]="beforeUpload"
+        (nzChange)="handleChange($event)"
+      >
+        <p class="ant-upload-drag-icon">
+          <i nz-icon nzType="inbox"></i>
+        </p>
+        <p class="ant-upload-text">{{ 'common.uploadText' | translate }}</p>
+        <p class="ant-upload-hint">
+          {{ 'common.uploadHint' | translate }}
+        </p>
+      </nz-upload>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onCancel()">
+        {{ 'action.cancel' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSubmit()"
+              [disabled]="files.length === 0">
+        {{ 'action.confirm' | translate }}
+      </button>
+    </div>
+  </div>
+</section>

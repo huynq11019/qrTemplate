@@ -1,0 +1,312 @@
+<div class="content">
+  <div class="row mb-3">
+    <div class="col-12">
+      <mb-table-title [title]="'model.survey.results.title'"></mb-table-title>
+    </div>
+  </div>
+  <section class="content">
+    <nz-tabset (nzSelectedIndexChange)="onChangeTab($event)" [nzSelectedIndex]="tabIndex">
+
+      <nz-tab [nzTitle]="'model.survey.results.survey' | translate"
+              *ngIf="userLevel.USER_LEVEL_CENTER || userLevel.USER_LEVEL_LEADER_MANAGEMENT">
+        <ng-container [ngTemplateOutlet]="templateStage"
+                      [ngTemplateOutletContext]="{}">
+        </ng-container>
+      </nz-tab>
+      <nz-tab [nzTitle]="'model.survey.results.company' | translate"
+              *ngIf="userLevel.USER_LEVEL_CENTER">
+        <ng-container [ngTemplateOutlet]="templateCompany"
+                      [ngTemplateOutletContext]="{}">
+        </ng-container>
+      </nz-tab>
+      <nz-tab [nzTitle]="'model.survey.results.chart' | translate"
+              *ngIf="userLevel.USER_LEVEL_CENTER">
+        <ng-container [ngTemplateOutlet]="templateChart"
+                      [ngTemplateOutletContext]="{}">
+        </ng-container>
+      </nz-tab>
+    </nz-tabset>
+  </section>
+</div>
+
+<ng-template #templateStage>
+  <div class="row mt-3 mb-4">
+    <div class="col-3 d-flex">
+      <mb-button [iconResource]="'filter'" class="mr-2" (click)="openAdvancedSearch()"></mb-button>
+      <nz-input-group [nzPrefix]="suffixIconSearch">
+        <input type="text" nz-input
+               [value]="tabIndex === 0 ? querySearchStage.keyword : querySearchCompany.keyword"
+               (keyup.enter)="search($event)"
+               [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </div>
+    <div class="col-9 text-right" *ngIf="userLevel.USER_LEVEL_CENTER">
+      <mb-button [type]="'primary'"
+                 (click)="exportModal()"
+                 [icon]="'file-text'"
+                 [text]="'action.outputFile'">
+      </mb-button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <nz-table
+        [nzData]="surveys"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+        <tr>
+          <th nzAlign="center">{{ 'common.index' | translate }}</th>
+          <th nzAlign="left">{{ 'model.survey.buildingCode' | translate }}</th>
+          <th nzAlign="left">{{ 'model.survey.name' | translate }}</th>
+          <th nzAlign="center">{{ 'model.survey.startDate' | translate}}</th>
+          <th nzAlign="center">{{ 'model.survey.endDate' | translate }}</th>
+          <th nzAlign="center">{{ 'model.survey.results.mediumScore' | translate }}</th>
+          <th nzAlign="left" *ngIf="userLevel.USER_LEVEL_CENTER">{{ 'model.survey.note' | translate }}</th>
+          <th nzAlign="center" *ngIf="userLevel.USER_LEVEL_CENTER"
+              [nzWidth]="'180px'">{{ 'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of surveys; let i = index">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td nzAlign="left">{{ item.building?.code }}</td>
+            <td nzAlign="left"
+                nzTooltipTitle="{{ item.survey?.name || '' }}"
+                nzTooltipPlacement="top"
+                nz-tooltip>{{ getLimitLength(item.survey?.name || '', 100) }}</td>
+            <td nzAlign="center">{{ formatDate(item.survey?.startAt) }}</td>
+            <td nzAlign="center">{{ formatDate(item.survey?.endAt) }}</td>
+            <td nzAlign="center">{{ item?.averageScore | number : '1.0-2' }}</td>
+            <td nzAlign="left" [nz-tooltip]="item?.survey?.note"
+                *ngIf="userLevel.USER_LEVEL_CENTER">{{ getLimitLength(item?.survey?.note!, 150) }}</td>
+            <td nzAlign="center" *ngIf="userLevel.USER_LEVEL_CENTER">
+              <mb-button-action [action]="'view'"
+                                [className]="'first'"
+                                (click)="detail(item, STAGE)"
+                                nzTooltipTitle="{{'action.detail' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip>
+              </mb-button-action>
+              <mb-button-action [action]="'file-export'"
+                                [className]="'last'"
+                                (click)="export(item, STAGE)"
+                                nzTooltipTitle="{{'action.export' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip>
+              </mb-button-action>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="querySearchStage.pageIndex"
+                     [pageSize]="querySearchStage.pageSize"
+                     [total]="querySearchStage.total"
+                     (onChange)="onQuerySearch($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #templateCompany>
+  <div class="row mt-3 mb-4">
+    <div class="col-3 d-flex">
+      <mb-button [iconResource]="'filter'" class="mr-2" (click)="openAdvancedSearch()"></mb-button>
+      <nz-input-group [nzPrefix]="suffixIconSearch">
+        <input type="text" nz-input
+               [value]="tabIndex === 0 ? querySearchStage.keyword : querySearchCompany.keyword"
+               (keyup.enter)="search($event)"
+               [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="companies"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)"
+      >
+        <thead>
+        <tr>
+          <th nzAlign="center">{{ 'common.index' | translate }}</th>
+          <th nzAlign="left">{{ 'model.survey.buildingCode' | translate }}</th>
+          <th nzAlign="left">{{ 'model.survey.company' | translate}}</th>
+          <th nzAlign="left">{{ 'model.survey.results.deputy' | translate }}</th>
+          <th nzAlign="left">{{ 'model.survey.name' | translate }}</th>
+          <th nzAlign="center">{{ 'model.survey.results.doSurveyAt' | translate }}</th>
+          <!--          <th nzAlign="center">{{ 'model.survey.startDate' | translate}}</th>-->
+          <!--          <th nzAlign="center">{{ 'model.survey.endDate' | translate }}</th>-->
+          <th nzAlign="center">{{ 'model.survey.results.mediumScore' | translate }}</th>
+          <th nzAlign="left" *ngIf="userLevel.USER_LEVEL_CENTER">{{ 'model.survey.note' | translate }}</th>
+          <th nzAlign="center" [nzWidth]="'180px'"
+              *ngIf="userLevel.USER_LEVEL_CENTER">{{ 'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of companies; let i = index">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td nzAlign="left">{{ item.building?.code }}</td>
+            <td nzAlign="left" nzTooltipTitle="{{ item.organization?.name || '' }}"
+                nzTooltipPlacement="top"
+                nz-tooltip>{{ getLimitLength(item.organization?.name || '', 60)}}</td>
+            <td nzAlign="left">{{ item.organization?.legalRepresentative }}</td>
+            <td nzAlign="left"
+                nzTooltipTitle="{{ item.survey?.name || '' }}"
+                nzTooltipPlacement="top"
+                nz-tooltip>{{ getLimitLength(item.survey?.name || '', 60) }}</td>
+            <td nzAlign="center">{{ formatDate(item?.surveyAt) }}</td>
+            <!--            <td nzAlign="center">{{ formatDate(item.survey?.startAt) }}</td>-->
+            <!--            <td nzAlign="center">{{ formatDate(item.survey?.endAt) }}</td>-->
+            <td nzAlign="center">{{ item?.averageScore | number : '1.0-2' }}</td>
+            <td nzAlign="left" nzTooltipTitle="{{ showNoteTooltip(item?.otherOpinions) }}"
+                nzTooltipPlacement="top" nz-tooltip
+                *ngIf="userLevel.USER_LEVEL_CENTER">{{ showNote(item?.otherOpinions) }}</td>
+            <td nzAlign="center" *ngIf="userLevel.USER_LEVEL_CENTER">
+              <mb-button-action [action]="'view'"
+                                [className]="'first'"
+                                (click)="detail(item, COMPANY)"
+                                nzTooltipTitle="{{'action.detail' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip>
+              </mb-button-action>
+              <mb-button-action [action]="'file-export'"
+                                [className]="'last'"
+                                (click)="export(item, COMPANY)"
+                                nzTooltipTitle="{{'action.export' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip>
+              </mb-button-action>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="querySearchCompany.pageIndex"
+                     [pageSize]="querySearchCompany.pageSize"
+                     [total]="querySearchCompany.total"
+                     (onChange)="onQuerySearch($event)"
+      ></mb-pagination>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #templateChart>
+  <div class="row mt-3">
+    <div class="col-12">
+      <p class="font-weight-bold">{{ 'model.survey.results.titleChart' | translate }}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row mt-3">
+          <div class="col-3">
+            <label>{{ 'model.survey.name' | translate }} <span class="text-danger">*</span></label>
+            <nz-select nzShowSearch nzAllowClear [nzShowArrow]="true"
+                       formControlName="surveyIds" debounceKeyUp
+                       (onEvent)="searchSurvey($event)" removeOptionTitle
+                       nzPlaceHolder="{{ 'model.survey.name' | translate }}"
+                       nzMode="multiple" [nzMaxTagCount]="1">
+              <nz-option *ngFor="let item of surveyList" [nzCustomContent]="true"
+                         [nzLabel]="getLimitLength(item.name!)"
+                         [nzValue]="item.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="item.name">{{getLimitLength(item.name!)}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-container *ngIf="form.get('surveyIds')?.touched || form.get('surveyIds')?.dirty">
+              <span class="text-danger" *ngIf="form.get('surveyIds')?.hasError('required')">
+                          <mb-not-blank [value]="'model.survey.name'"></mb-not-blank>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-3">
+            <label>{{ 'model.survey.criteria' | translate }}</label>
+            <nz-select nzShowSearch nzAllowClear removeOptionTitle
+                       formControlName="questionGroupIds" [nzDisabled]="questionGroupList?.length === 0"
+                       [nzShowArrow]="true" [nzMaxTagCount]="1"
+                       nzPlaceHolder="{{ 'model.survey.criteria' | translate }}"
+                       nzMode="multiple">
+              <nz-option *ngFor="let item of questionGroupList" [nzCustomContent]="true"
+                         [nzLabel]="getLimitLength(item.label! || item.name!)"
+                         [nzValue]="item.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0"
+                     [ngbTooltip]="item.label! || item.name!">{{getLimitLength(item.label! || item.name!)}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-3">
+            <label>{{ 'model.survey.question.questionOfSurvey' | translate }}</label>
+            <nz-select nzShowSearch nzAllowClear removeOptionTitle
+                       formControlName="questionIds" [nzDisabled]="questionList?.length === 0"
+                       [nzShowArrow]="true" [nzMaxTagCount]="1"
+                       nzPlaceHolder="{{ 'model.survey.question.questionOfSurvey' | translate }}"
+                       nzMode="multiple">
+              <nz-option *ngFor="let item of questionList" [nzCustomContent]="true"
+                         [nzLabel]="getLimitLength(item.label! || item.content!)"
+                         [nzValue]="item.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0"
+                     [ngbTooltip]="item.label! || item.content!">{{getLimitLength(item.label! || item.content!)}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-3">
+            <label>{{ 'model.notification.list.code' | translate }}</label>
+            <nz-select nzShowSearch nzAllowClear removeOptionTitle
+                       formControlName="buildingIds" [nzDisabled]="buildingList?.length === 0"
+                       [nzShowArrow]="true" [nzMaxTagCount]="1"
+                       nzPlaceHolder="{{ 'model.notification.list.code' | translate }}"
+                       nzMode="multiple">
+              <nz-option *ngFor="let item of buildingList"
+                         [nz-tooltip]="item.code" [nzCustomContent]="true"
+                         [nzLabel]="getLimitLength(item.code!)"
+                         [nzValue]="item.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="item?.code! + ' - ' + item?.name">
+                  {{getLimitLength(item?.code! + ' - ' + item?.name!, 30)}}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-12 text-center mt-5">
+      <button nz-button nzType="default" (click)="reset()">
+        {{ 'action.reset' | translate }}
+      </button>
+      <button class="ml-3" nz-button nzType="primary" [disabled]="!form.valid" (click)="onSearchChartSurvey()">
+        {{'model.survey.results.createChart' | translate}}
+      </button>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-12">
+      <div id="chart" style="min-height: 600px;" echarts [options]="this.option">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

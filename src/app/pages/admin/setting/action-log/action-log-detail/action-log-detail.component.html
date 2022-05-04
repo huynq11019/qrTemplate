@@ -1,0 +1,78 @@
+<div class="title mb-3">
+    <mb-table-title
+      [title]="( 'model.action-log.detail.title') | translate"
+      [showBack]="true">
+    </mb-table-title>
+</div>
+  <section class="content">
+    <div class="row">
+      <div class="col-12">
+        <form>
+          <div class="row"> 
+            <!-- Customer -->
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.uri' | translate }} </label>
+              <input [disabled]="true" nz-input [value]="actionLog.uri">
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.module' | translate }} </label>
+              <input [disabled]="true" nz-input [value]="actionLog.module">
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.method' | translate }} </label>
+              <input [disabled]="true" nz-input [value]="actionLog.method">
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.httpCode' | translate }} </label>
+              <input [disabled]="true" nz-input [value]="actionLog.httpCode">
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.accessedAt' | translate }}</label>
+              <input [disabled]="true" nz-input [value]="actionLog.accessedAt | date: 'dd/MM/yyyy'">
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.duration' | translate }} (ms)</label>
+              <input [disabled]="true" nz-input [value]="actionLog.duration">
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.remoteIp' | translate }} </label>
+              <input [disabled]="true" nz-input [value]="actionLog.remoteIp">
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.hostIp' | translate }} </label>
+              <input [disabled]="true" nz-input [value]="actionLog.hostIp">
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.sender' | translate }} </label>
+              <input [disabled]="true" nz-input [value]="actionLog.userId">
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.action-log.sentAt' | translate }} </label>
+              <input [disabled]="true" nz-input [value]="actionLog.sentAt | date: 'dd/MM/yyyy'">
+            </div>
+            <div class="col-12 mb-2">
+              <label>{{ 'model.action-log.requestParam' | translate }}</label>
+              <textarea  [disabled]="true" rows="3" [value]="actionLog.requestParam"
+                        nz-input></textarea>
+            </div>
+            <div class="col-12 mb-2">
+              <label>{{ 'model.action-log.requestPayload' | translate }}</label>
+              <textarea [disabled]="true" rows="3" [value]="actionLog.requestPayload"
+                        nz-input></textarea>
+            </div>
+            <div class="col-12 mb-2">
+              <label>{{ 'model.action-log.responsePayload' | translate }}</label>
+              <textarea [disabled]="true" rows="3" [value]="actionLog.responsePayload"
+                        nz-input></textarea>
+            </div>
+          </div>
+        </form>
+        <div class="col-12 text-center mt-5">
+          <button nz-button nzType="default" (click)="onCancel()">
+            {{ 'action.cancel' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  

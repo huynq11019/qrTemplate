@@ -1,0 +1,41 @@
+#!/usr/bin/env groovy
+
+pipeline {
+
+	agent any
+
+	options { skipDefaultCheckout() }
+
+	stages {
+		stage('checkout') {
+			steps {
+				checkout scm
+			}
+		}
+
+		stage('check node and npm') {
+			steps {
+				sh "node -v"
+				sh "npm -v"
+			}
+		}
+		
+		stage('npm install') {
+			steps {
+				sh "npm install"
+			}
+		}
+		
+		stage('packaging') {
+			steps {
+				sh "npm run qa"
+			}
+		}
+
+	        stage('copy') {
+		  steps {
+			sh "cp ./dist/mb-amc /home/mb_amc/services/dist"
+		  }
+		}
+	}
+}

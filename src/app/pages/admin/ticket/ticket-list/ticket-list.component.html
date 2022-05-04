@@ -1,0 +1,182 @@
+<div class="content">
+  <mb-table-title [title]="'model.ticket.list'"></mb-table-title>
+  <div class="row mt-3">
+    <div class="col-3 d-flex">
+      <mb-button
+        [iconResource]="'filter'"
+        class="mr-2"
+        (click)="openAdvancedSearch()"
+      ></mb-button>
+      <nz-input-group nzPrefixIcon="search">
+        <input
+          type="text"
+          nz-input
+          [value]="keyword"
+          (keyup.enter)="search($event)"
+          [placeholder]="'action.search' | translate"
+        />
+      </nz-input-group>
+    </div>
+    <div class="col-9 text-right">
+      <ng-container *ngIf="user?.userLevel !== CENTER">
+        <mb-button
+        *hasRoles="['ticket:create']"
+        [type]="'primary'"
+        [icon]="'plus'"
+        [text]="'action.create'"
+        (click)="create()"
+      >
+      </mb-button>
+      </ng-container>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="tickets"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)"
+      >
+        <thead>
+          <tr>
+            <th nzAlign="center">{{ "common.index" | translate }}</th>
+            <th nzAlign="left" nzColumnKey="code" [nzSortFn]="true">
+              {{ "model.ticket.ticketCode" | translate }}
+            </th>
+            <th nzAlign="left" nzColumnKey="buidingCode">
+              {{ "model.ticket.buildingCode" | translate }}
+            </th>
+            <th nzAlign="left" nzColumnKey="floor">
+              {{ "model.ticket.floor" | translate }}
+            </th>
+            <th nzAlign="left">
+              {{ "model.ticket.service.name" | translate }}
+            </th>
+            <th nzAlign="left">{{ "model.ticket.content" | translate }}</th>
+            <th nzAlign="center" nzColumnKey="createdAt" [nzSortFn]="true">
+              {{ "model.ticket.requestDay" | translate }}
+            </th>
+            <th nzAlign="left">
+              {{ "model.ticket.requestSender" | translate }}
+            </th>
+            <th nzAlign="left">
+              {{ "model.ticket.recipientRequest" | translate }}
+            </th>
+            <th
+              nzAlign="center"
+              nzColumnKey="expectedFinishAt"
+              [nzSortFn]="true"
+            >
+              {{ "model.ticket.estimatedCompletionDate" | translate }}
+            </th>
+            <th nzAlign="center">
+              {{ "model.ticket.status.title" | translate }}
+            </th>
+            <!-- <th nzAlign="left">{{'model.ticket.note' | translate}}</th>
+          <th nzAlign="left">{{'model.ticket.employeeFeedback' | translate}}</th> -->
+            <th nzAlign="center">{{ "action.msg" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of tickets; let i = index">
+            <tr>
+              <td class="thead-border-top-left" nzAlign="center">
+                {{ getIndex(i) }}
+              </td>
+              <td nzAlign="left">{{ item.code }}</td>
+              <td nzAlign="left">{{ item.buildingCode }}</td>
+              <td nzAlign="left">{{ item.floorName }}</td>
+              <td nzAlign="left">
+                {{ formatService(item.serviceType!) | translate }}
+              </td>
+              <td nzAlign="left" nz-tooltip="{{ item.content }}">
+                {{ getLimitLength(item.content!) }}
+              </td>
+              <td nzAlign="center">
+                {{ item.createdAt | date: "dd/MM/yyyy" }}
+              </td>
+              <td nzAlign="left">{{ item.issuedUserName }}</td>
+              <td nzAlign="left">{{ item.receivedUserName }}</td>
+              <td nzAlign="center">
+                {{
+                  displayStartAt(item.expectedFinishAt || 0)
+                    | date: "dd/MM/yyyy"
+                }}
+              </td>
+              <td nzAlign="center" class="status-style">
+                <mb-badge
+                  [color]="formatColor(item?.status!)"
+                  [text]="formatStatus(item?.status!) | translate"
+                >
+                </mb-badge>
+              </td>
+              <!-- <td nzAlign="left" nz-tooltip="{{item.note}}">{{ getLimitLength(item.note!) }}</td>
+            <td nzAlign="left" nz-tooltip="{{item.feedback}}">{{ getLimitLength(item.feedback!) }}</td> -->
+              <td
+                class="thead-border-top-right"
+                nzAlign="center"
+                class="action-width"
+              >
+                <ng-container *ngIf="item.status === statusOpen && user?.userLevel !== CENTER">
+                  <mb-button-action
+                    [action]="'received'"
+                    *hasRoles="['ticket:audit']"
+                    nzTooltipTitle="{{ 'model.ticket.receive' | translate }}"
+                    nzTooltipPlacement="top"
+                    nz-tooltip
+                    (click)="openReceiveTicket(item)"
+                  >
+                  </mb-button-action>
+                </ng-container>
+                <ng-container *ngIf="item.status === statusReceived && user?.userLevel !== CENTER">
+                  <mb-button-action
+                    [action]="'received'"
+                    *hasRoles="['ticket:resolve']"
+                    nzTooltipTitle="{{ 'model.ticket.handle' | translate }}"
+                    nzTooltipPlacement="top"
+                    nz-tooltip
+                    (click)="openHandleTicket(item)"
+                  >
+                  </mb-button-action>
+                </ng-container>
+                <ng-container *ngIf="item.status === statusProcessing && user?.userLevel !== CENTER">
+                  <mb-button-action
+                    [action]="'check'"
+                    *hasRoles="['ticket:resolve']"
+                    nzTooltipTitle="{{ 'model.ticket.doneAction' | translate }}"
+                    nzTooltipPlacement="top"
+                    nz-tooltip
+                    (click)="openCompleteTicket(item)"
+                  >
+                  </mb-button-action>
+                </ng-container>
+                <mb-button-action
+                  [action]="'view'"
+                  *hasRoles="['ticket:view']"
+                  nzTooltipTitle="{{ 'action.detail' | translate }}"
+                  nzTooltipPlacement="top"
+                  nz-tooltip
+                  (click)="toDetail(item.id)"
+                >
+                </mb-button-action>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination
+        [pageIndex]="pageIndex"
+        [pageSize]="pageSize"
+        [total]="total"
+        (onChange)="onQuerySearch($event)"
+      >
+      </mb-pagination>
+    </div>
+  </div>
+</div>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

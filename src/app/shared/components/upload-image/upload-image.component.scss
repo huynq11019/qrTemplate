@@ -1,0 +1,53 @@
+.image {
+  width: 205px;
+  height: 205px;
+  position: relative;
+  border-radius: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.camera {
+  position: absolute;
+  right: 0;
+  transform: translate(35%, -50%);
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#img-camera{
+  cursor: pointer;
+}
+
+.camera>input {
+  display: none;
+}
+
+
+//.btn-action:hover {
+//  cursor: pointer;
+//  box-sizing: border-box;
+//}
+//
+//.camera {
+//  position: absolute;
+//  top: 45%;
+//  left: 60%;
+//  transform: translate(-50%, -50%);
+//  -ms-transform: translate(-50%, -50%);
+//  color: white;
+//  font-size: 16px;
+//  padding: 12px 24px;
+//  border: none;
+//  cursor: pointer;
+//  border-radius: 5px;
+//}
+//
+//ng-container > .ant-upload{
+//  height: 35px !important;
+//}
+
+
+

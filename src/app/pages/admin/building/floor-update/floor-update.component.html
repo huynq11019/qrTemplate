@@ -1,0 +1,84 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span *ngIf="!isDelete">{{ (isUpdate ? 'model.floor.updateFloor' : 'model.floor.createFloor') | translate }}</span>
+    <span *ngIf="isDelete">{{ 'action.delete' | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-12 mb-2">
+            <label>{{ 'model.floor.floorNumber' | translate }}
+              <span class="text-danger">*</span>
+              ({{(availableArea.value || 0) + ' / ' + building?.totalFloor!}})
+            </label>
+            <input formControlName="floorNumber" nz-input [min]="0" appNumbersOnly [isNegative]="true"
+              (onMaxValue)="onMaxFloorNumber($event)" class="" placeholder="{{ 'model.floor.floorNumber' | translate }}"
+              #availableArea required>
+            <ng-container *ngIf="form.get('floorNumber')?.touched || form.get('floorNumber')?.dirty">
+              <span class="text-danger" *ngIf="form.get('floorNumber')?.hasError('required')">
+                <small>{{ 'model.floor.error.requiredFloor' | translate }}</small>
+              </span>
+              <span class="text-danger" *ngIf="form.get('floorNumber')?.hasError('min')">
+                <small>{{ 'model.floor.error.minFloorNumber' | translate }}</small>
+              </span>
+              <span class="text-danger" *ngIf="form.get('floorNumber')?.hasError('max')">
+                <small>{{ 'model.floor.error.floorNumberInvalid' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-12 mb-2">
+            <label>{{ 'model.floor.name' | translate }}
+              <span class="text-danger">*</span>
+            </label>
+            <input formControlName="name" nz-input class="" placeholder="{{ 'model.floor.name' | translate }}"
+              #availableArea [maxlength]="LENGTH_VALIDATOR.NAME_MAX_LENGTH.MAX" required>
+            <ng-container *ngIf="form.get('name')?.touched || form.get('name')?.dirty">
+              <span class="text-danger" *ngIf="form.get('name')?.hasError('required')">
+                <small>{{ 'model.floor.error.requiredFloorName' | translate }}</small>
+              </span>
+              <span class="text-danger" *ngIf="form.get('name')?.hasError('maxLength')">
+                <small>{{ 'model.floor.error.nameMaxLength' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-12 mb-2">
+            <label>{{ 'model.floor.totalArea' | translate }} (m<sup>2</sup>)<span class="text-danger">*</span>
+              ({{(totalArea.value || 0) + ' / ' + building?.area!}})
+            </label>
+            <input formControlName="totalArea" nz-input DecimalFormatter (onMaxValue)="this.onMaxTotalArea($event)"
+              placeholder="{{ 'model.floor.totalArea' | translate }}" #totalArea required>
+            <ng-container *ngIf="form.get('totalArea')?.touched || form.get('totalArea')?.dirty">
+              <span class="text-danger" *ngIf="form.get('totalArea')?.hasError('required')">
+                <small>{{ 'model.floor.error.requiredArea' | translate }}</small>
+              </span>
+              <span class="text-danger" *ngIf="form.get('totalArea')?.hasError('pattern')">
+                <small>{{ 'common.pattern' | translate }}</small>
+              </span>
+              <span class="text-danger" *ngIf="form.get('totalArea')?.hasError('max')">
+                <small>{{ 'model.floor.error.areaMax' | translate }}</small>
+              </span>
+              <span class="text-danger" *ngIf="form.get('totalArea')?.hasError('min')">
+                <small>{{ 'model.floor.error.areaMin' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div class="col-12 text-center" *nzModalFooter>
+          <button nz-button nzType="default" (click)="onCancel()">
+            {{ 'action.cancel' | translate }}
+          </button>
+          <button *ngIf="!isDelete" nz-button nzType="primary" (click)="isUpdate ? onUpdateSubmit() : onSubmit()"
+            [disabled]="this.form.invalid || this.isUpdating">
+            {{ (isUpdate ? 'action.update' : 'action.create') | translate }}
+          </button>
+          <button *ngIf="isDelete" nz-button nzType="danger" (click)="delete()">
+            {{ 'action.delete' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

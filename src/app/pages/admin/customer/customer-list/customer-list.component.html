@@ -1,0 +1,113 @@
+<div class="content">
+  <mb-table-title [title]="'model.customer.list'"></mb-table-title>
+  <div class="row mt-3">
+    <div class="col-3 d-flex">
+      <mb-button [iconResource]="'filter'" class="mr-2" (click)="filter()"></mb-button>
+      <nz-input-group nzPrefixIcon="search">
+        <input type="text" nz-input
+               [value]="keyword"
+               (keyup.enter)="search($event)"
+               [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+    </div>
+    <div class="col-9 text-right">
+      <mb-button [type]="'primary'" *hasRoles="['organization:create']"
+                 [icon]="'plus'"
+                 [text]="'action.create'"
+                 (click)="create()">
+      </mb-button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="customers"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        >
+        <thead>
+        <tr>
+          <th nzAlign="center">{{'common.index' | translate}}</th>
+          <th nzAlign="left">{{'common.company' | translate}}</th>
+          <th nzAlign="left">{{'model.customer.representative' | translate}}</th>
+          <th nzAlign="left">{{'model.customer.code' | translate}}</th>
+          <th nzAlign="left">{{'common.email' | translate}}</th>
+          <th nzAlign="center">{{'common.phoneNumber' | translate}}</th>
+<!--          <th nzAlign="center">{{'model.customer.foundingDate' | translate}}</th>-->
+          <th nzAlign="center">{{'common.status' | translate}}</th>
+          <th class="customer-action" nzAlign="center" [nzWidth]="'10%'">{{'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of customers; let i = index; let firstIndex = first; let lastIndex = last">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td nzAlign="left"
+                nzTooltipTitle="{{ item?.name || '' }}"
+                nzTooltipPlacement="top"
+                nz-tooltip>{{ getLimitLength(item?.name || '') }}
+            </td>
+            <td nzAlign="left"
+                nzTooltipTitle="{{ item?.legalRepresentative || '' }}"
+                nzTooltipPlacement="top"
+                nz-tooltip>{{ getLimitLength(item?.legalRepresentative || '') }}
+            </td>
+            <td nzAlign="left"
+                nzTooltipTitle="{{ item?.businessCode || '' }}"
+                nzTooltipPlacement="top"
+                nz-tooltip>{{ getLimitLength(item?.businessCode || '') }}
+            </td>
+            <td nzAlign="left"
+                nzTooltipTitle="{{ item?.email || '' }}"
+                nzTooltipPlacement="top"
+                nz-tooltip>{{ getLimitLength(item?.email || '') }}
+            </td>
+            <td nzAlign="center">{{ item.phoneNumber }}</td>
+<!--            <td nzAlign="center">{{ format(item?.incorporationDate || null, 'date') | date: 'dd/MM/yyyy' }}</td>-->
+            <td nzAlign="center">
+              <mb-badge [color]="item.status === ACTIVE ? 'badge-info' : 'badge-secondary'"
+                        [text]="format(item.status, 'status')">
+              </mb-badge>
+            </td>
+            <td nzAlign="center">
+              <mb-button-action [action]="'edit'" *hasRoles="['organization:update']"
+                                [className]="'first'"
+                                nzTooltipTitle="{{'action.update' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="update(item)">
+              </mb-button-action>
+              <mb-button-action [action]="item.status === ACTIVE ? 'lock' : 'unlock'"
+                                *hasRoles="['organization:update']"
+                                [className]="'last'"
+                                nzTooltipTitle="{{ (item.status === ACTIVE ? 'action.lock' : 'action.unlock') | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="lock(item)">
+              </mb-button-action>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="pageIndex"
+                     [pageSize]="pageSize"
+                     [total]="total"
+                     (onChange)="onQuerySearch($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</div>
+
+<mb-modal [title]="groupLockPopup.title"
+          [content]="groupLockPopup.content"
+          [okText]="groupLockPopup.okText"
+          [btnCentered]="true"
+          [isVisible]="isVisible"
+          (emitter)="onLockAndUnLock($event)">
+</mb-modal>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

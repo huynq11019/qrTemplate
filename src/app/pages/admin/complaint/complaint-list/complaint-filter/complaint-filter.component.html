@@ -1,0 +1,186 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span>{{ "model.complaint.advancedSearch" | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row mb-3">
+          <div class="col-6">
+            <label>{{ "model.complaint.buildingCode" | translate }}</label>
+            <nz-select
+              [nzShowArrow]="true"
+              nzShowSearch
+              [nzMaxTagPlaceholder]="buildingTag"
+              nzMode="multiple"
+              [nzMaxTagCount]="2"
+              formControlName="buildingIds"
+              nzAllowClear
+              nzPlaceHolder="{{
+                'model.complaint.filter.selectBuildingCode' | translate
+              }}"
+            >
+              <nz-option
+                [nzCustomContent]="true"
+                *ngFor="let building of buildings"
+                [nzLabel]="building.code!"
+                [nzValue]="building.id"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="building.code! + ' - ' + building.name"
+                >
+                  {{ building.code }} - {{ getLimitLength(building.name) }}
+                </div>
+              </nz-option>
+            </nz-select>
+            <ng-template #buildingTag let-selectedList>
+              <span
+                >{{ "+" + selectedList.length }}
+                {{ "common.building" | translate }}</span
+              >
+            </ng-template>
+          </div>
+          <div class="col-6">
+            <label>{{
+              "model.complaint.complaint-list.Satisfied" | translate
+            }}</label>
+            <nz-select
+              [nzShowArrow]="true"
+              nzShowSearch
+              removeOptionTitle
+              formControlName="satisfiedComplaint"
+              nzAllowClear
+              nzPlaceHolder="{{
+                'model.complaint.filter.selectSatisfied' | translate
+              }}"
+            >
+              <nz-option
+                [nzCustomContent]="true"
+                *ngFor="let rating of COMPLAINT_RATING_ARR"
+                [nzLabel]="rating.label | translate"
+                [nzValue]="rating.value"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="rating.label | translate"
+                >
+                  {{ rating.label! | translate }}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <label>{{
+              "model.complaint.complaint-list.type" | translate
+            }}</label>
+            <nz-select
+              [nzShowArrow]="true"
+              nzShowSearch
+              removeOptionTitle
+              formControlName="complaintType"
+              nzAllowClear
+              nzPlaceHolder="{{
+                'model.complaint.filter.selectComplaintType' | translate
+              }}"
+            >
+              <nz-option
+                [nzCustomContent]="true"
+                *ngFor="let status of COMPLAINT_TYPE_ARR"
+                [nzLabel]="status.label | translate"
+                [nzValue]="status.value"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="status.label | translate"
+                >
+                  {{ status.label! | translate }}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-6">
+            <label>{{
+              "model.complaint.complaint-list.status" | translate
+            }}</label>
+            <nz-select
+              [nzShowArrow]="true"
+              nzShowSearch
+              removeOptionTitle
+              formControlName="status"
+              nzAllowClear
+              nzPlaceHolder="{{ 'model.complaint.filter.selectStatus' | translate }}"
+            >
+              <nz-option
+                [nzCustomContent]="true"
+                *ngFor="let status of COMPLAINT_STATUS_ARR"
+                [nzLabel]="status.label | translate"
+                [nzValue]="status.value"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="status.label | translate"
+                >
+                  {{ status.label! | translate }}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label>{{ "model.complaint.createDate" | translate }}</label>
+          <div class="col-6">
+            <div>
+              <nz-date-picker
+                formControlName="startCreatedAt"
+                [nzId]="'startDatePicker'"
+                (keyup.enter)="enterDatePicker($event, 'startCreatedAt')"
+                [nzFormat]="'dd/MM/yyyy'"
+                #startDatePicker
+                nzPlaceHolder="{{ 'action.fromDate' | translate }}"
+              >
+              </nz-date-picker>
+            </div>
+          </div>
+          <div class="col-6">
+            <div>
+              <nz-date-picker
+                formControlName="endCreatedAt"
+                (keyup.enter)="enterDatePicker($event, 'endCreatedAt')"
+                [nzDisabledDate]="disabledBeforeStartAt"
+                [nzFormat]="'dd/MM/yyyy'"
+                #endDatePicker
+                nzPlaceHolder="{{ 'action.toDate' | translate }}"
+              >
+              </nz-date-picker>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" class="mr-2" (click)="onReset()">
+        {{ "action.reset" | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSearch()">
+        {{ "common.search" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

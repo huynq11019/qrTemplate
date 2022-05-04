@@ -1,0 +1,463 @@
+<div class="title mb-3">
+  <mb-table-title [showBack]="true"
+                  [title]="isUpdate ? 'model.customer.titleDetail' : 'model.customer.titleCreate'"></mb-table-title>
+</div>
+<section class="content">
+  <nz-tabset [nzSelectedIndex]="tabIndex" (nzSelectedIndexChange)="onChangeTab($event)">
+    <nz-tab [nzTitle]="'model.customer.informationCustomer' | translate">
+      <ng-container [ngTemplateOutlet]="informationCustomer"
+                    [ngTemplateOutletContext]="{}">
+      </ng-container>
+    </nz-tab>
+    <nz-tab [nzTitle]="'model.customer.informationRent' | translate" [nzDisabled]="!isUpdate">
+      <ng-container [ngTemplateOutlet]="informationRent"
+                    [ngTemplateOutletContext]="{}">
+      </ng-container>
+    </nz-tab>
+    <nz-tab [nzTitle]="'model.customer.contact' | translate" [nzDisabled]="!isUpdate">
+      <ng-container [ngTemplateOutlet]="informationContact"
+                    [ngTemplateOutletContext]="{}">
+      </ng-container>
+    </nz-tab>
+  </nz-tabset>
+</section>
+
+<ng-template #informationCustomer>
+  <div class="row mt-3">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <ng-container *ngIf="!isUpdate">
+            <div class="col-6 mb-2">
+              <label>{{ 'model.customer.code' | translate }} <span class="text-danger">*</span></label>
+              <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input formControlName="businessCode" nz-input [maxLength]="LENGTH_VALIDATOR.CODE_MAX_LENGTH.MAX"
+                       (input)="clearBusinessCodeValidate($event)"
+                       (keyup.enter)="search($event)"
+                       numbersCharacterOnly
+                       placeholder="{{ 'model.customer.code' | translate }}">
+              </nz-input-group>
+              <ng-template #suffixIconSearch>
+                <i class="search" (click)="clickOnSearch()" nz-icon nzType="search"></i>
+              </ng-template>
+              <ng-container *ngIf="form.get('businessCode')?.touched || form.get('businessCode')?.dirty">
+                <span class="text-danger" *ngIf="form.get('businessCode')?.hasError('required')">
+                  <mb-not-blank [value]="'model.customer.code'"></mb-not-blank>
+                </span>
+                <span class="text-danger" *ngIf="form.get('businessCode')?.hasError('pattern')">
+                  <small>{{ 'common.pattern' | translate }}</small>
+                </span>
+                <span class="text-success" *ngIf="modalSearch.isShowBusinessCodeNotUse">
+                  <small>{{ 'model.customer.success.businessCodeNotUse' | translate }}</small>
+                </span>
+                <span class="text-danger" *ngIf="modalSearch.isShowBusinessCodeUse">
+                  <small>{{ 'model.customer.error.businessCodeUse' | translate }}</small>
+                </span>
+              </ng-container>
+            </div>
+            <div class="col-6 mb-2">
+              <label>{{ 'model.customer.type' | translate }} <span class="text-danger">*</span></label>
+              <nz-select nzPlaceHolder="{{ 'model.customer.type' | translate }}" removeOptionTitle
+                         formControlName="type">
+                <nz-option *ngFor="let type of customerType" [nzCustomContent]="true"
+                           [nzLabel]="(type?.label || '') | translate"
+                           [nzValue]="type?.value">
+                  <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(type?.label || '') | translate">{{(type?.label || '') | translate}}</div>
+                </nz-option>
+              </nz-select>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="isUpdate">
+            <div class="col-12 mb-2">
+              <div class="information-detail-customer">
+                <span>{{ 'model.customer.customerCode' | translate }}: <span class="pl-2 font-weight-bold">{{ customer.code }}</span></span>
+                <span class="mr-4 ml-4">{{ 'model.customer.type' | translate }}: <span class="pl-2 font-weight-bold">{{ format(customer?.type, 'customer') }}</span></span>
+                <span>{{ 'model.customer.code' | translate }}: <span class="pl-2 font-weight-bold">{{ customer.businessCode }}</span></span>
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="col-6 mb-2">
+            <label>{{ 'common.company' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="name" nz-input [maxLength]="LENGTH_VALIDATOR.NAME_MAX_LENGTH.MAX"
+                   placeholder="{{ 'common.company' | translate }}">
+            <ng-container *ngIf="form.get('name')?.touched || form.get('name')?.dirty">
+            <span class="text-danger" *ngIf="form.get('name')?.hasError('required')">
+              <mb-not-blank [value]="'common.company'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('name')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'model.customer.representative' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="legalRepresentative" nz-input [maxLength]="LENGTH_VALIDATOR.NAME_MAX_LENGTH.MAX"
+                   placeholder="{{ 'model.customer.representative' | translate }}">
+            <ng-container *ngIf="form.get('legalRepresentative')?.touched || form.get('legalRepresentative')?.dirty">
+            <span class="text-danger" *ngIf="form.get('legalRepresentative')?.hasError('required')">
+              <mb-not-blank [value]="'model.customer.representative'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('legalRepresentative')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'common.email' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="email" nz-input [maxLength]="LENGTH_VALIDATOR.EMAIL_MAX_LENGTH.MAX"
+                   placeholder="{{ 'common.email' | translate }}">
+            <ng-container *ngIf="form.get('email')?.touched || form.get('email')?.dirty">
+            <span class="text-danger" *ngIf="form.get('email')?.hasError('required')">
+              <mb-not-blank [value]="'common.email'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('email')?.hasError('pattern')">
+              <small>{{ 'error.email' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'common.phoneNumber' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="phoneNumber" nz-input [maxLength]="LENGTH_VALIDATOR.PHONE_MAX_LENGTH.MAX"
+                   placeholder="{{ 'common.phoneNumber' | translate }}">
+            <ng-container *ngIf="form.get('phoneNumber')?.touched || form.get('phoneNumber')?.dirty">
+            <span class="text-danger" *ngIf="form.get('phoneNumber')?.hasError('required')">
+              <mb-not-blank [value]="'common.phoneNumber'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('phoneNumber')?.hasError('pattern')">
+              <small>{{ 'error.phoneNumber' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'model.customer.address' | translate }}</label>
+            <input formControlName="invoiceIssuingAddress" nz-input [maxLength]="LENGTH_VALIDATOR.ADDRESS_MAX_LENGTH.MAX"
+                   placeholder="{{ 'model.customer.address' | translate }}">
+            <ng-container
+              *ngIf="form.get('invoiceIssuingAddress')?.touched || form.get('invoiceIssuingAddress')?.dirty">
+            <span class="text-danger" *ngIf="form.get('invoiceIssuingAddress')?.hasError('required')">
+              <mb-not-blank [value]="'model.customer.address'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('invoiceIssuingAddress')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'model.customer.foundingDate' | translate }}</label>
+            <div class="date-picker">
+              <nz-date-picker formControlName="incorporationDate"
+                              (keyup.enter)="enterDatePicker($event)"
+                              [nzDisabledDate]="disabledAfterToday"
+                              [nzFormat]="'dd/MM/yyyy'"
+                              #datePicker
+                              nzPlaceHolder="{{ 'DD/MM/YYYY' | translate }}">
+              </nz-date-picker>
+            </div>
+            <ng-container *ngIf="form.get('incorporationDate')?.touched || form.get('incorporationDate')?.dirty">
+            <span class="text-danger" *ngIf="form.get('incorporationDate')?.hasError('required')">
+              <mb-not-blank [value]="'model.customer.foundingDate'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('incorporationDate')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'status.title' | translate }} <span class="text-danger">*</span></label>
+            <nz-select formControlName="status" removeOptionTitle
+                       [nzPlaceHolder]="'status.title' | translate">
+              <nz-option *ngFor="let item of status" [nzCustomContent]="true"
+                         [nzLabel]="(item?.label || '') | translate"
+                         [nzValue]="item?.value">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(item?.label || '') | translate">{{(item?.label || '') | translate}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row text-center mt-5">
+    <div class="col-12">
+      <button nz-button nzType="default" class="mr-2" (click)="onCancel()">
+        {{ 'action.cancel' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSubmit()"
+              [disabled]="!form.valid || modalSearch.isShowBusinessCodeUse">
+        {{ 'action.save' | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #informationContact>
+  <div class="row">
+    <div class="col-12 text-right">
+      <button nz-button nzType="primary" (click)="onCreateContact()">
+        <i class="text-white" nz-icon nzType="plus"></i>
+        {{ 'action.create' | translate }}
+      </button>
+    </div>
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="contactList"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'">
+        <thead>
+        <tr>
+          <th nzAlign="center">{{'common.index' | translate}}</th>
+          <th nzAlign="left">{{'model.user.fullName' | translate}}</th>
+          <th nzAlign="left">{{'common.phoneNumber' | translate}}</th>
+          <th nzAlign="left">{{'common.email' | translate}}</th>
+          <th nzAlign="center">{{'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of contactList; let i = index">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td nzAlign="left">{{ item?.fullName }}</td>
+            <td nzAlign="left">{{ item?.phoneNumber }}</td>
+            <td nzAlign="left">{{ item?.email }}</td>
+            <td nzAlign="center">
+              <mb-button-action [action]="'add'"
+                                [isShow]="!(item?.userId)"
+                                [className]="'first'"
+                                nzTooltipTitle="{{'action.link' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="onAddLinkUserToContact(item)">
+              </mb-button-action>
+              <mb-button-action [action]="'edit'"
+                                [className]="item?.userId ? 'first' : 'center'"
+                                (click)="onUpdateContact(item)"
+                                nzTooltipTitle="{{'action.update' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip>
+              </mb-button-action>
+              <mb-button-action [action]="'delete'"
+                                [className]="'last'"
+                                nzTooltipTitle="{{'action.delete' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="onOpenDeleteContact(item)">
+              </mb-button-action>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="contactRequest.pageIndex"
+                     [pageSize]="contactRequest.pageSize"
+                     [total]="contactRequest.total"
+                     (onChange)="onQuerySearchContact($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #informationRent>
+  <div class="row">
+    <div class="col-12 text-right">
+      <button nz-button nzType="primary" (click)="onCreateLeasing()" *ngIf="customer?.status === STATUS_ACTIVE">
+        <i class="text-white" nz-icon nzType="plus"></i>
+        {{ 'action.create' | translate }}
+      </button>
+    </div>
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="leasingList"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'">
+        <thead>
+        <tr>
+          <th nzAlign="center">{{'common.index' | translate}}</th>
+          <th>{{'common.buildingCode' | translate}}</th>
+          <th>{{'common.floor' | translate}}</th>
+          <th>{{'common.unitCode' | translate}}</th>
+          <th>{{'common.status' | translate}}</th>
+          <th nzAlign="center">{{'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of leasingList; let i = index">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td>{{ item.building?.code }}</td>
+            <td>{{ item.floor?.name }}</td>
+            <td>{{ item.unit?.code }}</td>
+            <td>{{ format(item.leasingStatus, 'leasing') }}</td>
+            <td nzAlign="center">
+              <ng-container *ngIf="item.leasingStatus !== RETURNED">
+                <mb-button-action [action]="'trash'"
+                                  [className]="'first'"
+                                  nzTooltipTitle="{{'model.customer.delete' | translate}}"
+                                  nzTooltipPlacement="top"
+                                  nz-tooltip
+                                  (click)="onClickActionLeasing(item, 'delete')">
+                </mb-button-action>
+                <mb-button-action [action]="'dollar'"
+                                  [className]="'center'"
+                                  *ngIf="item.leasingStatus !== LEASED"
+                                  (click)="onClickActionLeasing(item, 'paid')"
+                                  nzTooltipTitle="{{'model.customer.paid' | translate}}"
+                                  nzTooltipPlacement="top"
+                                  nz-tooltip>
+                </mb-button-action>
+                <mb-button-action [action]="'reset'"
+                                  [className]="'last'"
+                                  nzTooltipTitle="{{'model.customer.returned' | translate}}"
+                                  nzTooltipPlacement="top"
+                                  nz-tooltip
+                                  (click)="onClickActionLeasing(item, 'returned')">
+                </mb-button-action>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="leasingRequest.pageIndex"
+                     [pageSize]="leasingRequest.pageSize"
+                     [total]="leasingRequest.total"
+                     (onChange)="onQuerySearchLeasing($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</ng-template>
+
+<mb-modal [title]="'model.customer.titleDeleteContact'"
+          [content]="'model.customer.contentDeleteContact'"
+          [btnCentered]="true"
+          [showBtnCancel]="false"
+          [width]="'27%'"
+          [isVisible]="isVisibleContact"
+          (emitter)="onDeleteContact($event)">
+</mb-modal>
+
+<mb-modal [title]="groupLeasingPopup.title"
+          [content]="groupLeasingPopup.content"
+          [btnCentered]="true"
+          [showBtnCancel]="false"
+          [width]="'27%'"
+          [isVisible]="isVisibleLeasing"
+          (emitter)="onHandleActionLeasing($event)">
+</mb-modal>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>
+
+<mb-modal [title]="'model.customer.titleModalSearchBusinessCode'"
+          [content]="'model.customer.contentModalSearchBusinessCode'"
+          [okText]="'action.update'"
+          [btnCentered]="true"
+          [isVisible]="modalSearch.show"
+          (emitter)="onHandleSearch($event)">
+</mb-modal>
+
+<!-- START LINE - [ Information Contact ]
+
+<form [formGroup]="formContact">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div *ngFor="let item of contacts?.controls; let i = index;" formArrayName="contacts">
+          <div [formGroupName]="i">
+            <div class="row mt-2">
+              <div class="col-3">
+                <label>{{ 'model.customer.contactPerson' | translate }} <span class="text-danger">*</span></label>
+                <input formControlName="fullName" nz-input [maxLength]="255"
+                       placeholder="{{ 'model.customer.contactPerson' | translate }}">
+              </div>
+
+              <div class="col-3">
+                <label>{{ 'common.phoneNumber' | translate }} <span class="text-danger">*</span></label>
+                <input formControlName="phoneNumber" nz-input [maxLength]="255"
+                       placeholder="{{ 'common.phoneNumber' | translate }}">
+              </div>
+
+              <div class="col-3">
+                <label>{{ 'common.email' | translate }} <span class="text-danger">*</span></label>
+                <input formControlName="email" nz-input [maxLength]="255"
+                       placeholder="{{ 'common.email' | translate }}">
+              </div>
+
+              <div class="col-3 align-self-end">
+                <div class="d-flex">
+                  <mb-button [type]="'primary'" [disabled]="!item?.value?.id"
+                                  [icon]="'plus'"
+                                  [tooltip]="'action.create'"
+                                  (click)="addUser(item, i)">
+                  </mb-button>
+                  <mb-button class="ml-2"
+                                  [type]="'default'"
+                                  [icon]="'delete'"
+                                  [tooltip]="'action.delete'"
+                                  (click)="removeContact(i)">
+                  </mb-button>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3"><ng-container
+                *ngIf="contacts!.controls[i]?.get('fullName')?.touched || contacts!.controls[i]?.get('fullName')?.dirty">
+            <span class="text-danger" *ngIf="contacts!.controls[i]?.get('fullName')?.hasError('required')">
+              <small>{{ 'common.required' | translate }}</small>
+            </span>
+                <span class="text-danger" *ngIf="contacts!.controls[i]?.get('fullName')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+              </ng-container></div>
+              <div class="col-3"><ng-container
+                *ngIf="contacts!.controls[i]?.get('phoneNumber')?.touched || contacts!.controls[i]?.get('phoneNumber')?.dirty">
+            <span class="text-danger" *ngIf="contacts!.controls[i]?.get('phoneNumber')?.hasError('required')">
+              <small>{{ 'common.required' | translate }}</small>
+            </span>
+                <span class="text-danger" *ngIf="contacts!.controls[i]?.get('phoneNumber')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+              </ng-container></div>
+              <div class="col-3"><ng-container
+                *ngIf="contacts!.controls[i]?.get('email')?.touched || contacts!.controls[i]?.get('email')?.dirty">
+            <span class="text-danger" *ngIf="contacts!.controls[i]?.get('email')?.hasError('required')">
+              <small>{{ 'common.required' | translate }}</small>
+            </span>
+                <span class="text-danger" *ngIf="contacts!.controls[i]?.get('email')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+              </ng-container></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <button nz-button nzType="default" (click)="addContact()">
+              <i class="text-primary" nz-icon nzType="plus"></i>
+              {{ 'action.create' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row text-center mt-2">
+      <div class="col-12">
+        <button nz-button nzType="default" class="mr-2" (click)="onCancel()">
+          {{ 'action.cancel' | translate }}
+        </button>
+        <button nz-button nzType="primary" (click)="onSubmit()"
+                [disabled]="!formContact.valid">
+          {{ 'action.save' | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+
+END LINE -->

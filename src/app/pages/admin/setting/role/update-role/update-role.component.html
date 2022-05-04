@@ -1,0 +1,96 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span>{{ (isUpdate ? 'action.update' : 'action.create') | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-12 mb-2">
+            <label>{{ 'model.role.name' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="name" nz-input [maxLength]="LENGTH_VALIDATOR.NAME_MAX_LENGTH.MAX"
+                   placeholder="{{ 'model.role.enterName' | translate }}">
+            <ng-container *ngIf="form.get('name')?.touched || form.get('name')?.dirty">
+              <span class="text-danger" *ngIf="form.get('name')?.hasError('required')">
+                  <mb-not-blank [value]="'model.role.name'"></mb-not-blank>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 mb-2">
+            <label>{{ 'model.role.code' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="code" nz-input [disabled]="isUpdate" [maxLength]="LENGTH_VALIDATOR.CODE_MAX_LENGTH.MAX"
+                   placeholder="{{ 'model.role.enterCode' | translate }}">
+            <ng-container *ngIf="form.get('code')?.touched || form.get('code')?.dirty">
+              <span class="text-danger" *ngIf="form.get('code')?.hasError('required')">
+                  <mb-not-blank [value]="'model.role.code'"></mb-not-blank>
+              </span>
+              <span class="text-danger" *ngIf="form.get('code')?.hasError('pattern')">
+                <small>{{ 'common.pattern' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 ">
+            <label class="label-switch mr-5">{{ 'model.role.isAdmin' | translate }}</label>
+            <div class="ml-1">
+              <nz-switch  nzSize="small" formControlName="isRoot"
+                    [nzControl]="true"
+                    (click)="checkRoot()"
+                    nz-tooltip="{{'model.role.isAdmin' | translate}}">
+              </nz-switch>
+            </div>
+          </div>
+          <div class="col-6 ">
+            <label>{{ 'model.role.roleLevel' | translate }} <span class="text-danger">*</span></label>
+            <nz-select nzPlaceHolder="{{ 'model.role.chooseLevel' | translate }}"
+                  formControlName="roleLevel" removeOptionTitle
+                  (ngModelChange)="chooseNotCenter($event)">
+                <nz-option *ngFor="let level of ROLE_LEVEL"
+                  [nzLabel]="(level.label) | translate" [nzCustomContent]="true"
+                  [nzValue]="level.value">
+                  <div container="body" [animation]="false"
+                       [openDelay]="100"
+                       [closeDelay]="0" [ngbTooltip]="(level?.label!) | translate">{{(level?.label!) | translate}}</div>
+                </nz-option>
+            </nz-select>
+            <ng-container *ngIf="form.get('roleLevel')?.touched || form.get('roleLevel')?.dirty">
+              <span class="text-danger" *ngIf="form.get('roleLevel')?.hasError('required')">
+                  <mb-not-blank [value]="'model.role.roleLevel'"></mb-not-blank>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 mb-2">
+            <label>{{ 'model.role.description' | translate }}</label>
+              <textarea rows="4"
+                        [maxlength]="LENGTH_VALIDATOR.DESC_MAX_LENGTH.MAX"
+                        placeholder="{{ 'model.role.enterDes' | translate }}"
+                        formControlName="description"
+                        nz-input>
+              </textarea>
+            <ng-container *ngIf="form.get('description')?.touched || form.get('description')?.dirty">
+              <span class="text-danger" *ngIf="form.get('description')?.hasError('required')">
+                <small>{{ 'common.required' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" class="mr-2" (click)="onCancel()">
+        {{ 'action.cancel' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSubmit()"
+              [disabled]="form.invalid">
+        {{ (isUpdate ? 'action.save' : 'action.save') | translate }}
+      </button>
+    </div>
+  </div>
+</div>

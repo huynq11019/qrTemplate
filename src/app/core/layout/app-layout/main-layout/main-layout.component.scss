@@ -1,0 +1,138 @@
+:host {
+  display: flex;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-layout {
+  height: 100%;
+}
+
+.menu-sidebar {
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  overflow: auto;
+  height: 100% !important;
+  //min-height: 100vh;
+  box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+}
+
+.menu-sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+//.menu-sidebar.ant-layout-sider-collapsed {
+//  overflow: hidden;
+//}
+
+.header-trigger {
+  height: 64px;
+  padding: 20px 24px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all .3s, padding 0s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.sidebar-logo {
+  text-align: center;
+  position: relative;
+  height: 64px;
+  overflow: hidden;
+  line-height: 64px;
+  background: #ffffff;
+  transition: all .3s;
+}
+
+.sidebar-logo-default {
+  display: inline-block;
+  height: 36px;
+  width: 36px;
+  vertical-align: middle;
+}
+
+.sidebar-logo-resize {
+  display: inline-block;
+  //height: 64px;
+  //width: 64px;
+  vertical-align: middle;
+}
+
+.sidebar-logo h1 {
+  display: inline-block;
+  margin: 0 0 0 20px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+  vertical-align: middle;
+}
+
+nz-header {
+  padding: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.app-header {
+  position: relative;
+  height: 64px;
+  padding: 0;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+}
+
+nz-content {
+  margin: 24px;
+}
+
+.nz-content-dashboard {
+  margin: 0;
+}
+
+.inner-content {
+  height: 100%;
+}
+
+.btn-logout {
+  font-weight: 500;
+  border-radius: 8px;
+  min-width: 100px;
+  height: 35px;
+  background: #ffffff;
+  border: 1px solid #0054A5;
+  color: #0054A5;
+}
+
+.btn-logout:hover {
+  background: #0054A5;
+  border: 1px solid #0054A5;
+  color: #ffffff;
+}
+
+.btn-language {
+  border: none;
+  outline: none;
+  position: relative;
+  min-width: 0;
+  padding: 5px 10px;
+  top: -2px;
+}
+
+.language-form {
+  cursor: pointer;
+}
+
+::ng-deep.ant-popover-inner {
+  border-radius: 7px !important;
+}
+
+.layout-header-title {
+  font-size: 20px;
+  font-weight: 500;
+}

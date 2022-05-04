@@ -1,0 +1,338 @@
+<div class="content">
+  <mb-table-title
+    [showBack]="true"
+    [title]="'model.ticket.ticketDetail.title'"
+  ></mb-table-title>
+  <section class="content mt-3 pl-2 pr-2">
+    <div class="row pl-3">
+      <ng-container *ngIf="!isComplaint">
+        <div class="col-4">
+          <div class="row">
+            <div class="col-4">
+              <label> {{ this.getTranslate("ticketCode") }}: </label>
+            </div>
+            <div class="col-2">
+              <span class="ticket-value">{{ ticket?.code }}</span>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-4">
+              <label> {{ this.getTranslate("buildingCode") }}: </label>
+            </div>
+            <div class="col-2">
+              <span class="ticket-value">{{ ticket?.buildingCode }}</span>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-4">
+              <label> {{ this.getTranslate("organization") }}: </label>
+            </div>
+            <div class="col-6">
+              <span class="ticket-value">
+                {{ ticket?.organizationName }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="row">
+            <div class="col-4">
+              <label> {{ this.getTranslate("requestDate") }}: </label>
+            </div>
+            <div class="col-3">
+              <span class="ticket-value">
+                {{ ticket?.createdAt | date: "dd/MM/yyyy" }}
+              </span>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-4">
+              <label> {{ this.getTranslate("floorNumber") }}: </label>
+            </div>
+            <div class="col-3">
+              <span class="ticket-value">{{ ticket?.floorName }}</span>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-4">
+              <label> {{ this.getTranslate("sender") }}: </label>
+            </div>
+            <div class="col-6">
+              <span class="ticket-value">{{ ticket?.issuedUserName }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="row">
+            <div class="col-6">
+              <label> {{ this.getTranslate("status") }}: </label>
+            </div>
+            <div class="col-4">
+              <span class="ticket-value">{{
+                formatStatus(ticket?.status!) | translate
+              }}</span>
+            </div>
+          </div>
+          <div *ngIf="!!ticket?.serviceType" class="row mt-2">
+            <div class="col-6">
+              <label> {{ this.getTranslate("service") }}: </label>
+            </div>
+            <div class="col-4">
+              <span class="ticket-value">
+                {{ formatService(ticket?.serviceType!) | translate }}
+              </span>
+            </div>
+          </div>
+          <div *ngIf="!!ticket?.expectedFinishAt" class="row mt-2">
+            <div class="col-6">
+              <label> {{ this.getTranslate("estimateDate") }}: </label>
+            </div>
+            <div class="col-3">
+              <span class="ticket-value">
+                {{ ticket?.expectedFinishAt | date: "dd/MM/yyyy" }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isComplaint">
+        <div class="col-4">
+          <div class="row">
+            <div class="col-4">
+              <label>{{ this.getTranslate("ticketCode") }}:</label>
+            </div>
+            <div class="col-2">
+              <span class="ticket-value">{{ ticket?.code }}</span>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-4">
+              <label>{{ this.getTranslate("buildingCode") }}:</label>
+            </div>
+            <div class="col-2">
+              <span class="ticket-value">{{ ticket?.buildingCode }}</span>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-4">
+              <label>{{ this.getTranslate("complaintCode") }}:</label>
+            </div>
+            <div class="col-2">
+              <span
+                *ngIf="this.hasAuthority(['complaint:view']); else nonLink"
+                class="ticket-value"
+                ><a class="link-text" (click)="getLinkToComplaint()">{{
+                  ticket?.complaint?.code
+                }}</a></span
+              >
+              <ng-template #nonLink>
+                <span class="ticket-value" >
+                {{ticket?.complaint?.code}}
+              </span>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="row">
+            <div class="col-4">
+              <label>{{ this.getTranslate("createAt") }}: </label>
+            </div>
+            <div class="col-3">
+              <span class="ticket-value">
+                <span class="ticket-value">{{
+                  ticket?.createdAt | date: "dd/MM/yyyy"
+                }}</span></span
+              >
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-4">
+              <label>{{ this.getTranslate("floorNumber") }}: </label>
+            </div>
+            <div class="col-3">
+              <span class="ticket-value">{{ ticket?.floorName }}</span>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-4">
+              <label>{{ this.getTranslate("sender") }}: </label>
+            </div>
+            <div class="col-8">
+              <span class="ticket-value">{{
+                ticket?.issuedUserName
+              }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="row">
+            <div class="col-4">
+              <label>{{ this.getTranslate("status") }}: </label>
+            </div>
+            <div class="col-4">
+              <span class="ticket-value">{{
+                formatStatus(ticket?.status!) | translate
+              }}</span>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-4">
+              <label>{{ this.getTranslate("serviceType") }}: </label>
+            </div>
+            <div class="col-4">
+              <span class="ticket-value">{{
+                formatService(ticket?.serviceType!) | translate
+              }}</span>
+            </div>
+          </div>
+          <div class="row"></div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="row pl-2 pr-2 mt-3">
+      <div class="col">
+        <label
+          >{{ "model.ticket.content" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <textarea
+          class="content ticket"
+          rows="4"
+          nz-input
+          placeholder="{{ 'model.ticket.enterContent' | translate }}"
+          required
+          disabled="true"
+          >{{ ticket?.content }}</textarea
+        >
+      </div>
+    </div>
+    <div class="row pl-2 pr-2 mt-3">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <label>{{ this.getTranslate("illustrationsFiles") }}</label>
+          </div>
+        </div>
+        <!-- <p class="sub-title pr-2">Upload tối đa 5 ảnh</p> -->
+        <nz-image-group>
+          <ng-container *ngFor="let item of this.illustrationsFiles">
+            <!-- <div class="img-container"> -->
+            <img
+              nz-image
+              class="img-item"
+              nzSrc="{{ this.addTokenToFile(item?.viewUrl, item.id) }}"
+              [nzFallback]="fallback"
+              alt=""
+            />
+            <!-- </div> -->
+          </ng-container>
+          <ng-container *ngIf="this.illustrationsFiles?.length === 0">
+            <!-- <div class="img-container"> -->
+            <img
+              nz-image
+              class="img-item"
+              [nzSrc]="noImage"
+              [nzFallback]="fallback"
+            />
+            <!-- </div> -->
+          </ng-container>
+        </nz-image-group>
+      </div>
+    </div>
+    <div class="row pl-2 pr-2 mt-3">
+      <div class="col">
+        <label
+          >{{ "model.ticket.note" | translate }}
+          <span class="text-danger"></span
+        ></label>
+        <textarea
+          *ngIf="!!ticket?.note"
+          class="content ticket"
+          rows="4"
+          nz-input
+          required
+          disabled="true"
+          >{{ ticket?.note }}</textarea
+        >
+        <textarea
+          *ngIf="!ticket?.note"
+          class="content ticket"
+          rows="4"
+          nz-input
+          placeholder="{{ 'model.ticket.employeeNoteEmpty' | translate }}"
+          required
+          disabled="true"
+        ></textarea>
+      </div>
+    </div>
+    <div
+      *ngIf="ticket?.status === this.TICKET_STATUS_ALL.CLOSED"
+      class="row mt-3 pl-2 pr-2"
+    >
+      <div class="col">
+        <label>{{ "model.ticket.employeeFeedback" | translate }} </label>
+        <textarea
+          *ngIf="!!ticket?.feedback"
+          class="content ticket"
+          rows="4"
+          nz-input
+          required
+          disabled="true"
+          >{{ ticket?.feedback }}</textarea
+        >
+        <textarea
+          *ngIf="!ticket?.feedback"
+          class="content ticket"
+          rows="4"
+          nz-input
+          placeholder="{{ 'model.ticket.employeeFeedbackEmpty' | translate }}"
+          required
+          disabled="true"
+        ></textarea>
+      </div>
+    </div>
+    <div
+      *ngIf="ticket?.status === this.TICKET_STATUS_ALL.CLOSED"
+      class="row pl-2 pr-2 mt-3"
+    >
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <label>{{ this.getTranslate("inspectionFiles") }}</label>
+          </div>
+        </div>
+        <!--        <p class="sub-title pr-2">Upload tối đa 5 ảnh</p>-->
+        <nz-image-group>
+          <ng-container *ngFor="let item of this.inspectionFiles">
+            <!-- <div class="img-container"> -->
+            <img
+              nz-image
+              class="img-item"
+              nzSrc="{{ this.addTokenToFile(item?.viewUrl, item.id) }}"
+              [nzFallback]="fallback"
+              alt=""
+            />
+            <!-- </div> -->
+          </ng-container>
+          <ng-container *ngIf="this.inspectionFiles?.length === 0">
+            <!-- <div class="img-container"> -->
+            <img
+              nz-image
+              class="img-item"
+              [nzSrc]="noImage"
+              [nzFallback]="fallback"
+            />
+            <!-- </div> -->
+          </ng-container>
+        </nz-image-group>
+      </div>
+    </div>
+
+    <div class="col-lg-12 text-center mt-4">
+      <button class="mr-4" nz-button nzType="default" (click)="onCancel()">
+        {{ "model.ticket.ticketDetail.close" | translate }}
+      </button>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,284 @@
+<div class="content">
+  <mb-table-title
+    [title]="'model.complaint.complaint-list.title'"
+  ></mb-table-title>
+  <ng-container>
+    <div class="row mt-3">
+      <div class="col-3 d-flex">
+        <mb-button
+          [iconResource]="'filter'"
+          class="mr-2"
+          (click)="openAdvancedSearch(complaintSearchRequest)"
+        ></mb-button>
+        <nz-input-group nzPrefixIcon="search">
+          <input
+            type="text"
+            nz-input
+            [placeholder]="'action.search' | translate"
+            (keyup.enter)="searchComplaint($event)"
+          />
+        </nz-input-group>
+      </div>
+      <div class="col-9 d-flex justify-content-end">
+        <ng-container
+          *ngIf="currentUser?.userLevel == USER_LEVEL_LEADER_MANAGEMENT"
+        >
+          <mb-button
+            id="markSpam"
+            [type]="'dashed'"
+            [text]="'model.complaint.ClassifySpam'"
+            (click)="openMarkSpamComplaints(this.complaintSelectedArr)"
+          >
+          </mb-button>
+        </ng-container>
+        <ng-container *ngIf="currentUser?.userLevel === USER_LEVEL_CENTER">
+          <mb-button
+            id="delete"
+            iconColor="text-danger"
+            [type]="'dashed'"
+            [icon]="'delete'"
+            [text]="'model.complaint.delete'"
+            (click)="openDeleteSpamComplaints(this.complaintSelectedArr)"
+          >
+          </mb-button>
+          <!-- <button nz-button nzType="default" class="mr-2 btn-delete" >
+            {{ 'model.complaint.delete' | translate }}
+          </button> -->
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+  <!--  table-->
+  <div class="row mt-3">
+    <nz-table
+      #table
+      [nzData]="this.complaints"
+      [nzNoResult]="noDataResult"
+      [nzTableLayout]="'auto'"
+      (nzQueryParams)="onChangeQueryParams($event)"
+    >
+      <thead>
+        <tr>
+          <th
+            [nzChecked]="checked"
+            [nzDisabled]="isDisable"
+            (nzCheckedChange)="onAllChecked($event)"
+          ></th>
+          <th nzAlign="center">{{ "common.index" | translate }}</th>
+          <th nzAlign="left" nzColumnKey="code" [nzSortFn]="true">
+            {{ this.getTranslate("complaint-code") }}
+          </th>
+          <th nzAlign="left" nzColumnKey="name">
+            {{ this.getTranslate("building-code") }}
+          </th>
+          <th nzAlign="left">
+            {{ this.getTranslate("sender") }}
+          </th>
+          <th nzAlign="left">
+            {{ this.getTranslate("senderPhoneNumber") }}
+          </th>
+          <th nzAlign="left">
+            {{ this.getTranslate("complaintContent") }}
+          </th>
+          <th nzAlign="center" nzColumnKey="createdAt" [nzSortFn]="true">
+            {{ this.getTranslate("complaintAt") }}
+          </th>
+          <th nzAlign="left">
+            {{ this.getTranslate("Satisfied") }}
+          </th>
+          <th nzAlign="left">
+            {{ this.getTranslate("type") }}
+          </th>
+          <th nzAlign="center">
+            {{ this.getTranslate("status") }}
+          </th>
+          <th class="building-action action-min-width" nzAlign="center">
+            {{ "action.msg" | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of this.complaints; let i = index">
+          <tr>
+            <td
+              [nzChecked]="setOfCheckedId.has(item.id || '')"
+              [nzDisabled]="checkDisableCheckbox(item)"
+              (nzCheckedChange)="onItemChecked($event, item)"
+            ></td>
+            <td [nzAlign]="'center'">
+              {{ getIndex(i) }}
+            </td>
+            <td nzAlign="left">
+              {{ item?.code }}
+            </td>
+            <td nzAlign="left">
+              {{ item?.buildingCode }}
+            </td>
+            <td nzAlign="left" nz-tooltip="{{ item.fullName }}">
+              {{ getLimitLength(item?.fullName!) }}
+            </td>
+            <td nzAlign="left" nz-tooltip="{{ item.phoneNumber }}">
+              {{ getLimitLength(item?.phoneNumber!, 11) }}
+            </td>
+            <td nzAlign="left" nz-tooltip="{{ item.content }}">
+              {{ getLimitLength(item.content!) }}
+            </td>
+            <td nzAlign="center">
+              {{ item?.createdAt | date: "dd/MM/yyyy" }}
+            </td>
+            <td nzAlign="left">
+              {{ this.getRating(item?.satisfied) }}
+            </td>
+            <td nzAlign="left">
+              {{ this.getComplaintType(item?.complaintType) }}
+            </td>
+            <td nzAlign="center">
+              <mb-badge
+                [hover]="true"
+                [color]="format(item?.status).color"
+                [text]="getTranslate(format(item?.status).text)"
+              >
+              </mb-badge>
+            </td>
+            <td
+              class="thead-border-top-right"
+              nzAlign="center"
+              class="action-width action-min-width"
+            >
+              <ng-container
+                *ngIf="item.complaintType === complaintType.SPAM.value"
+              >
+                <mb-button-action
+                  [action]="'feedback'"
+                  *hasRoles="['complaint:audit']"
+                  nzTooltipTitle="{{
+                    'model.complaint.serviceFeedback' | translate
+                  }}"
+                  nzTooltipPlacement="top"
+                  nz-tooltip
+                  (click)="openServiceFeedback(item)"
+                >
+                </mb-button-action>
+              </ng-container>
+              <mb-button-action
+                [action]="'view'"
+                *hasRoles="['complaint:view']"
+                nzTooltipTitle="{{ 'action.detail' | translate }}"
+                nzTooltipPlacement="top"
+                nz-tooltip
+                (click)="toComplaintDetail(item.id)"
+              >
+              </mb-button-action>
+
+              <ng-container
+                *ngIf="
+                  currentUser?.userLevel == USER_LEVEL_LEADER_MANAGEMENT &&
+                  item.status !== this.complaintStatus.CLOSED.value &&
+                  item.status !== this.complaintStatus.IN_PROGRESS.value
+                "
+              >
+                <mb-button-action
+                  [action]="'three-point'"
+                  nz-dropdown
+                  [nzTrigger]="'click'"
+                  [nzDropdownMenu]="menu1"
+                  nzPlacement="bottomRight"
+                  nz-button
+                  nzTooltipTitle="{{ 'action.otherAction' | translate }}"
+                  nzTooltipPlacement="top"
+                  nz-tooltip
+                >
+                </mb-button-action>
+                <nz-dropdown-menu #menu1="nzDropdownMenu">
+                  <ul nz-menu style="border-radius: 8px">
+                    <li
+                      nz-menu-item
+                      *hasRoles="['ticket:create']"
+                      [nzDisabled]="isDisableCreateTicket(item)"
+                      (click)="openConfirmCreateTicket(item)"
+                    >
+                      <mb-button-action
+                        [disable]="isDisableCreateTicket(item)"
+                        [action]="'create-ticket'"
+                        nzTooltipPlacement="top"
+                        nz-tooltip
+                      >
+                      </mb-button-action>
+                      <span>{{
+                        "model.complaint.createTicket" | translate
+                      }}</span>
+                    </li>
+                    <li
+                      nz-menu-item
+                      *hasRoles="['ticket:create']"
+                      [nzDisabled]="isDisableComplete(item)"
+                      (click)="openCloseComplaint(item)"
+                    >
+                      <mb-button-action
+                        [disable]="isDisableComplete(item)"
+                        [action]="'check'"
+                        nzTooltipPlacement="top"
+                        nz-tooltip
+                      >
+                      </mb-button-action>
+                      <span>{{ "model.complaint.complete" | translate }}</span>
+                    </li>
+                    <li
+                      *ngIf="!isDisableMarkSpam(item)"
+                      nz-menu-item
+                      [nzDisabled]="isDisableMarkSpam(item)"
+                      (click)="openMarkSpamComplaint2(item)"
+                    >
+                      <mb-button-action
+                        [disable]="isDisableMarkSpam(item)"
+                        [action]="'mark-spam'"
+                        nzTooltipPlacement="top"
+                        nz-tooltip
+                      >
+                      </mb-button-action>
+                      <span>{{ "model.complaint.markSpam" | translate }}</span>
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
+              </ng-container>
+              <ng-container
+                *ngIf="item.complaintType === complaintType.SPAM.value"
+              >
+                <mb-button-action
+                  [action]="'delete'"
+                  *hasRoles="['complaint:delete']"
+                  nzTooltipTitle="{{ 'action.delete' | translate }}"
+                  nzTooltipPlacement="top"
+                  nz-tooltip
+                  (click)="openDeleteComplaint(item)"
+                >
+                </mb-button-action>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+    <mb-pagination
+      [pageIndex]="this.complaintSearchRequest.pageIndex || 1"
+      [pageSize]="this.complaintSearchRequest.pageSize || 10"
+      [total]="totalItems"
+      (onChange)="onQuerySearch($event)"
+    >
+    </mb-pagination>
+  </div>
+</div>
+
+<mb-modal
+  [title]="groupPopup.title"
+  [content]="groupPopup.content"
+  [okText]="groupPopup.okText"
+  [btnCentered]="true"
+  [isVisible]="isVisible"
+  (emitter)="handleAction($event)"
+>
+</mb-modal>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

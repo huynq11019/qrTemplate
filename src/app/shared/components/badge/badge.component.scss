@@ -1,0 +1,41 @@
+.badge {
+  border-radius: 4px;
+  padding: 8px 0;
+  width: 120px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.badge-hover:hover {
+  cursor: pointer;
+}
+
+.badge-info {
+  background: #00B69B;
+  color: #F8F8F8;
+}
+
+.badge-secondary {
+  background: #F8F8F8;
+  color: rgba(0, 182, 155, 0.5);;
+}
+
+.badge-warning {
+  background: #FFA756;
+  color: #FFFFFF;
+}
+
+.badge-danger {
+  background: #EC1A3B;
+  color: #FFFFFF;
+}
+
+.badge-success {
+  background: #369DFF;
+  color: #FFFFFF;
+}
+
+.badge-default {
+  background: #F8F8F8;
+  color: rgba(0, 182, 155, 0.8);
+}

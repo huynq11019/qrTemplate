@@ -1,0 +1,19 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span>{{ 'model.notification.list.attach' | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <mb-file class="mb-2"
+               *ngIf="isExistFiles"
+               [isDownload]="true"
+               [filesOrigin]="files">
+      </mb-file>
+      <mb-no-data *ngIf="!isExistFiles"></mb-no-data>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12" *nzModalFooter>
+    </div>
+  </div>
+</div>

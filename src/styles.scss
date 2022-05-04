@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+@import "~ng-zorro-antd/style/index.min.css";
+
+/* Import toast css */
+// regular style toast
+@import '~ngx-toastr/toastr';
+
+/* Global base styles */
+@import "assets/css/global.scss";

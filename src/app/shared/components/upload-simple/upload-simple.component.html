@@ -1,0 +1,36 @@
+<nz-upload *ngIf="easyUpload" [nzMultiple]="multiple" [nzAccept]="acceptFiles" [nzDisabled]="disabled"
+  [nzShowUploadList]="false" [(nzFileList)]="filesUpload" [nzCustomRequest]="handleCustomUploadReq"
+  [nzBeforeUpload]="beforeUpload" (nzChange)="handleChange($event)">
+  <button nz-button>
+    <i nz-icon nzType="upload"></i>
+    {{ 'common.chooseFile' | translate }}
+  </button>
+</nz-upload>
+
+<nz-upload *ngIf="!easyUpload" [ngClass]="(filesUpload.length > 0 && type === 'image' )? 'drag-image' : ''"
+  nzType="drag" [nzMultiple]="multiple" [nzAccept]="acceptFiles" [nzDisabled]="disabled" [nzShowUploadList]="false"
+  [(nzFileList)]="filesUpload" [nzCustomRequest]="handleCustomUploadReq" [nzBeforeUpload]="beforeUpload"
+  (nzChange)="handleChange($event)">
+  <ng-container *ngIf="type === 'default'">
+    <p class="ant-upload-drag-icon">
+      <i nz-icon nzType="inbox"></i>
+    </p>
+    <p class="ant-upload-text">{{ 'common.uploadText' | translate }}</p>
+    <p class="ant-upload-hint">
+      {{ 'common.uploadHint' | translate }}
+    </p>
+  </ng-container>
+  <!-- phần ảnh -->
+  <ng-container *ngIf="type === 'image'">
+    <p ngClass="ant-upload-drag-icon">
+      <i nz-icon nzType="upload"></i>
+    </p>
+    <ng-container *ngIf="titleUpload === '' ">
+      <p *ngIf="!(filesUpload.length > 0)" class="ant-upload-text">{{ 'common.uploadImage' | translate }}</p>
+      <p *ngIf="!(filesUpload.length > 0)" class="ant-upload-hint">{{ 'common.maxImage' | translate }}</p>
+    </ng-container>
+    <ng-container *ngIf="titleUpload !== '' ">
+      <p *ngIf="!(filesUpload.length > 0)" class="ant-upload-text title-upload">{{ titleUpload }}</p>
+    </ng-container>
+  </ng-container>
+</nz-upload>

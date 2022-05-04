@@ -1,0 +1,113 @@
+<div class="content">
+  <mb-table-title [title]="'model.survey.list.title'"></mb-table-title>
+  <div class="row mt-3">
+    <div class="col-3 d-flex">
+      <mb-button [iconResource]="'filter'" class="mr-2" (click)="openAdvancedSearch()"></mb-button>
+      <nz-input-group nzPrefixIcon="search">
+        <input type="text" nz-input
+               [value]="keyword"
+               (keyup.enter)="search($event)"
+               [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+    </div>
+    <div class="col-9 text-right" *hasRoles="['survey:create']">
+      <mb-button [type]="'primary'"
+                 [icon]="'plus'"
+                 [text]="'action.create'"
+                 (click)="create()">
+      </mb-button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="surveys"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+        <tr>
+          <th nzAlign="center">{{'common.index' | translate}}</th>
+          <!--          <th nzColumnKey="buildingCode">{{ getTranslate('buildingCode') }}</th>-->
+          <th nzAlign="left" nzColumnKey="name">{{ getTranslate('name') }}</th>
+          <th nzAlign="center" nzColumnKey="startAt" [nzSortFn]="true">{{ getTranslate('startDate') }}</th>
+          <th nzAlign="center" nzColumnKey="endAt" [nzSortFn]="true">{{ getTranslate('endDate') }}</th>
+          <th nzAlign="center" nzColumnKey="status">{{ getTranslate('status') }}</th>
+          <th nzAlign="center">{{'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of surveys; let i = index">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <!--            <td>{{ item.buildingCode }}</td>-->
+            <!--            <td>-->
+            <!--              <button class="btn btn-detail" (click)="detail(item)"-->
+            <!--                      nz-tooltip="{{item.name}}">{{ getLimitLength(item.name!, 20) }}</button>-->
+            <!--            </td>-->
+            <td nzAlign="left" nz-tooltip="{{item.name}}"
+                [nzTooltipPlacement]="['topLeft', 'leftTop']">{{ getLimitLength(item.name!, 100) }}</td>
+            <td nzAlign="center">{{ getStartOfDay(item.startAt || 0) | date: 'dd/MM/yyyy' }}</td>
+            <td nzAlign="center">{{ getStartOfDay(item.endAt || 0) | date: 'dd/MM/yyyy' }}</td>
+            <td nzAlign="center">
+              <mb-badge [hover]="false"
+                        [color]="getColorByStatus(item)"
+                        [text]="getStatus(item)">
+              </mb-badge>
+            </td>
+            <td nzAlign="center">
+              <mb-button-action [action]="'view'" *ngIf="!showBtnSend(item)"
+                                nzTooltipTitle="{{'action.detail' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="detail(item)">
+              </mb-button-action>
+              <mb-button-action [action]="'edit'" *ngIf="showBtnSend(item)"
+                                className="first"
+                                nzTooltipTitle="{{'action.update' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="edit(item)">
+              </mb-button-action>
+              <mb-button-action [action]="'send'" *ngIf="showBtnSend(item) && !isExpired(item)"
+                                className="center"
+                                nzTooltipTitle="{{'action.send' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="sendSurvey(item)">
+              </mb-button-action>
+              <mb-button-action [action]="'delete'" *ngIf="showBtnSend(item)"
+                                className="last"
+                                nzTooltipTitle="{{'action.delete' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="delete(false, item)">
+              </mb-button-action>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="pageIndex"
+                     [pageSize]="pageSize"
+                     [total]="total"
+                     (onChange)="onQuerySearch($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</div>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>
+
+<mb-modal [title]="groupPopup.title"
+          [content]="groupPopup.content"
+          [interpolateParams]="groupPopup.interpolateParams"
+          [okText]="groupPopup.okText"
+          [btnCentered]="true"
+          [isVisible]="isVisible"
+          (emitter)="actionCustom($event)">
+</mb-modal>
+

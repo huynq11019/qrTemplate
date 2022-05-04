@@ -1,0 +1,13 @@
+.level-height {
+  height: 150px;
+}
+
+.switch {
+  margin-left: 15px;
+  margin-top: 10px;
+}
+
+::ng-deep .cdk-virtual-scroll-viewport {
+    min-height: 150px;
+}
+

@@ -1,0 +1,257 @@
+<div class="content">
+  <div class="row">
+    <mb-table-title class="col" [title]="this.getTranslate('title')"></mb-table-title>
+  </div>
+  <div class="row mt-3 d-flex">
+    <div class="col d-flex">
+      <mb-button [iconResource]="'filter'" class="mr-2"
+                 (click)="this.openAdvancedSearch()"
+      ></mb-button>
+      <div class="col">
+        <div class="row">
+          <!--          <div class="col-4">-->
+          <!--            <label class="mt-2 time-label">{{this.getTranslate('time')}}</label>-->
+          <!--          </div>-->
+          <div class="col-6">
+            <!--            <nz-range-picker [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-range-picker>-->
+            <div class="row">
+              <div class="col-2 pt-2 pr-0">
+                <p class="text-right">{{this.getTranslate('startDate')}}</p>
+              </div>
+              <div class="col-4">
+                <nz-date-picker
+                  [nzFormat]="dateFormat"
+                  [(ngModel)]="startDate"
+                  [nzPlaceHolder]="'DD/MM/YYYY'"
+                  [nzDisabledDate]="disabledStartDate"
+                  #startDatePicker
+                  (keyup.enter)="enterStartDatePicker($event)"
+                  (ngModelChange)="onStartDateChange($event)">
+                </nz-date-picker>
+              </div>
+              <div class="col-2 pt-2 pr-0">
+                <p class="text-right">{{this.getTranslate('endDate')}}</p>
+              </div>
+              <div class="col-4">
+                <nz-date-picker
+                  [nzFormat]="dateFormat"
+                  [nzPlaceHolder]="'DD/MM/YYYY'"
+                  [nzDisabledDate]="disabledEndDate"
+                  [(ngModel)]="endDate"
+                  #endDatePicker
+                  (keyup.enter)="enterEndDatePicker($event)"
+                  (ngModelChange)="onEndDateChange($event)">
+                </nz-date-picker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="">
+    <div class="row">
+      <nz-table
+        class="complaint-table"
+        [nzData]="buildings"
+        [nzTableLayout]="'auto'"
+        [nzNoResult]="noDataResult"
+      >
+        <thead>
+        <tr>
+          <th nzAlign="center" class="right-border" rowSpan="2">{{'common.index' | translate}}</th>
+          <th class="col-buildingCode right-border" rowSpan="2" nzAlign="left">{{this.getTranslate('building-name')}}</th>
+          <th nzAlign="center" class="right-border" rowSpan="2">{{this.getTranslate('total-feedback')}}</th>
+          <th nzAlign="center" class="right-border" colSpan="4">{{this.getTranslate('satisfied')}}</th>
+          <th nzAlign="center" class="right-border" colSpan="4">{{this.getTranslate('unSatisfied')}}</th>
+          <th class="w40" nzAlign="center" colSpan="2" rowSpan="2">{{this.getTranslate('totalSpam')}}</th>
+        </tr>
+        <tr>
+          <th class="w40" nzAlign="center">{{this.getTranslate('total')}}</th>
+          <th class="w40 " nzAlign="center">{{this.getTranslate('open')}}</th>
+          <th class="w40 " nzAlign="center">{{this.getTranslate('in-progress')}}</th>
+          <th class="w40 right-border" nzAlign="center">{{this.getTranslate('done')}}</th>
+          <th class="w40" nzAlign="center">{{this.getTranslate('total')}}</th>
+          <th class="w40 " nzAlign="center">{{this.getTranslate('open')}}</th>
+          <th class="w40 " nzAlign="center">{{this.getTranslate('in-progress')}}</th>
+          <th class="w40 right-border" nzAlign="center">{{this.getTranslate('done')}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of buildings; index as i">
+          <tr>
+            <td nzAlign="center">{{this.getIndex(i)}}</td>
+            <td nzAlign="left" nz-tooltip="{{item.buildingName}}">{{this.limitText(item.buildingName, 100)}}</td>
+            <td nzAlign="center"><span class="point"
+            >{{item.statistical?.totalComplaint}}</span>
+            </td>
+            <td nzAlign="center"><span class="point"
+            >{{item.statistical?.satisfiedTotal || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point "
+            >{{item.statistical?.satisfiedWait || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point "
+            >{{item.statistical?.satisfiedProcessing || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point "
+            >{{item.statistical?.satisfiedProcessed || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point"
+            >{{item.statistical?.unsatisfiedTotal || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point "
+            >{{item.statistical?.unsatisfiedWait || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point "
+            >{{item.statistical?.unsatisfiedProcessing || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point "
+            >{{item.statistical?.unsatisfiedProcessed || 0}}</span>
+            </td>
+            <td nzAlign="right"><span class="point"
+            >{{item.statistical?.totalSpam || 0}}</span>
+            </td>
+            <td nzAlign="right"><i (click)="this.openChart(item)" nz-icon [nzType]="item.checked ? 'down' : 'right'"
+                   nzTheme="outline"></i></td>
+          </tr>
+          <tr *ngIf="!!item.checked">
+            <td colspan="13">
+              <div class="row">
+                <div class="col">
+                  <div class="row">
+                    <div echarts [options]="item.classifySatisfiedChart" (chartInit)="chartInit($event)"
+                         class="report-chart"></div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col-8">
+                      <div class="row ratio-item">
+                        <div class="col">
+                          <img class="icon-status" src="assets/images/icon/expired.png">
+                          <span class="ml-2">{{this.getTranslate('chart.unSatisfied')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.unsatisfiedTotal, item.statistical?.totalComplaint)}}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="row pd-10">
+                        <div class="col">
+                          <img class="icon-status" src="assets/images/icon/accepted.png">
+                          <span class="ml-2">{{this.getTranslate('chart.satisfied')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.satisfiedTotal, item.statistical?.totalComplaint)}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="row">
+                    <div echarts [options]="item.satisfiedStatusChart" (chartInit)="chartInit($event)"
+                         class="report-chart"></div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col-8">
+                      <div class="row ratio-item">
+                        <div class="col">
+                          <img class="icon-status" src="assets/images/icon/expired.png">
+                          <span class="ml-2">{{this.getTranslate('chart.open')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.satisfiedWait, item.statistical?.satisfiedTotal)}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row ratio-item">
+                        <div class="col">
+                          <img class="icon-status" src="assets/images/icon/processing.png">
+                          <span class="ml-2">{{this.getTranslate('chart.processing')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.satisfiedProcessing, item.statistical?.satisfiedTotal)}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row pd-10">
+                        <div class="col">
+                          <img class="icon-status" src="assets/images/icon/waiting.png">
+                          <span class="ml-2">{{this.getTranslate('chart.processed')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.satisfiedProcessed, item.statistical?.satisfiedTotal)}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="row">
+                    <div echarts [options]="item.needToImproveChart" (chartInit)="chartInit($event)"
+                         class="report-chart"></div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col-8">
+                      <div class="row ratio-item">
+                        <div class="col">
+                          <img class="icon-status" src="assets/images/icon/expired.png">
+                          <span class="ml-2">{{this.getTranslate('chart.open')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.unsatisfiedWait, item.statistical?.unsatisfiedTotal)}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row ratio-item">
+                        <div class="col">
+                          <img class="icon-status" src="assets/images/icon/processing.png">
+                          <span class="ml-2">{{this.getTranslate('chart.processing')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.unsatisfiedProcessing, item.statistical?.unsatisfiedTotal)}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row pd-10">
+                        <div class="col">
+                          <img class="icon-status" src="assets/images/icon/waiting.png">
+                          <span class="ml-2">{{this.getTranslate('chart.processed')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.unsatisfiedProcessed, item.statistical?.unsatisfiedTotal)}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="this.buildingSearchRequest.pageIndex"
+                     [pageSize]="this.buildingSearchRequest.pageSize"
+                     [total]="this.buildingSearchRequest.total"
+                     (onChange)="onQuerySearchBuilding($event)">
+      </mb-pagination>
+    </div>
+  </section>
+</div>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

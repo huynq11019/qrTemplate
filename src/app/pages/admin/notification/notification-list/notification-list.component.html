@@ -1,0 +1,286 @@
+<div class="content">
+  <div class="title mb-3">
+    <mb-table-title [title]="'model.notification.listTitle'"></mb-table-title>
+  </div>
+  <section class="content">
+    <nz-tabset (nzSelectedIndexChange)="onChangeTab($event)" [nzSelectedIndex]="tabIndex">
+      <nz-tab [nzTitle]="'model.notification.internal' | translate"
+              *ngIf="userLevel.USER_LEVEL_CENTER">
+        <ng-container [ngTemplateOutlet]="searchTemplate"
+                      [ngTemplateOutletContext]="{}">
+        </ng-container>
+        <ng-container [ngTemplateOutlet]="internal"
+                      [ngTemplateOutletContext]="{}">
+        </ng-container>
+      </nz-tab>
+      <nz-tab [nzTitle]="'model.notification.customer' | translate"
+              *ngIf="userLevel.USER_LEVEL_CENTER || userLevel.USER_LEVEL_LEADER_MANAGEMENT">
+        <ng-container [ngTemplateOutlet]="searchTemplate"
+                      [ngTemplateOutletContext]="{}">
+        </ng-container>
+        <ng-container [ngTemplateOutlet]="customer"
+                      [ngTemplateOutletContext]="{}">
+        </ng-container>
+      </nz-tab>
+    </nz-tabset>
+  </section>
+</div>
+
+<ng-template #searchTemplate>
+  <div class="row mt-3 mb-4">
+    <div class="col-3 d-flex">
+      <mb-button [iconResource]="'filter'" class="mr-2" (click)="filter()"></mb-button>
+      <nz-input-group [nzPrefix]="suffixIconSearch">
+        <input type="text" nz-input
+               [value]="tabIndex === 0 ? querySearchInternal.keyword : querySearchCustomer.keyword"
+               (keyup.enter)="search($event)"
+               [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </div>
+    <div class="col-9 text-right" *hasRoles="['notification:create']">
+      <mb-button [type]="'primary'"
+                 [icon]="'plus'"
+                 [text]="'action.create'"
+                 (click)="create()">
+      </mb-button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #internal>
+  <div class="row">
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="internals"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+        <tr>
+          <th nzAlign="center">{{'common.index' | translate}}</th>
+          <th nzAlign="left">{{'model.notification.list.code' | translate}}</th>
+          <th nzAlign="left">{{'model.notification.list.title' | translate}}</th>
+          <th nzAlign="center">{{'model.notification.list.estimatedDate' | translate}}</th>
+          <th nzAlign="center">{{'model.notification.list.actualDate' | translate}}</th>
+          <!--          <th nzAlign="center">{{'model.notification.list.attach' | translate}}</th>-->
+          <th nzAlign="center">{{'common.status' | translate}}</th>
+          <th nzAlign="left">{{'common.sender' | translate}}</th>
+          <th nzAlign="center" [nzWidth]="'180px'">{{'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of internals; let i = index">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td nzAlign="left"
+                [nzTooltipTitle]="formatColumn('buildings', item)"
+                nzTooltipPlacement="top"
+                nz-tooltip>
+              {{ getLimitLength(formatColumn('buildings', item)) }}
+            </td>
+            <td nzAlign="left"
+                [nzTooltipTitle]="(item.title)"
+                nzTooltipPlacement="top"
+                nz-tooltip>
+              {{ getLimitLength(item.title) }}
+            </td>
+            <td nzAlign="center">{{ formatDate(item?.expectedNotificationAt) }}</td>
+            <td nzAlign="center">{{ formatDate(item?.notificationAt) }}</td>
+            <!--            <td nzAlign="center">-->
+            <!--              <img class="view"-->
+            <!--                   (click)="openModalViewFile(item)"-->
+            <!--                   src="assets/images/button/eye.png"-->
+            <!--                   alt="view">-->
+            <!--            </td>-->
+            <td nzAlign="center">
+              <mb-badge [color]="getColor(item.status!)"
+                        [text]="(formatStatus(item?.status!)) | translate">
+              </mb-badge>
+            </td>
+            <td nzAlign="left">{{ item?.senderUsername || '' }}</td>
+            <td nzAlign="center">
+              <ng-template [ngIf]="item.status === NOTIFICATION_STATUS_ALL.WAITING_VALUE">
+                <mb-button-action [action]="'edit'" *hasRoles="['notification:update']"
+                                  [className]="'first'"
+                                  nzTooltipTitle="{{'action.update' | translate}}"
+                                  nzTooltipPlacement="top"
+                                  nz-tooltip
+                                  (click)="update(item)">
+                </mb-button-action>
+                <mb-button-action [action]="'send'" *hasRoles="['notification:update']"
+                                  [className]="'center'"
+                                  nzTooltipTitle="{{'action.send' | translate}}"
+                                  nzTooltipPlacement="top"
+                                  nz-tooltip
+                                  (click)="send(item)">
+                </mb-button-action>
+                <mb-button-action [action]="'delete'" *hasRoles="['notification:delete']"
+                                  [className]="'last'"
+                                  nzTooltipTitle="{{'action.delete' | translate}}"
+                                  nzTooltipPlacement="top"
+                                  nz-tooltip
+                                  (click)="delete(item)">
+                </mb-button-action>
+              </ng-template>
+              <ng-template [ngIf]="item.status === NOTIFICATION_STATUS_ALL.DONE_VALUE ||
+               item.status === NOTIFICATION_STATUS_ALL.IN_PROGRESS_VALUE">
+                <mb-button-action [action]="'view'" *hasRoles="['notification:view']"
+                                  nzTooltipTitle="{{'action.detail' | translate}}"
+                                  nzTooltipPlacement="top"
+                                  nz-tooltip
+                                  (click)="detail(item)">
+                </mb-button-action>
+              </ng-template>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="querySearchInternal.pageIndex"
+                     [pageSize]="querySearchInternal.pageSize"
+                     [total]="querySearchInternal.total"
+                     (onChange)="onQuerySearch($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #customer>
+  <div class="row">
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="customers"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+        <tr>
+          <th nzAlign="center">{{'common.index' | translate}}</th>
+          <th nzAlign="left">{{'model.notification.list.code' | translate}}</th>
+          <th nzAlign="left">{{'model.notification.list.floor' | translate}}</th>
+          <th nzAlign="left">{{'model.notification.list.company' | translate}}</th>
+          <th nzAlign="left">{{'model.notification.list.title' | translate}}</th>
+          <th nzAlign="center">{{'model.notification.list.estimatedDate' | translate}}</th>
+          <th nzAlign="center">{{'model.notification.list.actualDate' | translate}}</th>
+          <!--          <th nzAlign="center">{{'model.notification.list.attach' | translate}}</th>-->
+          <th nzAlign="center">{{'common.status' | translate}}</th>
+          <th nzAlign="left">{{'common.sender' | translate}}</th>
+          <th nzAlign="center" [nzWidth]="'180px'">{{'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of customers; let i = index">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td nzAlign="left"
+                [nzTooltipTitle]="formatColumn('buildings', item)"
+                nzTooltipPlacement="top"
+                nz-tooltip>
+              {{ getLimitLength(formatColumn('buildings', item)) }}
+            </td>
+            <td nzAlign="left"
+                [nzTooltipTitle]="formatColumn('floors', item)"
+                nzTooltipPlacement="top"
+                nz-tooltip>
+              {{ getLimitLength(formatColumn('floors', item)) }}
+            </td>
+            <td nzAlign="left"
+                [nzTooltipTitle]="formatColumn('organizations', item)"
+                nzTooltipPlacement="top"
+                nz-tooltip>
+              {{ getLimitLength(formatColumn('organizations', item)) }}
+            </td>
+            <td nzAlign="left"
+                [nzTooltipTitle]="(item.title)"
+                nzTooltipPlacement="top"
+                nz-tooltip>
+              {{ getLimitLength(item.title) }}
+            </td>
+            <td nzAlign="center">{{ formatDate(item?.expectedNotificationAt) }}</td>
+            <td nzAlign="center">{{ formatDate(item?.notificationAt) }}</td>
+            <!--            <td nzAlign="center">-->
+            <!--              <img class="view"-->
+            <!--                   (click)="openModalViewFile(item)"-->
+            <!--                   src="assets/images/button/eye.png"-->
+            <!--                   alt="view">-->
+            <!--            </td>-->
+            <td nzAlign="center">
+              <mb-badge [color]="getColor(item?.status!)"
+                        [text]="(formatStatus(item?.status!)) | translate">
+              </mb-badge>
+            </td>
+            <td nzAlign="left">{{ item?.senderUsername || '' }}</td>
+            <td nzAlign="center">
+              <ng-template [ngIf]="item.status === NOTIFICATION_STATUS_ALL.WAITING_VALUE">
+                <ng-container
+                  *ngIf="((currentUser.userLevel === USER_LEVEL_CENTER)
+                   || (currentUser.userLevel === USER_LEVEL_LEADER_MANAGEMENT && item?.issuedUserId === currentUser.id)); else view">
+                  <mb-button-action [action]="'edit'" *hasRoles="['notification:update']"
+                                    [className]="'first'"
+                                    nzTooltipTitle="{{'action.update' | translate}}"
+                                    nzTooltipPlacement="top"
+                                    nz-tooltip
+                                    (click)="update(item)">
+                  </mb-button-action>
+                  <mb-button-action [action]="'send'" *hasRoles="['notification:update']"
+                                    [className]="'center'"
+                                    nzTooltipTitle="{{'action.send' | translate}}"
+                                    nzTooltipPlacement="top"
+                                    nz-tooltip
+                                    (click)="send(item)">
+                  </mb-button-action>
+                  <mb-button-action [action]="'delete'" *hasRoles="['notification:delete']"
+                                    [className]="'last'"
+                                    nzTooltipTitle="{{'action.delete' | translate}}"
+                                    nzTooltipPlacement="top"
+                                    nz-tooltip
+                                    (click)="delete(item)">
+                  </mb-button-action>
+                </ng-container>
+              </ng-template>
+              <ng-template [ngIf]="item.status === NOTIFICATION_STATUS_ALL.DONE_VALUE ||
+                                   item.status === NOTIFICATION_STATUS_ALL.IN_PROGRESS_VALUE ||
+                                   item.status === NOTIFICATION_STATUS_ALL.FAILED_VALUE" #view>
+                <mb-button-action [action]="'view'" *hasRoles="['notification:view']"
+                                  nzTooltipTitle="{{'action.detail' | translate}}"
+                                  nzTooltipPlacement="top"
+                                  nz-tooltip
+                                  (click)="detail(item)">
+                </mb-button-action>
+              </ng-template>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="querySearchCustomer.pageIndex"
+                     [pageSize]="querySearchCustomer.pageSize"
+                     [total]="querySearchCustomer.total"
+                     (onChange)="onQuerySearch($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</ng-template>
+
+<mb-modal [title]="'model.notification.titleDelete'"
+          [content]="'model.notification.contentDelete'"
+          [btnCentered]=true
+          [isVisible]="isVisible"
+          (emitter)="onDelete($event)">
+</mb-modal>
+
+<mb-modal [title]="'model.notification.titleSend'"
+          [content]="'model.notification.contentSend'"
+          [btnCentered]=true
+          [isVisible]="isVisibleSend"
+          (emitter)="onSend($event)">
+</mb-modal>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

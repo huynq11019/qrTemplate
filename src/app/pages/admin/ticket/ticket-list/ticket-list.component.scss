@@ -1,0 +1,21 @@
+.button-filter {
+  height: 38px !important;
+  width: 22px !important;
+  border-radius: 5px !important;
+}
+
+::ng-deep .button-custom {
+  min-width: 80px !important;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.action-width {
+  width: 120px;
+}
+
+.status-style {
+  min-width: 150px;
+}
+

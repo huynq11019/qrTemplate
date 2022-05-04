@@ -1,0 +1,71 @@
+//nz-select {
+//  margin: 0 8px 10px 0;
+//  width: 120px;
+//}
+
+.remove-question {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+//.anticon,.anticon svg {
+//  text-transform: none;
+//  display: inline-block;
+//  font-size: 24px;
+//}
+
+::ng-deep .my-auto>.anticon>* {
+  font-size: 24px;
+}
+
+.create-survey-template{
+  height: 40px;
+  width: 100%;
+  max-width: 190px;
+  line-height: 30px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-around;
+  //justify-content: space-between;
+  flex-direction: row;
+  border: none;
+
+  background-color: #fafafafa;
+}
+
+.questions{
+  background-color: #f5f5f5;
+  padding: 10px 30px;
+  word-break: break-all;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9;
+  line-height: 3;
+}
+
+.introduction{
+  color: #3e4550;
+  text-overflow: ellipsis;
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 1;
+  max-width: 100%;
+  height: auto;
+  min-height: 32px;
+  line-height: 1.5715;
+  vertical-align: bottom;
+  transition: all .3s,height 0s;
+  //position: relative;
+  //display: inline-block;
+  padding: 7px 11px !important;
+  font-size: 14px;
+  background-image: none;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+}
+
+.sub-label{
+  font-weight: 400;
+}
+
+

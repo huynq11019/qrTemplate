@@ -1,0 +1,35 @@
+.footer-button{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 80px;
+
+  :nth-child(1){
+    margin-right: 50px;
+  }
+}
+
+.btn-action{
+  min-width: 120px;
+}
+
+.info-common {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.uFooter-button.unit  {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  //margin-top: 80px;
+
+  :nth-child(1) {
+    //margin-right: 50px;
+  }
+}
+//.ng-touched.ng-invalid{
+//  border-color: red;
+//}
+

@@ -1,0 +1,58 @@
+.ant-dropdown-trigger {
+  background: rgba(206, 206, 206, 0.24);
+  border-radius: 8px;
+}
+
+.ant-btn {
+  font-weight: 100;
+  font-size: 14px;
+  border-radius: 8px;
+  color: #8F92A1;
+  border: none;
+}
+
+span {
+  font-weight: bold;
+  color: #282828;
+}
+
+.pagination-custom {
+  margin-top: 2rem;
+}
+
+.pagination {
+  height: 38px;
+  background: rgba(206, 206, 206, 0.24);;
+  border-radius: 8px;
+}
+
+.size-of-pagination {
+  color: #8F92A1;
+  margin: auto 1rem;
+  font-weight: 500;
+}
+
+.pagination-previous {
+  background: #FAFBFD;
+  border: 1px solid #CECECE;
+  box-sizing: border-box;
+  border-radius: 8px 0 0 8px;
+  border-right: none;
+  padding: 11px 16px;
+}
+
+.pagination-next {
+  background: #FAFBFD;
+  border: 1px solid #CECECE;
+  box-sizing: border-box;
+  border-radius: 0 8px 8px 0;
+  padding: 11px 16px;
+}
+
+.hover {
+  cursor: pointer;
+}
+
+.disable {
+  opacity: 50%;
+}

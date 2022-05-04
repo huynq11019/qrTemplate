@@ -1,0 +1,423 @@
+<div class="row">
+  <div class="col-8 title">
+    <mb-table-title [showBack]="true" [title]="getTitle()"></mb-table-title>
+  </div>
+  <!--  <div class="col-4 text-right">-->
+  <!--    <button *ngIf="isDetail"-->
+  <!--            (click)="onCancel()"-->
+  <!--            nz-button nzType="default">-->
+  <!--      <i nz-icon nzType="arrow-left" nzTheme="outline"></i>-->
+  <!--      <span style="vertical-align: center">{{'action.back' | translate}}-->
+  <!--    </span>-->
+  <!--    </button>-->
+  <!--  </div>-->
+</div>
+<!--<section class="content">-->
+<div class="row mt-3">
+  <div class="col-12">
+    <form [formGroup]="form">
+      <section class="content">
+        <!--        Chọn tòa, tầng, cty-->
+        <div class="row mt-2">
+          <div class="col-6 mb-2">
+            <label>{{ getTranslate('selectBuilding') }} <span class="text-danger" *ngIf="!isDetail">*</span></label>
+            <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderTemplate" class="pr-1"
+                       nzMode="multiple" [nzMaxTagCount]="2"
+                       formControlName="buildingIds" removeOptionTitle
+                       [nzDisabled]="isDetail" [nzShowArrow]="true"
+                       [nzMaxTagPlaceholder]="buildingTag"
+                       nzPlaceHolder="{{ 'common.building' | translate }}"
+                       id="building">
+              <nz-option *ngFor="let building of buildings" [nzCustomContent]="true"
+                         [nzValue]="building?.id" [nzLabel]="getLimitLength(building.name!, 30)">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="building.name">{{building.code}} - {{getLimitLength(building.name!, 60)}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-template #renderTemplate>
+              <mb-select-all *ngIf="buildings.length > 0"
+                             (click)="selectAll('buildingIds', buildings)">
+              </mb-select-all>
+            </ng-template>
+            <ng-template #buildingTag let-selectedList>
+              <span>{{ '+' + selectedList.length }} {{ 'common.building' | translate }}</span>
+            </ng-template>
+            <ng-container *ngIf="form.get('buildingIds')?.touched || form.get('buildingIds')?.dirty">
+              <span class="text-danger" *ngIf="form.get('buildingIds')?.hasError('required')">
+                          <mb-not-blank [value]="'common.building'"></mb-not-blank>
+
+                    </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ getTranslate('selectFloor') | translate }}</label>
+            <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderTemplateFloor"
+                       nzMode="multiple" [nzMaxTagCount]="2" [nzShowArrow]="true"
+                       formControlName="floorIds" [nzMaxTagPlaceholder]="floorTag"
+                       debounceKeyUp removeOptionTitle
+                       (onEvent)="searchFloorByBuilding($event)"
+                       [nzDisabled]="floors?.length === 0 || isDetail"
+                       nzPlaceHolder="{{ 'model.survey.floor' | translate }}"
+                       id="floor">
+              <nz-option *ngFor="let floor of floors" [nzCustomContent]="true"
+                         [nzValue]="floor?.id" [nzLabel]="getLimitLength(floor.name!, 30)">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0"
+                     [ngbTooltip]="floor.name">{{getLimitLength(floor.name!, 60)}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-template #renderTemplateFloor>
+              <mb-select-all *ngIf="floors.length > 0"
+                             (click)="selectAll('floorIds', floors)">
+              </mb-select-all>
+            </ng-template>
+            <ng-template #floorTag let-selectedList>
+              <span>{{ '+' + selectedList.length }} {{ 'common.floor' | translate }}</span>
+            </ng-template>
+          </div>
+        </div>
+        <!--        Chon toa-->
+        <div class="row mt-2">
+          <div class="col-12">
+            <label>{{ 'common.company' | translate }}</label>
+            <nz-select nzAllowClear nzShowSearch [nzDropdownRender]="renderTemplateCompany"
+                       nzMode="multiple" [nzMaxTagCount]="2" [nzShowArrow]="true"
+                       formControlName="organizationIds" removeOptionTitle
+                       [nzDisabled]="organizations?.length === 0 || isDetail"
+                       nzPlaceHolder="{{ 'common.company' | translate }}"
+                       [nzMaxTagPlaceholder]="companyTag"
+                       id="organization">
+              <nz-option *ngFor="let org of organizations" [nzCustomContent]="true"
+                         [nzValue]="org?.id" [nzLabel]="getLimitLength(org.name!, 40)">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="org.name">{{getLimitLength(org.name!, 80)}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-template #renderTemplateCompany>
+              <mb-select-all *ngIf="organizations.length > 0"
+                             (click)="selectAll('organizationIds', organizations)">
+              </mb-select-all>
+            </ng-template>
+            <ng-template #companyTag let-selectedList>
+              <span>{{ '+' + selectedList.length }} {{ 'common.company' | translate }}</span>
+            </ng-template>
+          </div>
+        </div>
+        <!--        Ngày bắt đầu, kết thúc -->
+        <div class="row mt-2">
+          <div class="col-6 mb-2">
+            <label>{{ getTranslate('startDate') }} <span class="text-danger" *ngIf="!isDetail">*</span></label>
+            <div class="date-picker">
+              <nz-date-picker formControlName="startAt" [nzId]="'startPicker'"
+                              (keyup.enter)="enterDatePicker($event, 'startAt')"
+                              [nzDisabledDate]="disabledBeforeToday"
+                              [nzFormat]="'dd/MM/yyyy'" [nzDisabled]="isDetail"
+                              #startPicker
+                              nzPlaceHolder="DD/MM/YYYY"
+              >
+              </nz-date-picker>
+            </div>
+            <ng-container *ngIf="form.get('startAt')?.touched || form.get('startAt')?.dirty">
+              <span class="text-danger" *ngIf="form.get('startAt')?.hasError('required')">
+                          <mb-not-blank [value]="'model.survey.startDate'"></mb-not-blank>
+                    </span>
+              <span class="text-danger" *ngIf="form.get('startAt')?.hasError('pattern')">
+                <small>{{ 'common.pattern' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ getTranslate('endDate') }} <span class="text-danger" *ngIf="!isDetail">*</span></label>
+            <div class="date-picker">
+              <nz-date-picker formControlName="endAt"
+                              (keyup.enter)="enterDatePicker($event, 'endAt')"
+                              [nzDisabledDate]="disabledBeforeStartAt"
+                              [nzDefaultPickerValue]="startAt"
+                              [nzFormat]="'dd/MM/yyyy'" [nzDisabled]="isDetail"
+                              #endPicker
+                              nzPlaceHolder="DD/MM/YYYY"
+              >
+              </nz-date-picker>
+            </div>
+            <ng-container *ngIf="form.get('endAt')?.touched || form.get('endAt')?.dirty">
+              <span class="text-danger" *ngIf="form.get('endAt')?.hasError('required')">
+                 <mb-not-blank [value]="'model.survey.endDate'"></mb-not-blank>
+              </span>
+              <span class="text-danger" *ngIf="form.get('endAt')?.hasError('pattern')">
+                <small>{{ 'common.pattern' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+        <!--        Tên đợt khảo sát-->
+        <div class="row mt-2">
+          <div class="col-12 mb-2">
+            <label>{{ getTranslate('name') }} <span class="text-danger" *ngIf="!isDetail">*</span></label>
+            <input formControlName="name" nz-input [maxLength]="LENGTH_VALIDATOR.NAME_MAX_LENGTH.MAX"
+                   class="form-control"
+                   placeholder="{{ 'model.survey.name' | translate }}">
+            <ng-container *ngIf="form.get('name')?.touched || form.get('name')?.dirty">
+              <span class="text-danger" *ngIf="form.get('name')?.hasError('required')">
+                 <mb-not-blank [value]="getTranslate('name')"></mb-not-blank>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+
+        <!--       Nội dung mở đầu -->
+        <div class="row mt-2">
+          <div class="col-12 mb-2">
+            <label>{{ getTranslate('introduction') }} <span class="text-danger" *ngIf="!isDetail">*</span></label>
+            <div *ngIf="isDetail" class="introduction">
+              <span [innerHTML]="form?.get('introduction')?.value"></span>
+            </div>
+            <mb-editor [placeholder]="getTranslate('introduction')"
+                       *ngIf="!isDetail && (survey?.introduction || !isUpdate)"
+                       [value]="form?.get('introduction')?.value || ''"
+                       (data)="onChangeData('introduction', $event)">
+            </mb-editor>
+            <ng-container *ngIf="form.get('introduction')?.touched || form.get('introduction')?.dirty">
+              <span class="text-danger" *ngIf="form.get('introduction')?.hasError('required')">
+                <small>{{ 'common.required' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+
+        <!--       Notification Content -->
+        <div class="row mt-2">
+          <div class="col-12 mb-2">
+            <label>{{ getTranslate('notificationContent') }} <span class="text-danger"
+                                                                   *ngIf="!isDetail">*</span></label>
+            <div *ngIf="isDetail" class="introduction">
+              <span [innerHTML]="form?.get('notificationContent')?.value"></span>
+            </div>
+            <mb-editor [placeholder]="getTranslate('notificationContent')"
+                       *ngIf="!isDetail && (survey?.introduction || !isUpdate)"
+                       [value]="form?.get('notificationContent')?.value || ''"
+                       (data)="onChangeData('notificationContent', $event)">
+            </mb-editor>
+            <ng-container *ngIf="form.get('notificationContent')?.touched || form.get('notificationContent')?.dirty">
+              <span class="text-danger" *ngIf="form.get('notificationContent')?.hasError('required')">
+                <small>{{ 'common.required' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+        <!--        Ghi chú-->
+        <div class="row mt-2">
+          <div class="col-12 mb-2">
+            <label>{{ getTranslate('note') }}</label>
+            <textarea rows="5"
+                      formControlName="note" [maxlength]="LENGTH_VALIDATOR.NOTE_MAX_LENGTH.MAX"
+                      placeholder="{{ getTranslate('note') }}"
+                      nz-input>
+            </textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="content mt-3">
+        <!--        create content survey: template and question-->
+        <div class="row mt-2">
+          <div class="col-8 mb-2">
+            <label>{{ getTranslate('surveyTemplate.name') }} <span class="text-danger"
+                                                                   *ngIf="!isDetail">*</span></label>
+            <nz-select nzShowSearch nzAllowClear *ngIf="!isCreateSurveyTemplate"
+                       formControlName="surveyTemplateId" [nzDisabled]="isDetail"
+                       debounceKeyUp (onEvent)="searchSurveyTemplate($event)"
+                       (nzBlur)="searchSurveyTemplate($event)"
+                       nzServerSearch removeOptionTitle
+            >
+              <nz-option *ngFor="let surveyTemplate of surveyTemplates" [nzCustomContent]="true"
+                         [nzValue]="surveyTemplate?.id" [nzLabel]="getLimitLength(surveyTemplate.name!, 100)">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0"
+                     [ngbTooltip]="surveyTemplate.name">{{getLimitLength(surveyTemplate.name!, 100)}}</div>
+              </nz-option>
+            </nz-select>
+            <input formControlName="surveyTemplateName" nz-input *ngIf="isCreateSurveyTemplate"
+                   class="form-control" [maxLength]="LENGTH_VALIDATOR.LABEL_MAX_LENGTH.MAX"
+                   placeholder="{{ getTranslate('surveyTemplate.name') }}">
+            <ng-container *ngIf="(form.get('surveyTemplateId')?.touched || form.get('surveyTemplateName')?.touched)
+                && (!form.get('surveyTemplateName')?.value  || !form.get('surveyTemplateId')?.value)">
+              <span class="text-danger" *ngIf="form.get('surveyTemplateId')?.hasError('required') ||
+              form.get('surveyTemplateName')?.hasError('required')">
+                 <mb-not-blank [value]="'model.survey.surveyTemplate.name'"></mb-not-blank>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-4 mb-2 " style="margin-top: 28px">
+            <button class="create-survey-template" *ngIf="!isDetail"
+                    (click)="createNewSurveyTemplate()"
+                    nz-button nzType="default">
+              <i nz-icon nzType="plus-circle" nzTheme="outline" *ngIf="!isCreateSurveyTemplate"></i>
+              <i nz-icon nzType="select" nzTheme="outline" *ngIf="isCreateSurveyTemplate"></i>
+              <span style="vertical-align: center">{{isCreateSurveyTemplate ?
+                getTranslate('surveyTemplate.select') : getTranslate('surveyTemplate.create')}}</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!--        Tiêu chí khảo sát và câu hỏi-->
+        <div class="row mt-2">
+          <div class="col-12 mt-2">
+            <div formArrayName="criteria"
+                 *ngFor="let item of criteria().controls; let i = index;">
+              <div [formGroupName]="i">
+                <div class="col-12 row mt-5">
+                  <hr>
+                </div>
+                <div class="row mt-2">
+                  <!--  Tiêu chí -->
+                  <div class="col-12">
+                    <div class="row col-12">
+                      <div class="col-4 ml-0 pl-0">
+                        <label>{{ getTranslate('questionGroup.title') }}</label>
+                      </div>
+                    </div>
+                    <div class="row col-12">
+                      <div class="col-4 ml-0 pl-0">
+                        <label class="sub-label">{{ getTranslate('questionGroup.label') }} <span class="text-danger"
+                                                                                                 *ngIf="!isDetail">*</span></label>
+                        <input formControlName="label" nz-input
+                               class="form-control" [maxLength]="LENGTH_VALIDATOR.LABEL_MAX_LENGTH.MAX"
+                               placeholder="{{ getTranslate('questionGroup.label') }}">
+                      </div>
+                      <div class="col-7">
+                        <label class="sub-label">{{ getTranslate('questionGroup.name') }} <span class="text-danger"
+                                                                                                *ngIf="!isDetail">*</span></label>
+                        <input formControlName="name" nz-input
+                               class="form-control" [maxLength]="LENGTH_VALIDATOR.LABEL_MAX_LENGTH.MAX"
+                               placeholder="{{ getTranslate('questionGroup.name') }}">
+                      </div>
+                      <div class="col-1 remove-question">
+                        <mb-button-action [action]="'delete'" *ngIf="isCreateSurveyTemplate"
+                                          (click)="removeItemCriteriaControl(i)"
+                                          nzTooltipTitle="{{'action.delete' | translate}}"
+                                          nzTooltipPlacement="top"
+                                          nz-tooltip>
+                        </mb-button-action>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <!--                  Question-->
+                <div class="row mt-3">
+                  <div class="col-12 mt-2">
+                    <!--                  <div class="col-10 mt-2">-->
+                    <div formArrayName="questions"
+                         *ngFor="let q of questions(i)?.controls; let j = index;">
+                      <div [formGroupName]="j">
+                        <div class="row mt-2">
+                          <div class="col-12 mb-2">
+                            <label><u>{{ getTranslate('question.title') + (j + 1) }} </u></label>
+                            <div class="row col-12">
+                              <div class="col-4 ml-0 pl-0">
+                                <label class="sub-label">{{ getTranslate('question.label') }} <span class="text-danger"
+                                                                                                    *ngIf="!isDetail">*</span></label>
+                                <input formControlName="label" nz-input
+                                       [maxLength]="LENGTH_VALIDATOR.LABEL_MAX_LENGTH.MAX"
+                                       class="form-control"
+                                       placeholder="{{ getTranslate('question.content') }}">
+                              </div>
+                              <div class="col-7">
+                                <label class="sub-label">{{ getTranslate('question.content') }} <span
+                                  class="text-danger"
+                                  *ngIf="!isDetail">*</span></label>
+                                <input formControlName="content" nz-input
+                                       [maxLength]="LENGTH_VALIDATOR.LABEL_MAX_LENGTH.MAX"
+                                       class="form-control"
+                                       placeholder="{{ getTranslate('question.content') }}">
+                              </div>
+                              <div class="col-1 remove-question">
+                                <mb-button-action [action]="'delete'" *ngIf="isCreateSurveyTemplate"
+                                                  (click)="removeItemControl(i, j)"
+                                                  nzTooltipTitle="{{'action.delete' | translate}}"
+                                                  nzTooltipPlacement="top"
+                                                  nz-tooltip>
+                                </mb-button-action>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row col-2 mt-2 ml-0 pl-0">
+                  <div class="box-filter pl-0">
+                    <button *ngIf="isCreateSurveyTemplate" nz-button (click)="addItemControl(i)">
+                      <i nz-icon nzType="plus" nzTheme="outline"></i>
+                      <span>{{ getTranslate('question.addQuestion') }}</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!--                <div class="row mt-2" *ngIf="!isCreateSurveyTemplate">-->
+                <!--                  <div class="col-12">-->
+                <!--                    <label>{{getTranslate('question.questionOfSurvey')}}<span class="text-danger">*</span> </label>-->
+                <!--                    <p class="questions mt-2" [innerHTML]="getQuestionInGroup(i)"></p>-->
+                <!--                  </div>-->
+                <!--                </div>-->
+
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mt-2 row">
+            <div class="col-12 mt-1 text-right">
+              <div class="box-filter">
+                <button *ngIf="isCreateSurveyTemplate" nzType="primary"
+                        nz-button (click)="addItemCriteriaControl()">
+                  <i nz-icon nzType="plus" nzTheme="outline"></i>
+                  <span>{{ getTranslate('addTypeSurvey') }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-12 mb-2 mt-3">
+            <label>{{ getTranslate('otherOpinion') }} <span class="text-danger" *ngIf="!isDetail">*</span></label>
+            <textarea rows="5"
+                      formControlName="otherOpinion"
+                      [maxLength]="LENGTH_VALIDATOR.OPINION_MAX_LENGTH.MAX" id="otherOpinion"
+                      placeholder="{{ getTranslate('otherOpinion') }}"
+                      nz-input>
+            </textarea>
+            <ng-container *ngIf="form.get('otherOpinion')?.touched || form.get('otherOpinion')?.dirty">
+              <span class="text-danger" *ngIf="form.get('otherOpinion')?.hasError('required')">
+                 <mb-not-blank [value]="'model.survey.otherOpinion'"></mb-not-blank>
+              </span>
+              <span class="text-danger" *ngIf="form.get('otherOpinion')?.hasError('pattern')">
+                <small>{{ 'common.pattern' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+<section class="content mt-n3" *ngIf="!isDetail">
+  <div class="row mt-4">
+    <div class="col-12 text-center">
+      <button nz-button nzType="default" (click)="onCancel()">
+        {{ 'action.cancel' | translate }}
+      </button>
+      <button class="ml-3" nz-button nzType="primary" (click)="isUpdate ? onUpdateSubmit() : onSubmit()"
+              [disabled]="!form.valid || (criteria()?.length || 0) === 0 || (questions(0)?.length || 0) === 0"
+      >
+        {{ (isUpdate ? 'action.update' : 'action.create') | translate }}
+      </button>
+    </div>
+  </div>
+</section>
+<!--</section>-->

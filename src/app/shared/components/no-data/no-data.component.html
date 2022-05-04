@@ -1,0 +1,11 @@
+<nz-empty
+  [nzNotFoundImage]="imageTpl"
+  [nzNotFoundContent]="contentTpl"
+>
+  <ng-template #imageTpl>
+    <img src="assets/images/empty.svg" alt="empty">
+  </ng-template>
+  <ng-template #contentTpl>
+    <span>{{ 'common.noDataResult' | translate }}</span>
+  </ng-template>
+</nz-empty>

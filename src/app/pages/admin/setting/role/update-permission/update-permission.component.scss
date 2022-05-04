@@ -1,0 +1,44 @@
+::ng-deep.ant-collapse {
+  background: white !important;
+}
+.ant-collapse-borderless>.ant-collapse-item {
+  border: 0;
+}
+.ant-collapse-borderless {
+  border-radius: 10px;
+}
+::ng-deep.ant-collapse-item {
+  background-color: white !important;
+  border-radius: 10px !important;
+}
+::ng-deep.ant-collapse-header {
+  background-color: #f7f7f7 !important;
+  border-radius: 10px !important;
+  margin-bottom: 10px;
+  outline: none;
+}
+::ng-deep.ant-collapse-content-box {
+  background-color: white !important;
+}
+.subLabel {
+  padding-top: 5px;
+  position: relative;
+}
+.custom-hr {
+  width: 96%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-top: 5px;
+}
+
+.customStyle {
+  background: white;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  border: 0px;
+  font-weight: bold;
+}
+
+.text-span{
+  font-weight: normal;
+}

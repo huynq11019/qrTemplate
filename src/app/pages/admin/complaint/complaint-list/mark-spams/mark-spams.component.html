@@ -1,0 +1,146 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span *ngIf="currentUser?.userLevel == USER_LEVEL_LEADER_MANAGEMENT">{{
+      "model.complaint.confirmUpdateClassify" | translate
+    }}</span>
+    <span *ngIf="currentUser?.userLevel == USER_LEVEL_CENTER">{{
+      "model.complaint.confirmDeleteComplaints" | translate
+    }}</span>
+  </div>
+  <div class="mt-n3">
+    <div *ngIf="this.isConfirm && this.setOfCheckedId.size > 1">
+      <span [innerHTML]="this.getTranslate('confirmsUpdateClassifyText')"></span>
+    </div>
+    <div *ngIf="this.isConfirm && this.setOfCheckedId.size == 1">
+      <span [innerHTML]="this.getTranslate('confirmUpdateClassifyText')"></span>
+    </div>
+    <div>
+      <span *ngIf="!this.isConfirm">{{
+        "model.complaint.confirmDeleteComplaintsText" | translate
+      }}</span>
+    </div>
+  </div>
+  <ng-template #oneComplaint>
+    <div class="row">
+      <!--      {{ "model.complaint.complaint" | translate }}: {{ complaint.complaint }}-->
+    </div>
+  </ng-template>
+  <div class="row" *ngIf="!this.complaint; else oneComplaint">
+    <div class="col-12 table-container">
+      <nz-table #table [nzData]="this.complaints" [nzTableLayout]="'auto'">
+        <thead>
+          <tr>
+            <th
+              [nzChecked]="checked"
+              (nzCheckedChange)="onAllChecked($event)"
+            ></th>
+            <th nzAlign="center">{{ "common.index" | translate }}</th>
+            <th nzAlign="left">
+              {{ this.getTranslate("complaint-list.complaint-code") }}
+            </th>
+            <th nzAlign="center">
+              {{ this.getTranslate("complaint-list.sender") }}
+            </th>
+            <th nzAlign="center">
+              {{ this.getTranslate("complaint-list.senderPhoneNumber") }}
+            </th>
+            <th nzAlign="center">
+              {{ this.getTranslate("complaint-list.complaintContent") }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of this.complaints; let i = index">
+            <tr>
+              <td
+                [nzChecked]="setOfCheckedId.has(item.id || '')"
+                [nzDisabled]="checkDisableCheckbox(item)"
+                (nzCheckedChange)="onItemChecked($event, item?.id)"
+              ></td>
+              <td [nzAlign]="'center'">
+                {{ getIndex(i) }}
+              </td>
+              <td nzAlign="left">
+                {{ item?.code }}
+              </td>
+              <td nzAlign="left">
+                {{ getLimitLength(item?.fullName) }}
+              </td>
+              <td nzAlign="left">
+                {{ getLimitLength(item?.phoneNumber) }}
+              </td>
+              <td
+                nzAlign="left"
+                nz-tooltip="{{ item.content }}"
+                [nzTooltipPlacement]="'topLeft'"
+              >
+                {{ getLimitLength(item.content!, 40) }}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+  <form [formGroup]="this.form" *ngIf="this.isConfirm">
+    <div class="row mt-3">
+      <div class="col">
+        <label
+          >{{ this.getTranslate("reason")
+          }}<span class="text-danger">*</span></label
+        >
+        <textarea
+          nz-input
+          formControlName="reason"
+          rows="4"
+          placeholder="{{ this.getTranslate('contentInput') }}"
+          maxlength="{{ this.MAX_DESCRIPTION_LENGTH }}"
+        ></textarea>
+        <ng-container
+          *ngIf="form.get('reason')?.touched || form.get('reason')?.dirty"
+        >
+          <span
+            class="text-danger"
+            *ngIf="form.get('reason')?.hasError('required')"
+          >
+            <small>{{
+              "model.complaint.error.requiredReasonSpam" | translate
+            }}</small>
+          </span>
+          <span
+            class="text-danger"
+            *ngIf="form.get('reason')?.hasError('pattern')"
+          >
+            <small>{{ "common.pattern" | translate }}</small>
+          </span>
+        </ng-container>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" class="mr-2" (click)="cancel()">
+        {{ "action.cancel" | translate }}
+      </button>
+      <!--      *ngIf="currentUser?.userLevel == USER_LEVEL_LEADER_MANAGEMENT && this.isConfirm"-->
+      <button
+        *ngIf="this.isConfirm"
+        nz-button
+        nzType="primary"
+        [disabled]="this.form.invalid || setOfCheckedId?.size === 0"
+        (click)="action(CONFIRM)"
+      >
+        {{ "action.confirm" | translate }}
+      </button>
+      <button
+        *ngIf="!this.isConfirm"
+        nz-button
+        nzType="primary"
+        [disabled]="setOfCheckedId?.size === 0"
+        (click)="action(DELETE)"
+      >
+        {{ "action.confirm" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

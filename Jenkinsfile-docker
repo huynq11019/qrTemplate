@@ -1,0 +1,65 @@
+#!/usr/bin/env groovy
+
+pipeline {
+
+	agent any
+
+	options { skipDefaultCheckout() }
+
+	environment {
+		DOCKER_IMAGE = "192.168.2.105:5000/amc-fe"
+		SERVICE_NAME = "amc-fe"
+	}
+	stages {
+		stage('checkout') {
+			steps {
+				checkout scm
+			}
+		}
+
+		stage('check node and npm') {
+			steps {
+				sh "node -v"
+				sh "npm -v"
+			}
+		}
+		
+		stage('npm install') {
+			steps {
+				sh "npm install"
+			}
+		}
+		
+		stage('packaging') {
+			steps {
+				sh "npm run qa"
+			}
+		}
+
+	        stage('build') {
+		  environment {
+			DOCKER_TAG="${BUILD_NUMBER}"
+		  }
+		  steps {
+			sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} . "
+			sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
+			sh "docker image ls | grep ${DOCKER_IMAGE}"
+			
+			sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+			sh "docker push ${DOCKER_IMAGE}:latest"
+			
+			//clean to save disk
+			sh "docker image rm ${DOCKER_IMAGE}:${DOCKER_TAG}"
+			sh "docker image rm ${DOCKER_IMAGE}:latest"
+		  }
+		}
+
+		stage('deploy') {
+		  steps {
+			withCredentials([sshUserPrivateKey(credentialsId: "ssh-key-server-deploy", keyFileVariable: 'keyfile')]) {
+                    		sh 'ssh -oStrictHostKeyChecking=no -i ${keyfile}  evotek@192.168.2.105 "ls && pwd && sh ./mb_amc/deploy.sh ${SERVICE_NAME}"'
+                	}
+		  }	
+		}
+	}
+}

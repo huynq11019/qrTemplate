@@ -1,0 +1,47 @@
+<div class="advanced-search">
+  <div *nzModalTitle>
+    <span>{{ 'common.advancedSearch' | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col">
+            <label>{{ 'model.unit.filter.building' | translate }}</label>
+            <nz-select nzAllowClear
+                       [nzShowArrow]="true"
+                       maxlength="100"
+                       nzShowSearch
+                       nzServerSearch
+                       [nzAutoClearSearchValue]="true"
+                       [nzMaxTagCount]="1"
+                       nzPlaceHolder="{{'model.building.filter' | translate}}"
+                       formControlName="buildingIds"
+                       debounceKeyUp removeOptionTitle
+                       (onEvent)="this.loadDataBuilding($event.target?.value)"
+                       nzMode="multiple">
+              <nz-option *ngFor="let s of this.buildings" [nzCustomContent]="true"
+                         [nzValue]="s?.id" [nzLabel]="this.limitText(s?.code||  '',30 )">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="s?.code + ' ' + s?.name">
+                  {{s.code}} - {{this.limitText(s?.name || '', 30)}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onCancel()">
+        {{ 'action.reset' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSubmit()"
+      >
+        {{ ('common.search') | translate }}
+      </button>
+    </div>
+  </div>
+</div>

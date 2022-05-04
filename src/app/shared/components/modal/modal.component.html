@@ -1,0 +1,28 @@
+<nz-modal
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  [nzCloseIcon]="modalClose"
+  [nzWidth]="width"
+  [nzCentered]="centered"
+  [(nzVisible)]="isVisible"
+  [nzMaskClosable]="true"
+  [nzClosable]="closable"
+>
+  <ng-template #modalTitle [ngIf]="showTitle">
+    {{ title | translate }}
+  </ng-template>
+  <ng-template #modalClose>
+    <i *ngIf="showClose" nz-icon nzType="close" nzTheme="outline" (click)="cancel()"></i>
+  </ng-template>
+  <ng-template #modalContent>
+    <p class="content" [innerHTML]="showContent()">
+    </p>
+  </ng-template>
+  <ng-template #modalFooter>
+    <div [ngClass]="btnCentered ? 'text-center' : ''">
+      <button *ngIf="showBtnCancel" nz-button nzType="default" (click)="cancel()">{{ cancelText | translate }}</button>
+      <button nz-button nzType="primary" (click)="handle()">{{ okText | translate }}</button>
+    </div>
+  </ng-template>
+</nz-modal>

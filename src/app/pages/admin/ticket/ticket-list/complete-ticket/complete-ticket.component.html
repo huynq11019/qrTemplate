@@ -1,0 +1,75 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span>{{ "model.ticket.confirmRequest" | translate }}</span>
+  </div>
+  <div class="row">
+    <form [formGroup]="form">
+      <div class="col-12 mb-2">
+        <label
+          >{{ "model.ticket.image" | translate
+          }}<span class="text-danger"> *</span></label
+        >
+        <div [ngClass]="filesUpload.length > 0 ? 'd-flex' : ''">
+          <div>
+            <mb-file
+              class="mb-2"
+              [type]="'image'"
+              [imageUrls]="imageUrls!"
+              [filesOrigin]="files"
+              [filesUpload]="filesUpload"
+              (onChangeFilesOrigin)="getFilesOrigin($event)"
+              (onChangeFilesUpload)="getFiles($event)"
+            >
+            </mb-file>
+          </div>
+          <div
+            [ngClass]="filesUpload.length > 0 ? 'mt-1' : ''"
+            *ngIf="filesUpload.length < 5"
+          >
+            <mb-upload-simple
+              [type]="'image'"
+              [easyUpload]="false"
+              [multiple]="true"
+              [maxFileUpload]="maxFileUpload"
+              [disabled]="filesUpload.length > 5"
+              [filesUpload]="filesUpload"
+              [acceptTypeFiles]="['image']"
+              (emitter)="getFiles($event)"
+            >
+            </mb-upload-simple>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <label>{{ "model.ticket.feedback" | translate }}</label>
+        <nz-form-item>
+          <nz-form-control>
+            <textarea
+              rows="4"
+              [maxLength]="LENGTH_VALIDATOR.NOTE_MAX_LENGTH.MAX"
+              placeholder="{{ 'model.ticket.enterFeedback' | translate }}"
+              formControlName="feedback"
+              nz-input
+            >
+            </textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onCancel()">
+        {{ "action.cancel" | translate }}
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        [disabled]="!valuableImages()"
+        (click)="onSubmit()"
+      >
+        {{ "action.save" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

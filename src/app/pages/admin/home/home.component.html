@@ -1,0 +1,334 @@
+<div id="main">
+
+  <div id="header">
+    <div class="header-logo" (click)="toHome()">
+      <img src="assets/images/amc-logo.svg" alt="AMC_LOGO">
+    </div>
+    <div class="header-nav">
+      <ul id="nav">
+        <li [ngClass]="getClassIndex(tabIndex.introduce)" (click)="changeTab(tabIndex.introduce)">
+          <a>{{ 'home.introduce' | translate }}</a>
+        </li>
+        <nz-divider nzType="vertical"></nz-divider>
+        <li [ngClass]="getClassIndex(tabIndex.download)" (click)="changeTab(tabIndex.download)">
+          <a>{{ 'home.download' | translate }}</a>
+        </li>
+      </ul>
+      <button class="btn-language" nz-button nz-popover nzPopoverTrigger="click" [(nzPopoverVisible)]="visible"
+        [nzPopoverContent]="languageTemplate">
+        <img *ngIf="currentLanguage === LANGUAGES_CONST.VI.code" src="assets/images/icon/vietnam.png" alt="vi">
+        <img *ngIf="currentLanguage === LANGUAGES_CONST.EN.code" src="assets/images/icon/english.png" alt="en">
+      </button>
+      <ng-template #languageTemplate>
+        <div class="language-form">
+          <p (click)="onChangeLanguage(LANGUAGES_CONST.VI.code)"><img src="assets/images/icon/vietnam.png" alt="vi">
+            <span class="ml-2">{{ 'common.vi' | translate }}</span>
+          </p>
+          <p (click)="onChangeLanguage(LANGUAGES_CONST.EN.code)"><img src="assets/images/icon/english.png" alt="en">
+            <span class="ml-2">{{ 'common.en' | translate }}</span>
+          </p>
+        </div>
+      </ng-template>
+      <nz-divider nzType="vertical"></nz-divider>
+      <button class="btn-login" nz-button nzType="primary" (click)="navigate('/authentication/login')">
+        {{ 'home.log-in' | translate }}
+      </button>
+      <div class="clear"></div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="index === tabIndex.introduce">
+    <div id="start">
+      <div class="row ">
+        <div class="col start-content">
+          <span class="text-primary d-block start-title"><strong>MB</strong>-AMC</span>
+          <p class="mt-1 mt-md-3 start-content-inner">
+            {{ 'home.start-title' | translate }}
+          </p>
+          <p class="start-content-inner">
+            {{ 'home.start-content' | translate }}
+          </p>
+          <button nz-button nzType="primary" class="mt-4 btn-login " (click)="navigate('/authentication/login')"> {{
+            'home.start' | translate }}</button>
+        </div>
+        <div class="col" *ngIf="currentLanguage === LANGUAGES_CONST.VI.code; else laptopEn">
+          <img class="start-image" src="assets/images/laptop-me.png" alt="start">
+        </div>
+        <ng-template #laptopEn>
+          <div class="col">
+            <img class="start-image" src="assets/images/laptop-me-en.png" alt="start">
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <div id="introduce-content">
+      <div class="row">
+        <div class="col-12 col-lg-6 introduce-image-header ">
+          <!--          text-center-->
+          <img class="introduce-image" src="assets/images/building.svg" alt="introduce-content">
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="text-bottom d-flex justify-content-end">
+            <div class="introduce-wrapper">
+              <h2 class="mt-3 mt-lg-0 ">{{ 'home.intro-title' | translate }} <span
+                  class="text-primary "><strong>MB</strong>-AMC</span>
+              </h2>
+              <p class="mt-3 text-justify">{{ 'home.intro-content' | translate }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center introduce-content-bottom mt-5">
+        <div class="col-md-4 mt-3 mt-md-0">
+          <img src="assets/images/effective.svg">
+          <p class="content-introduce ">{{ 'home.intro-content-1' | translate }}</p>
+        </div>
+        <div class="col-md-4 mt-3 mt-md-0">
+          <img src="assets/images/search.svg">
+          <p class="content-introduce ">{{ 'home.intro-content-2' | translate }}</p>
+        </div>
+        <div class="col-md-4 mt-3 mt-md-0">
+          <img src="assets/images/optimalManager.svg">
+          <p class="content-introduce ">{{ 'home.intro-content-3' | translate }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="some-future">
+      <div class="row">
+        <div class="col-md-7 text-content ">
+          <div class="row">
+            <h2 class="text-title">{{ 'home.future-title' | translate }}</h2>
+            <div class="mt-md-3 mt-3">
+              <label class="sub-title">
+                <img class="survey-icon" src="assets/images/icon/survey-icon.svg" alt="no-image" />
+                {{ 'home.future-title-2' | translate }}</label>
+            </div>
+            <div class="mt-md-2 future-content">
+              <p>{{ 'home.future-content' | translate }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <img class="request-icon" src="assets/images/icon/request-icon.svg" alt="no-image" /><label
+                class="sub-title">{{ 'home.support' | translate }}</label>
+            </div>
+            <div class="mt-md-2 future-content">
+              <p>{{ 'home.future-content-1' | translate }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5 col-md-0">
+          <div class=" d-flex justify-content-center">
+            <nz-carousel [nzEffect]="'fade'" [nzAutoPlay]="true" nzAutoPlaySpeed="3000" [nzDots]="false" #mobileSlider>
+              <div nz-carousel-content *ngFor="let index of array" class="d-flex justify-content-end">
+                <img (click)="this.nextImage()" class="img-mobile"
+                  src="assets/images/bg-mobile{{index}}{{this.currentLanguage}}.svg" alt="bg-mobile">
+              </div>
+            </nz-carousel>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="trialApp">
+      <div class="trial-box-desktop">
+        <div class="d-flex justify-content-center trial-content">
+          <div class="trial-inner-content">
+            <h2>{{ 'home.experience' | translate }} <span class="text-primary "><strong>MB</strong>-AMC</span> {{
+              'home.on-your-phone' | translate }}</h2>
+            <div class="d-flex mt-3">
+              <div class="qr-code">
+                <qrcode [qrdata]="qrCode" [width]="160" [margin]="0" [errorCorrectionLevel]="'M'">
+                </qrcode>
+              </div>
+              <div class="">
+                <p class="label-trial trial-high-light">
+                  {{ 'home.scan' | translate }}
+                </p>
+                <p class="label-trial mt-2">
+                  {{ 'home.or' | translate }}
+                </p>
+                <p class="label-trial trial-high-light mt-2">
+                  {{ 'home.download-app' | translate }}
+                </p>
+                <div class="button-storage d-inline-flex mt-3">
+                  <div class="mr-3 to-downloadBox">
+                    <img (click)="toDownloadIos()" src="../../../assets/images/button/app-store.svg">
+                  </div>
+                  <div class="to-downloadBox">
+                    <img (click)="toDownloadAndroid()" src="../../../assets/images/button/chplayAppsvg.svg">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="trial-box-image justify-content-end">
+            <img src="assets/images/icon/trialImage.png">
+          </div>
+        </div>
+      </div>
+      <div class="trial-box-mobile ">
+        <div class="d-flex justify-content-center">
+          <img src="assets/images/icon/trialImage.png">
+        </div>
+        <div class=" trial-box-content-mobile mt-3 text-center">
+          <h2 class=" trial-mobile-title">{{ 'home.experience' | translate }} <span
+              class="text-primary"><strong>MB</strong>-AMC</span> {{ 'home.on-your-phone' | translate }}</h2>
+          <div class="button-store d-flex justify-content-center mt-3">
+            <div class="mr-3">
+              <img (click)="this.toDownloadIos()" src="../../../assets/images/button/app-store.svg">
+            </div>
+            <div class="">
+              <img (click)="this.toDownloadAndroid()" src="../../../assets/images/button/chplayAppsvg.svg">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <home-footer></home-footer> -->
+  </ng-container>
+
+  <ng-container *ngIf="index === tabIndex.download">
+    <div id="download">
+      <div id="download-box" class="download-box">
+        <div class="download-container row align-items-center">
+          <div id="div-1" class="display d-flex justify-content-center col-12 col-lg-6">
+            <div class="display">
+              <div class="h2-custom">
+                {{ 'home.tutorial' | translate }}
+              </div>
+              <div class="qr-box mt-5">
+                <div class="qr-code">
+                  <qrcode [qrdata]="qrCode" [width]="width" [margin]="0" [errorCorrectionLevel]="'M'">
+                  </qrcode>
+                </div>
+                <div class="qr-title">
+                  <div class="qr-content">
+                    <div class="text-primary font-weight-bold h5-custom">{{ 'home.scan' | translate }}</div>
+                    <!-- <p>Để trải nghiệm ứng dụng trên điện thoại</p> -->
+                  </div>
+                  <div style="margin-bottom: 5px">
+                    <div class="h5-custom">{{ 'home.or' | translate }}</div>
+                  </div>
+                  <div class="download-app">
+                    <div style="margin-top: 10px">
+                      <span class="text-primary font-weight-bold h5-custom">{{ 'home.download-store' | translate
+                        }}</span>
+                      <p class="p-custom">{{ 'home.download-content' | translate}}</p>
+                    </div>
+                    <div class="tag">
+                      <div class="card-app-store">
+                        <img (click)="this.toDownloadIos()" src="assets/images/app-store.svg" alt="app-store">
+                      </div>
+                      <div class="card-google-play">
+                        <img (click)="this.toDownloadAndroid()" src="assets/images/google-play.svg" alt="google-play">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="div-2" class="bg-mobile-container d-flex col-12 col-lg-6">
+            <div *ngIf="this.currentLanguage === LANGUAGES_CONST.VI.code; else phone3En">
+              <img class="bg-mobile" src="assets/images/phone3.png" alt="bg-mobile">
+            </div>
+            <ng-template #phone3En>
+              <img class="bg-mobile" src="assets/images/phone3_en.png" alt="bg-mobile">
+            </ng-template>
+          </div>
+          <div class="mobie-tag d-flex flex-column">
+            <div class="text-center">
+              <h5>{{ 'home.load' | translate }} <span class="text-primary"><strong>MB</strong>-AMC</span> {{
+                'home.on-your-phone' | translate }}</h5>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+              <div class="card-app-store">
+                <img (click)="toDownloadIos()" src="assets/images/app-store.svg" alt="app-store">
+              </div>
+              <div class="card-google-play">
+                <img (click)="this.toDownloadAndroid()" src="assets/images/google-play.svg" alt="google-play">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="policy text-center">
+          <div *ngIf="currentLanguage === LANGUAGES_CONST.VI.code">
+            <p>Bằng việc cài đặt, bạn đồng ý với <a class="text-primary" (click)="goPrivacy()">Điều khoản và Chính sách
+                quyền riêng tư</a> của chúng tôi.</p>
+          </div>
+          <div *ngIf="currentLanguage === LANGUAGES_CONST.EN.code">
+            <p>{{ 'home.policy-title' | translate }} <a class="text-primary" (click)="goPrivacy()">{{
+                'home.policy-title-2' | translate }}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <home-footer></home-footer> -->
+  </ng-container>
+
+  <!-- footer -->
+  <div class="footer">
+    <div class="footer-top d-flex justify-content-center">
+      <div class="container">
+        <div class="row mt-4">
+          <div class="col-lg-7 col-sm-12 col-xs-12">
+            <div class="row row-1 mt-3">
+              <div class="logo-margin col-lg-12 col-xl-3 text-left mt-1">
+                <img src="assets/images/amc-logo.svg" alt="AMC_LOGO">
+              </div>
+              <div class="col-lg-12 col-xl-9">
+                <div class="content">
+                  <p>
+                    <span class="company-name text-left">
+                      {{ 'home.company-name' | translate }}
+                    </span>
+                    <br>
+                    <span class="commpany-address text-left">
+                      {{ 'home.company-address' | translate }}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="info-contact col-lg-5 col-sm-12 col-xs-12">
+            <div class="info-container d-flex">
+              <div class="contact-margin contact-margin-right">
+                <div class="d-flex">
+                  <span class="icon-contact">
+                    <img src="assets/images/contact-phone.png" alt="">
+                  </span>
+                  <p class="m-0 d-flex flex-column">
+                    <span class="title-contact">HOTLINE</span>
+                  </p>
+                </div>
+                <div class="text-contact-contanier">
+                  <a class="text-contact">024 3388 8668</a>
+                </div>
+              </div>
+              <div class="contact-margin">
+                <div class="d-flex">
+                  <span class="icon-contact">
+                    <img src="assets/images/contact-email.png" alt="">
+                  </span>
+                  <p class="m-0 d-flex flex-column">
+                    <span class="title-contact">EMAIL</span>
+                  </p>
+                </div>
+                <div class="text-contact-contanier">
+                  <a class="text-contact">congty@mbamc.com.vn</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4" id="copy-right">
+      <hr style="background-color: #0054A5; height: 1px;">
+      <p style="color: #0054A5; font-size: 12px;" class="copy-right text-center mt-2">Copyright {{this.currentYear}} MB
+        AMC. All rights reserved.</p>
+    </div>
+  </div>
+</div>

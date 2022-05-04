@@ -1,0 +1,35 @@
+.drag-image > .ant-upload {
+  height: 110px !important;
+  width: 110px !important;
+  margin-top: 6px;
+  margin-left: 10px;
+}
+
+.drag-image > .ant-upload > .ant-upload-btn {
+  height: 110px !important;
+  width: 110px !important;
+}
+
+// ::ng-deep .ant-upload {
+//   height: 110px !important;
+// }
+
+icon-upload {
+  margin-top: 20px;
+}
+
+.ant-upload-text {
+  opacity: 0.6;
+}
+
+@media (max-width: 375px) {
+  .ant-upload-text {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 366px) {
+  .ant-upload-text {
+    font-size: 12px !important;
+  }
+}

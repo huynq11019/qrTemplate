@@ -1,0 +1,27 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.fixAll.tslint": true
+  },
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
+  "css.validate": false,
+  "scss.validate": false,
+  "doxdocgen.generic.authorName": "hieu.daominh",
+  "doxdocgen.generic.authorEmail": "hieudao500@gmail.com",
+  "doxdocgen.c.firstLine": "/**",
+  "tslint.validateWithDefaultConfig": true,
+  "cSpell.words": [
+    "Ngxs"
+  ]
+}
+

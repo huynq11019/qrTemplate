@@ -1,0 +1,130 @@
+<div class="content">
+  <ng-container>
+    <mb-table-title [title]="'model.unit.list'"></mb-table-title>
+    <div class="row mt-3">
+
+      <div class="col-3 d-flex">
+        <mb-button [iconResource]="'filter'" class="mr-2" (click)="filter()"></mb-button>
+
+        <nz-input-group nzPrefixIcon="search">
+          <input type="text" nz-input
+                 [value]="keyword"
+                 (keyup.enter)="search($event)"
+                 [placeholder]="'action.search' | translate"/>
+        </nz-input-group>
+      </div>
+      <div class="col text-right">
+        <mb-button
+          [type]="'primary'"
+          [icon]="'plus'"
+          [text]="'action.create'"
+          (click)="create()">
+          {{ 'action.create' | translate }}
+        </mb-button>
+      </div>
+    </div>
+    <ng-template #suffixIconSearch>
+      <i nz-icon nzType="search"></i>
+    </ng-template>
+  </ng-container>
+
+  <div class="row mt-3">
+    <nz-table
+      #table
+      [nzData]="units"
+      [nzNoResult]="noDataResult"
+      [nzTableLayout]="'auto'"
+      (nzQueryParams)="onQueryParamsChange($event)">
+      <thead>
+      <tr>
+        <th nzAlign="center">{{'common.index' | translate}}</th>
+        <th class="col-buildingCode" nzAlign="left" nzColumnKey="buildingCode">{{'model.building.code' | translate}}</th>
+        <th nzAlign="center" nzColumnKey="floorNumber" [nzSortFn]="true">{{'model.survey.floor' | translate}}</th>
+        <th class="col-unitCode" nzAlign="left" nzColumnKey="code" [nzSortFn]="true">{{'model.unit.code' | translate}}</th>
+        <th class="col-type" nzAlign="left" nzColumnKey="type">{{'model.unit.type' | translate}}</th>
+        <th class="col-area" nzAlign="right" nzColumnKey="area" [nzSortFn]="true">{{'model.unit.area' | translate}} (m<sup>2</sup>)</th>
+        <th nzAlign="left" nzColumnKey="company">{{'common.company' | translate}}</th>
+        <th nzAlign="center" nzColumnKey="representative">{{'model.customer.representative' | translate}}</th>
+        <th class="col-status" nzAlign="center" nzColumnKey="status">{{'common.status' | translate}}</th>
+        <th nzAlign="center">{{'action.msg' | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of units; let i = index">
+        <tr>
+          <td nzAlign="center">{{ getIndex(i) }}</td>
+          <td class="col-buildingCode" [nz-tooltip]="item.buildingCode" nzAlign="left">{{ this.limitText(item.buildingCode || '', 15)}}</td>
+          <td nzAlign="center">{{ item?.floorName }}</td>
+          <td nzAlign="left">{{ item.code  }}</td>
+          <td nzAlign="left">{{ this.getType(item.type)}}</td>
+          <td nzAlign="right">{{ item.area }}</td>
+          <td nzAlign="left"
+              nzTooltipTitle="{{ item?.organizationName || '' }}"
+              nzTooltipPlacement="top"
+              nz-tooltip>{{ limitText(item.organizationName || '', 30) }}</td>
+          <td nzAlign="left"
+              nzTooltipTitle="{{ item?.legalRepresentative || '' }}"
+              nzTooltipPlacement="top"
+              nz-tooltip>{{ limitText(item.legalRepresentative || '') }}</td>
+          <td nzAlign="center">
+            <mb-badge [hover]="true"
+                      [color]="format(item, 'leasingStatus').sClass"
+                      [text]="format(item, 'leasingStatus').text">
+            </mb-badge>
+          </td>
+
+          <td nzAlign="center">
+            <div class="unit-action" *ngIf="item.status === unitStatus.ACTIVE.value">
+              <mb-button-action
+                *ngIf="item.leasingStatus != this.leasingStatus.AVAILABLE.value &&  !item.isDefault"
+                [action]="'view'"
+                nzTooltipTitle="{{'action.detail' | translate}}"
+                nzTooltipPlacement="top"
+                nz-tooltip
+                (click)="goDetail(item)">
+              </mb-button-action>
+              <mb-button-action
+                *ngIf="item.leasingStatus == this.leasingStatus.AVAILABLE.value && !item.isDefault"
+                [className]="'first'"
+                [action]="'edit'"
+                nzTooltipTitle="{{'action.update' | translate}}"
+                nzTooltipPlacement="top"
+                nz-tooltip
+                (click)="goToUpdate(item)">
+              </mb-button-action>
+              <mb-button-action
+                *ngIf="item.leasingStatus == this.leasingStatus.AVAILABLE.value && !item.isDefault"
+                [action]="'delete'"
+                [className]="'last'"
+                nzTooltipTitle="{{'action.delete' | translate}}"
+                nzTooltipPlacement="top"
+                nz-tooltip
+                (click)="openConfirmDelete(item)">
+              </mb-button-action>
+
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </nz-table>
+    <mb-pagination [pageIndex]="this.unitRequest.pageIndex"
+                   [pageSize]="this.unitRequest.pageSize"
+                   [total]="total"
+                   (onChange)="onQuerySearch($event)">
+    </mb-pagination>
+  </div>
+</div>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>
+
+<mb-modal [title]="this.unitGroupModal.title"
+          [content]="unitGroupModal.content"
+          [okText]="unitGroupModal.okText"
+          [btnCentered]="true"
+          [isVisible]="isVisible"
+          [callBack]="this.unitGroupModal.callBack"
+          (emitter)="handleSuccess($event)">
+</mb-modal>

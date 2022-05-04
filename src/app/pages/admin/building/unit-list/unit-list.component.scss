@@ -1,0 +1,21 @@
+.unit-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+}
+.col-buildingCode {
+  min-width: 5rem !important;
+}
+.col-area {
+  min-width: 9rem !important;
+}
+.col-status{
+  min-width: 7rem !important;
+}
+.col-unitCode{
+  min-width: 7rem !important;
+}
+.col-type {
+  min-width: 7rem !important;
+}

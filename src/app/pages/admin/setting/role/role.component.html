@@ -1,0 +1,111 @@
+<div class="content">
+  <mb-table-title [title]="'model.role.list'"></mb-table-title>
+  <div class="row mt-3">
+    <div class="col-3 d-flex">
+      <mb-button [iconResource]="'filter'" class="mr-2" (click)="openAdvancedSearch()"></mb-button>
+      <nz-input-group nzPrefixIcon="search">
+        <input type="text" nz-input
+               [value]="keyword"
+               (keyup.enter)="search($event)"
+               [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+    </div>
+    <div class="col-9 text-right">
+      <mb-button [type]="'primary'" *hasRoles="['role:create']"
+                 [icon]="'plus'"
+                 [text]="'action.create'"
+                 (click)="create()">
+      </mb-button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <nz-table
+        #table
+        [nzData]="roles"
+        [nzNoResult]="noDataResult"
+        [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+        <tr>
+          <th nzAlign="center">{{'common.index' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="name" [nzSortFn]="true">{{'model.role.name' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="isRoot">{{'model.role.isAdmin' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="code" [nzSortFn]="true">{{'model.role.code' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="code">{{'model.role.roleLevel' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="description">{{'model.role.description' | translate}}</th>
+          <th nzAlign="center" nzColumnKey="createdAt" [nzSortFn]="true">{{'model.role.createdAt' | translate}}</th>
+          <th nzAlign="left" nzColumnKey="createdBy" [nzSortFn]="true">{{'model.role.createdBy' | translate}}</th>
+          <th nzAlign="center" nzColumnKey="lastModifiedAt" [nzSortFn]="true">{{'model.role.lastModifiedAt' |
+            translate}}
+          </th>
+          <th nzAlign="center" nzColumnKey="status">{{'model.role.status' | translate}}</th>
+          <th nzAlign="center" *hasRoles="['role:view']">{{'action.msg' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of roles; let i = index">
+          <tr>
+            <td nzAlign="center">{{ getIndex(i) }}</td>
+            <td nzAlign="left">{{ item.name }}</td>
+            <td nzAlign="left">{{ item.isRoot }}</td>
+            <td nzAlign="left">{{ item.code }}</td>
+            <td nzAlign="left">{{ formatLevel(item.roleLevel!) | translate }}</td>
+            <td nzAlign="left" nz-tooltip="{{item.description}}">{{ getLimitLength(item.description!) }}</td>
+            <td nzAlign="center">{{ item.createdAt | date: 'dd/MM/yyyy' }}</td>
+            <td nzAlign="left">{{ item.createdBy }}</td>
+            <td nzAlign="center">{{ item.lastModifiedAt | date: 'dd/MM/yyyy' }}</td>
+            <td nzAlign="center">
+              <mb-badge
+                [color]="item.status === roleActive ? 'badge-info' : 'badge-secondary'"
+                [text]="format(item.status, 'status')">
+              </mb-badge>
+            </td>
+            <td nzAlign="center" class="action" *hasRoles="['role:view']">
+              <mb-button-action [action]="'edit'" *hasRoles="['role:update']"
+                                className="first"
+                                nzTooltipTitle="{{'action.update' | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="update(item)">
+              </mb-button-action>
+              <mb-button-action [action]="'permission'" *hasRoles="['role:view']"
+                                [isRoot]="!!item.isRoot"
+                                className="center"
+                                nzTooltipTitle="{{( !item.isRoot ? 'action.permission' : 'action.fullPermission') | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="!item.isRoot ? updatePermission(item) : ''">
+              </mb-button-action>
+              <mb-button-action [action]="item.status === roleActive ? 'lock' : 'unlock'" *hasRoles="['role:update']"
+                                [className]="'last'"
+                                nzTooltipTitle="{{ (item.status === roleActive ? 'action.lock' : 'action.unlock') | translate}}"
+                                nzTooltipPlacement="top"
+                                nz-tooltip
+                                (click)="lock(item)">
+              </mb-button-action>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="pageIndex"
+                     [pageSize]="pageSize"
+                     [total]="total"
+                     (onChange)="onQuerySearch($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</div>
+
+<mb-modal [title]="groupLockPopup.title"
+          [content]="groupLockPopup.content"
+          [okText]="groupLockPopup.okText"
+          [btnCentered]="true"
+          [isVisible]="isVisible"
+          (emitter)="onLockAndUnLock($event)">
+</mb-modal>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

@@ -1,0 +1,386 @@
+.container {
+  max-width: 100%;
+}
+
+.center-logo{
+  margin-left: calc(-10% * 10.0/12 );
+}
+
+.title {
+  margin: 0px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.image-amc {
+  width: 300px;
+}
+
+.image {
+  width: 320px;
+}
+
+.text {
+  font-weight: bold;
+}
+
+.text-content {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.text-content-end-page {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0px;
+}
+
+.default-content {
+  min-height: 100vh;
+  position: relative;
+  //margin: 0 auto;
+}
+
+.text-upload-title {
+  font-size: 13px;
+  color: #7EB6EC;
+}
+
+.text-upload {
+  margin: 0px;
+  font-weight: bold;
+}
+
+.opacity-btn {
+  opacity: 0.2;
+}
+
+.typeBtnOff {
+  background-color: #CECECE !important; 
+  color: white;
+  border: 1px solid #CECECE !important;
+}
+
+.feeling {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.enter-mail {
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+}
+//.btn-action-page{
+//  position: absolute;
+//  bottom: 20px;
+//  left: 50%;
+//  transform: translateX(-50%);
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  text-align: center;
+//}
+
+@media (max-width: 425px) {
+  .enter-mail {
+    text-align: left !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .text {
+    font-size: 11px;
+  }
+
+  .text-upload {
+    margin: 0px;
+    font-weight: bold;
+    font-size: 11px;
+  }
+
+  .text-upload-title {
+    font-size: 11px;
+    color: #7EB6EC;
+  }
+
+  .text-content-end-page {
+    font-size: 11px !important;
+    font-weight: bold;
+    margin: 0px;
+  }
+
+  .image-amc {
+    width: 140px;
+  }
+
+  .image {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .title {
+    margin: 0px;
+    font-size: 11px !important;
+    font-weight: bold;
+  }
+
+  .text-content {
+    font-size: 11px;
+    font-weight: bold;
+  }
+}
+
+// IphoneSE
+@media (max-width: 375px) and (min-width: 300px) {
+  .text {
+    font-size: 12px;
+  }
+
+  .text-upload {
+    margin: 0px;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  .text-upload-title {
+    font-size: 11px;
+    color: #7EB6EC;
+  }
+
+  .text-content-end-page {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0px;
+  }
+
+  .image-amc {
+    width: 190px;
+  }
+
+  .title {
+    margin: 0px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .text-content {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .image {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  //.input-text {
+  //  margin-left: 24px;
+  //  width: 141px;
+  //}
+}
+
+@media (max-width: 389px) and (min-width: 340px) {
+  .text {
+    font-size: 12px;
+  }
+
+  .text-upload {
+    margin: 0px;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  .text-upload-title {
+    font-size: 10px;
+    color: #7EB6EC;
+  }
+
+  .text-content-end-page {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0px;
+  }
+
+  .image-amc {
+    width: 190px;
+  }
+
+  .title {
+    margin: 0px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .text-content {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .image {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  //.input-text {
+  //  margin-left: 24px;
+  //  width: 131px;
+  //}
+}
+
+// Iphone XR
+@media (max-width: 430px) and (min-width: 401px) {
+  .text {
+    font-size: 12px;
+  }
+
+  .text-upload {
+    margin: 0px;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  .text-upload-title {
+    font-size: 11px;
+    color: #7EB6EC;
+  }
+
+  .text-content-end-page {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0px;
+  }
+
+  .image-amc {
+    width: 200px;
+  }
+
+  .title {
+    margin: 0px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .text-content {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .image {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  //.input-text {
+  //  margin-left: 24px;
+  //  width: 171px;
+  //}
+}
+
+// 12 pro
+@media (max-width: 400px) and (min-width: 390px) {
+  .text {
+    font-size: 13px;
+  }
+
+  .text-upload {
+    margin: 0px;
+    font-weight: bold;
+    font-size: 13px;
+  }
+
+  .text-upload-title {
+    font-size: 11px;
+    color: #7EB6EC;
+  }
+
+  .text-content-end-page {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0px;
+  }
+
+  .image-amc {
+    width: 195px;
+  }
+
+  .title {
+    margin: 0px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .text-content {
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .image {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  //.input-text {
+  //  margin-left: 24px;
+  //  width: 153px;
+  //}
+}
+
+@media (max-width: 400px) and (min-width: 390px) {
+  .text {
+    font-size: 13px;
+  }
+
+  //.input-text {
+  //  margin-left: 24px;
+  //  width: 153px;
+  //}
+}
+
+@media (max-width: 576px) and (min-width: 430px) {
+  .text {
+    font-size: 14px;
+  }
+
+  .text-upload {
+    margin: 0px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .text-upload-title {
+    font-size: 12px;
+    color: #7EB6EC;
+  }
+
+  .text-content-end-page {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0px;
+  }
+
+  .image-amc {
+    width: 240px;
+  }
+
+  .title {
+    margin: 0px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .text-content {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  //.input-text {
+  //  margin-left: 24px;
+  //  width: 265px;
+  //}
+}
+
+@media (min-width: 577px) {
+
+}
+

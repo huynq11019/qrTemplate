@@ -1,0 +1,31 @@
+<div *ngIf="total > 0" class="pagination-custom">
+  <div class="row">
+    <div class="col">
+      <button nz-button nz-dropdown [nzDropdownMenu]="menu">
+        {{ 'common.show' | translate }} <span class="ml-2">{{ pageSize }}</span>
+        <i nz-icon nzType="down"></i>
+      </button>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item (click)="onChangePageSize(option)"
+              *ngFor="let option of pageSizeOptions">{{ option }}
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+    <div class="col"></div>
+    <div class="col">
+      <div class="w-auto pagination float-right">
+        <p class="size-of-pagination">{{firstIndex}}-{{lastIndex}} of {{total}}</p>
+        <div class="pagination-next-previous">
+          <img class="pagination-previous"
+               [ngClass]="firstIndex === index ? 'disable' : 'hover'"
+               (click)="previous()" src="assets/images/button/previous.png" alt="previous">
+          <img class="pagination-next"
+               [ngClass]="lastIndex === total ? 'disable' : 'hover'"
+               (click)="next()" src="assets/images/button/next.png" alt="next">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

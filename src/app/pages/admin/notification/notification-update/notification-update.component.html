@@ -1,0 +1,217 @@
+<div class="title mb-3">
+  <mb-table-title
+    [title]="(isUpdate ? (isDetail ? 'model.notification.detail' : 'model.notification.update') : 'model.notification.create') | translate"
+    [showBack]="true"
+    [url]="NOTIFICATION_URL"
+    [navigationExtras]="navigationExtras">
+  </mb-table-title>
+</div>
+<section class="content">
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-6 mb-2">
+            <label>{{ 'model.notification.list.code' | translate }} <span class="text-danger">*</span></label>
+            <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderTemplate"
+                       [nzShowArrow]="true" removeOptionTitle
+                       nzPlaceHolder="{{ 'model.notification.list.code' | translate }}"
+                       nzMode="multiple"
+                       [nzDisabled]="isDetail"
+                       [nzMaxTagCount]="2"
+                       [nzMaxTagPlaceholder]="buildingTag"
+                       formControlName="buildingIds">
+              <nz-option *ngFor="let item of buildings" [nzCustomContent]="true"
+                         [nzLabel]="item?.code || ''"
+                         [nzValue]="item?.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0"
+                     [ngbTooltip]="(item?.code!) + ' - ' + item?.name ">{{(item?.code!) + ' - ' + getLimitLength(item?.name! || '')}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-template #renderTemplate>
+              <mb-select-all *ngIf="buildings.length > 0 && currentUser?.userLevel === USER_LEVEL_CENTER"
+                             (click)="selectAll('buildingIds', buildings)">
+              </mb-select-all>
+            </ng-template>
+            <ng-template #buildingTag let-selectedList>
+              <span>{{ '+' + selectedList.length }} {{ 'common.building' | translate }}</span>
+            </ng-template>
+            <ng-container *ngIf="form.get('buildingIds')?.touched || form.get('buildingIds')?.dirty">
+              <span class="text-danger" *ngIf="form.get('buildingIds')?.hasError('required')">
+                <mb-not-blank [value]="'model.notification.list.code'"></mb-not-blank>
+              </span>
+              <span class="text-danger" *ngIf="form.get('buildingIds')?.hasError('pattern')">
+                <small>{{ 'common.pattern' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+          <!-- Customer -->
+          <div *ngIf="!isInternal" class="col-6 mb-2">
+            <label>{{ 'model.notification.list.floor' | translate }}</label>
+            <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderTemplateFloors"
+                       [nzShowArrow]="true" removeOptionTitle
+                       nzPlaceHolder="{{ 'model.notification.list.floor' | translate }}"
+                       nzMode="multiple"
+                       [nzDisabled]="isDetail || floors.length === 0"
+                       [nzMaxTagCount]="2"
+                       [nzMaxTagPlaceholder]="floorTag"
+                       formControlName="floorIds">
+              <nz-option *ngFor="let item of floors" [nzCustomContent]="true"
+                         [nzLabel]="item?.name || ''"
+                         [nzValue]="item?.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(item?.name!)">{{(item?.name!)}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-template #renderTemplateFloors>
+              <mb-select-all *ngIf="floors.length > 0"
+                             (click)="selectAll('floorIds', floors)">
+              </mb-select-all>
+            </ng-template>
+            <ng-template #floorTag let-selectedList>
+              <span>{{ '+' + selectedList.length }} {{ 'common.floor' | translate }}</span>
+            </ng-template>
+            <ng-container *ngIf="form.get('floorIds')?.touched || form.get('floorIds')?.dirty">
+              <span class="text-danger" *ngIf="form.get('floorIds')?.hasError('required')">
+                <mb-not-blank [value]="'model.notification.list.floor'"></mb-not-blank>
+              </span>
+              <span class="text-danger" *ngIf="form.get('floorIds')?.hasError('pattern')">
+                <small>{{ 'common.pattern' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+          <div *ngIf="!isInternal" class="col-6 mb-2">
+            <label>{{ 'model.notification.list.company' | translate }}</label>
+            <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderTemplateCustomers"
+                       [nzShowArrow]="true" removeOptionTitle
+                       nzPlaceHolder="{{ 'model.notification.list.company' | translate }}"
+                       nzMode="multiple"
+                       [nzDisabled]="isDetail || customers.length === 0"
+                       [nzMaxTagCount]="1"
+                       [nzMaxTagPlaceholder]="companyTag"
+                       formControlName="customerIds">
+              <nz-option *ngFor="let item of customers" [nzCustomContent]="true"
+                         [nzLabel]="getLimitLength(item?.name!, 30)"
+                         [nzValue]="item?.id">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(item?.name!)">{{getLimitLength(item?.name!, 100)}}</div>
+              </nz-option>
+            </nz-select>
+            <ng-template #renderTemplateCustomers>
+              <mb-select-all *ngIf="customers.length > 0"
+                             (click)="selectAll('customerIds', customers)">
+              </mb-select-all>
+            </ng-template>
+            <ng-template #companyTag let-selectedList>
+              <span>{{ '+' + selectedList.length }} {{ 'common.company' | translate }}</span>
+            </ng-template>
+            <ng-container *ngIf="form.get('customerIds')?.touched || form.get('customerIds')?.dirty">
+              <span class="text-danger" *ngIf="form.get('customerIds')?.hasError('required')">
+                <mb-not-blank [value]="'model.notification.list.company'"></mb-not-blank>
+              </span>
+              <span class="text-danger" *ngIf="form.get('customerIds')?.hasError('pattern')">
+                <small>{{ 'common.pattern' | translate }}</small>
+              </span>
+            </ng-container>
+          </div>
+          <!-- Customer -->
+          <div class="col-6 mb-2">
+            <label>{{ 'model.notification.list.estimatedDate' | translate }} <span class="text-danger">*</span></label>
+            <div class="date-picker">
+              <nz-date-picker formControlName="date"
+                              [nzDisabled]="isDetail"
+                              (keyup.enter)="enterDatePicker($event)"
+                              [nzDisabledDate]="disabledBeforeToday"
+                              [nzFormat]="'dd/MM/yyyy'"
+                              #datePicker
+                              nzPlaceHolder="{{ 'DD/MM/YYYY' | translate }}">
+              </nz-date-picker>
+            </div>
+            <ng-container *ngIf="form.get('date')?.touched || form.get('date')?.dirty">
+            <span class="text-danger" *ngIf="form.get('date')?.hasError('required')">
+              <mb-not-blank [value]="'model.notification.list.estimatedDate'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('date')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-12 mb-2">
+            <label>{{ 'model.notification.list.title' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="title"
+                   nz-input
+                   [maxLength]="200"
+                   placeholder="{{ 'model.notification.list.title' | translate }}">
+            <ng-container *ngIf="form.get('title')?.touched || form.get('title')?.dirty">
+            <span class="text-danger" *ngIf="form.get('title')?.hasError('required')">
+              <mb-not-blank [value]="'model.notification.list.title'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('title')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-12 mb-2">
+            <label>{{ 'model.notification.list.content' | translate }} <span class="text-danger">*</span></label>
+            <mb-editor [placeholder]="'model.notification.list.content' | translate"
+                       *ngIf="notification?.content || !isUpdate"
+                       [isReadOnly]="isDetail"
+                       [value]="form?.get('content')?.value || ''"
+                       (inputInvalid)="onHandleEditorInvalid($event)"
+                       (data)="onChangeData($event)">
+            </mb-editor>
+            <ng-container *ngIf="form.get('content')?.touched || form.get('content')?.dirty">
+            <span class="text-danger" *ngIf="form.get('content')?.hasError('required')">
+              <mb-not-blank [value]="'model.notification.list.content'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('content')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-12 mb-2">
+            <label>{{ 'common.note' | translate }}</label>
+            <textarea rows="3" [maxLength]="255"
+                      placeholder="{{ 'common.note' | translate }}"
+                      formControlName="note"
+                      nz-input></textarea>
+          </div>
+          <div class="col-12 mb-2">
+            <label [hidden]="(files?.length === 0 && isDetail)">{{ 'common.attachedFiles' | translate }}</label>
+            <mb-file class="mb-2"
+                     [isRemove]="!isDetail"
+                     [filesOrigin]="files"
+                     [filesUpload]="filesUpload"
+                     [isDownload]="isDetail"
+                     (onChangeFilesOrigin)="getFilesOrigin($event)"
+                     (onChangeFilesUpload)="getFiles($event)">
+            </mb-file>
+            <mb-upload-simple *ngIf="!isDetail"
+                              [multiple]="true"
+                              [easyUpload]="false"
+                              [maxFileUpload]="maxFileUpload"
+                              [disabled]="((filesUpload?.length || 0) + (files?.length || 0)) >= maxFileUpload"
+                              [filesOrigin]="files"
+                              [filesUpload]="filesUpload"
+                              [acceptTypeFiles]="['pdf']"
+                              (emitter)="getFiles($event)">
+            </mb-upload-simple>
+          </div>
+        </div>
+      </form>
+      <div class="col-12 text-center mt-5" *ngIf="!isDetail">
+        <button nz-button nzType="default" (click)="onCancel()">
+          {{ 'action.cancel' | translate }}
+        </button>
+        <button class="ml-3" nz-button nzType="primary" (click)="isUpdate ? onUpdateSubmit() : onSubmit()"
+                [disabled]="!form.valid || isInvalid">
+          {{ 'action.save' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

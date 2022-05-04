@@ -1,0 +1,114 @@
+<div class="content">
+  <mb-table-title [title]="'model.action-log.list'"></mb-table-title>
+  <div [formGroup]="form" class="row mt-3">
+    <div class="col-1 d-flex">
+      <mb-button [type]="'primary'" [icon]="'reload'" [text]="'common.refresh' | translate" (click)="refresh()">
+      </mb-button>
+    </div>
+    <div class="col-3 d-flex">
+      <nz-select [nzShowArrow]="true" nzServerSearch removeOptionTitle nzShowSearch debounceKeyUp formControlName="uri"
+        (onEvent)="onSearchUris($event.target.value)" (ngModelChange)="onSearch($event, 'uri')" nzAllowClear
+        nzPlaceHolder="{{ 'model.action-log.uri' | translate }}">
+        <nz-option [nzCustomContent]="true" *ngFor="let uri of uris" [nzLabel]="uri" [nzValue]="uri">
+          <div container="body" [animation]="false" [openDelay]="100" [closeDelay]="0" [ngbTooltip]="uri">
+            {{ uri }}
+          </div>
+        </nz-option>
+      </nz-select>
+    </div>
+    <div class="col-2 d-flex">
+      <nz-select nzAllowClear removeOptionTitle (ngModelChange)="onSearch($event, 'method')" formControlName="method"
+        nzPlaceHolder="{{ 'model.action-log.method' | translate }}">
+        <nz-option *ngFor="let method of METHODS" [nzLabel]="method.label" [nzValue]="method.value" [nzCustomContent]="true">
+          <div container="body" [animation]="false" [openDelay]="100" [closeDelay]="0"
+            [ngbTooltip]="(method.label) | translate">{{(method.label) | translate}}</div>
+        </nz-option>
+      </nz-select>
+    </div>
+    <div class="col-2 d-flex">
+      <nz-select nzAllowClear removeOptionTitle formControlName="module" (ngModelChange)="onSearch($event, 'module')"
+        nzPlaceHolder="{{ 'model.action-log.module' | translate }}">
+        <nz-option *ngFor="let module of MODULES" [nzLabel]="module.label" [nzValue]="module.value" [nzCustomContent]="true">
+          <div container="body" [animation]="false" [openDelay]="100" [closeDelay]="0"
+            [ngbTooltip]="(module.label) | translate">{{(module.label) | translate}}</div>
+        </nz-option>
+      </nz-select>
+    </div>
+    <div class="col-2 d-flex">
+      <nz-select nzAllowClear removeOptionTitle formControlName="httpCode"
+        (ngModelChange)="onSearch($event, 'httpCode')" nzPlaceHolder="{{ 'model.action-log.httpCode' | translate }}">
+        <nz-option *ngFor="let httpCode of HTTP_CODES" [nzLabel]="httpCode.label" [nzValue]="httpCode.value" [nzCustomContent]="true">
+          <div container="body" [animation]="false" [openDelay]="100" [closeDelay]="0"
+            [ngbTooltip]="(httpCode.label) | translate">{{(httpCode.label) | translate}}</div>
+        </nz-option>
+      </nz-select>
+    </div>
+    <div class="col-2 d-flex">
+      <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderTemplate" nzMode="multiple" debounceKeyUp
+        formControlName="userIds" (ngModelChange)="onSearch($event, 'userIds')" nzServerSearch [nzShowArrow]="true"
+        [nzMaxTagCount]="1" removeOptionTitle (onEvent)="onSearchUser($event.target.value)"
+        nzPlaceHolder="{{ 'model.action-log.sender' | translate }}" id="building">
+        <nz-option *ngFor="let user of usersSearch" [nzCustomContent]="true" [nzValue]="user?.id"
+          [nzLabel]="user.username!">
+          <div container="body" [animation]="false" [openDelay]="100" [closeDelay]="0" [ngbTooltip]="(user?.username!)">
+            {{(user.username!)}}</div>
+        </nz-option>
+      </nz-select>
+      <ng-template #renderTemplate>
+      </ng-template>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <nz-table #table [nzData]="actionLogs" [nzNoResult]="noDataResult" [nzTableLayout]="'auto'"
+        (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+          <tr>
+            <th nzAlign="center">{{'common.index' | translate}}</th>
+            <th nzAlign="left" nzColumnKey="uri">{{'model.action-log.uri' | translate}}</th>
+            <th nzAlign="center" nzColumnKey="method">{{'model.action-log.method' | translate}}</th>
+            <th nzAlign="center" nzColumnKey="module">{{'model.action-log.module' | translate}}</th>
+            <th nzAlign="left" nzColumnKey="hostIp">{{'model.action-log.hostIp' | translate}}</th>
+            <th nzAlign="left" nzColumnKey="remoteIp">{{'model.action-log.remoteIp' | translate}}</th>
+            <th nzAlign="center" nzColumnKey="httpCode">{{'model.action-log.httpCode' | translate}}</th>
+            <th nzAlign="center" nzColumnKey="accessedAt" [nzSortFn]="true">{{'model.action-log.accessedAt' | translate}}
+            </th>
+            <th nzAlign="center" nzColumnKey="duration" [nzSortFn]="true">{{'model.action-log.duration' | translate}}</th>
+            <th nzAlign="center" nzColumnKey="description">{{'action.msg' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of actionLogs; let i = index">
+            <tr>
+              <td nzAlign="center">{{ getIndex(i) }}</td>
+              <td nzAlign="left">{{ item.uri }}</td>
+              <td nzAlign="center">{{ item.method }}</td>
+              <td nzAlign="center">{{ item.module }}</td>
+              <td nzAlign="left">{{ item.remoteIp }}</td>
+              <td nzAlign="left">{{ item.hostIp }}</td>
+              <td nzAlign="center">{{ item.httpCode }}</td>
+              <td nzAlign="center">{{ item?.accessedAt | date: "dd/MM/yyyy" }}</td>
+              <td nzAlign="center">{{ item?.duration }} ms</td>
+              <td nzAlign="center">
+                <mb-button-action [action]="'view'" *hasRoles="['ticket:view']"
+                  nzTooltipTitle="{{ 'action.detail' | translate }}" nzTooltipPlacement="top" (click)="onDetail(item)"
+                  nz-tooltip>
+                </mb-button-action>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="pageIndex" [pageSize]="pageSize" [total]="total" (onChange)="onQuerySearch($event)">
+      </mb-pagination>
+    </div>
+  </div>
+</div>
+
+<mb-modal [title]="groupLockPopup.title" [content]="groupLockPopup.content" [okText]="groupLockPopup.okText"
+  [btnCentered]="true">
+</mb-modal>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

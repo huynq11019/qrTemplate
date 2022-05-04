@@ -1,0 +1,40 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span>{{ 'action.outputFile' | translate }} Excel</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-12">
+            <label>{{ 'model.survey.nameTitle' | translate }} <span class="text-danger">*</span></label>
+            <nz-select formControlName="surveyId"
+                       debounceKeyUp removeOptionTitle
+                       nzShowSearch nzServerSearch
+                       (onEvent)="searchSurveys($event)"
+                       nzAllowClear
+                       nzPlaceHolder="{{ 'model.survey.nameTitle' | translate }}">
+              <nz-option *ngFor="let survey of surveys"
+                         [nzValue]="survey.id" [nzCustomContent]="true"
+                         [nzLabel]="survey.name || ''">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="survey.name!">{{survey.name!}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" class="mr-2" (click)="cancel()">
+        {{ 'action.cancel' | translate }}
+      </button>
+      <button nz-button nzType="primary" [disabled]="form.invalid" (click)="export()">
+        {{ ('action.outputFile') | translate }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<ng-container *ngIf=" form?.get(fieldName)?.touched || form?.get(fieldName)?.dirty">
+  <span class="text-danger" *ngFor="let err of this.errorMessage?.valid">
+    <small
+      *ngIf="this.form?.get(fieldName)?.hasError(err.type)">
+<!--      {{((this.errorMessage?.fieldName || '')|translate) + ' '}} {{this.getMessageError(err.type, err.param) | translate }}-->
+      {{((this.errorMessage?.fieldName || '')|translate) + ' '}} {{this.getMessageErrorByField(err)}}
+    </small>
+  </span>
+</ng-container>
+<ng-container *ngIf="!errorMessage">
+  <!--  Thông báo lỗi nếu DEV khởi tạo sai validate message-->
+  <span class="text-danger">errorMessage not found</span>
+</ng-container>

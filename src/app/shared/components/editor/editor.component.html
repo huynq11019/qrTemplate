@@ -1,0 +1,8 @@
+<div class="row">
+  <div class="col-12">
+    <div [id]="idEditor" [innerHTML]="value"></div>
+  </div>
+  <div class="col-12 text-right">
+    <span [ngClass]="getClass()">{{ getLengthStripHTML(value) + '/' +  maxLength }}</span>
+  </div>
+</div>

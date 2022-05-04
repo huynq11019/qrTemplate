@@ -1,0 +1,956 @@
+$spacer: 1rem;
+
+:root {
+}
+
+.text-primary {
+  color: #0054A5;
+}
+
+p {
+  font-size: 16px;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#main {
+  background: #F8F9FE;
+  min-height: 100vh;
+}
+
+#header {
+  height: 70px;
+  padding: 0 20px;
+  background-color: #fff;
+  top: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  z-index: 1000;
+}
+
+#header .header-logo {
+  float: left;
+  line-height: 60px;
+  cursor: pointer;
+}
+
+#header .header-nav {
+  float: right;
+  line-height: 60px;
+}
+
+#nav {
+  display: inline-block;
+}
+
+#nav li {
+  display: inline-block;
+  color: #0054A5;
+  padding: 0 50px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 18px;
+  position: relative;
+}
+
+#nav li:hover {
+  cursor: pointer;
+  border-bottom: 3px solid #177DDF;
+}
+
+.tab-selected {
+  border-bottom: 3px solid #177DDF;
+}
+
+#nav li a, #nav li a:hover {
+  color: #0054A5;
+}
+
+.ant-divider-vertical {
+  position: relative;
+  top: -0.06em;
+  display: inline-block;
+  height: 2em;
+  margin: 0 8px;
+  vertical-align: middle;
+  border-top: 0;
+  border-left: 2px solid rgba(0, 0, 0, .06);
+}
+
+.ant-btn {
+  height: 42px;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+.btn-login {
+  //margin-left: 30px;
+}
+
+#download {
+  margin-top: 70px;
+  // padding-top: 50%;
+  // width: 100%;
+  // height: 100%;
+  position: relative;
+  background: url("../../../assets/images/new-bg.png") top center / cover no-repeat;
+  min-height: auto;
+
+}
+
+#download .download-box {
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // width: 80%;
+  padding: 5% 10% 25px 10%;
+  margin: 0 auto;
+}
+
+#download .download-box {
+  // margin-top: 10%;
+}
+
+.qr-box {
+  display: flex;
+}
+
+.qr-code {
+  margin-right: 30px;
+}
+
+.qr-title .qr-content {
+  margin-bottom: 10px;
+}
+
+.bg-mobile-container {
+  justify-content: end;
+}
+
+.policy {
+  margin-top: 100px !important;
+}
+
+.policy a {
+  color: #0054A5;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.policy p {
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.tag {
+  display: flex;
+  margin-top: 15px;
+}
+
+.card-app-store {
+  background: #000;
+  border-radius: 4px;
+  width: 110px;
+  padding: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.card-google-play {
+  background: #000;
+  border-radius: 4px;
+  width: 110px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.ant-carousel .slick-slide img {
+  display: block;
+  //margin: 0 auto;
+}
+
+.to-downloadBox {
+  cursor: pointer;
+}
+
+#start {
+  margin-top: 70px;
+  background-image: url("../../../assets/images/start-cover.png") ;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#introduce-content {
+  padding: 80px 180px;
+}
+
+#survey-mobile {
+  padding: 50px;
+  background: #EDF1FF;
+  text-align: center;
+}
+
+#survey-mobile h2 {
+  margin-bottom: 30px;
+}
+
+.survey-mobile-margin {
+  margin: 0 20px;
+}
+
+#copy-right {
+  color: #0B1F3F;
+  padding: 20px 0;
+}
+.start-content {
+  padding-left: 180px;
+  width: 50%;
+  margin: auto;
+}
+.start-image {
+  width: 100%;
+}
+
+.start-title {
+  font-size: 40px;
+  //line-height: 40px;
+  font-style: normal;
+}
+.start-content-inner {
+  font-weight: 600;
+  font-size: 1.5em;
+  line-height: 30px;
+  font-style: normal;
+}
+.introduce-wrapper {
+  width: 85%;
+}
+@media only screen and (max-width: 1440px) {
+  .start-content {
+    padding-left: 200px;
+    //width: 50%;
+    //margin: auto;
+  }
+}
+@media only screen and (max-width: 1440px) {
+  .start-content {
+    padding-left: 150px;
+    //width: 50%;
+    //margin: auto;
+  }
+}
+@media only screen and (max-width: 991px) and (min-width: 786px) {
+  #download-box {
+    display:flex; flex-direction: column; text-align:center;
+  }
+
+  .bg-mobile-container {
+    margin-top: 0px !important;
+  }
+
+  #download .bg-mobile {
+    width: 550px !important;
+  }
+
+  #div-1 {
+    order: 2;
+  }
+
+  #div-2 {
+    order: 1;
+  }
+}
+@media only screen and (max-width: 990px) {
+  .start-content {
+    padding-left: 100px;
+    //width: 50%;
+    //margin: auto;
+  }
+  .introduce-image-header {
+    text-align: center !important;
+  }
+  .introduce-wrapper {
+    width: 100%;
+  }
+
+}
+@media only screen and (max-width: 786px) {
+  .start-content {
+    padding-left: 50px;
+  }
+  .start-content-inner {
+    font-size: 1em;
+    line-height: 30px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .start-content {
+    padding-left: 20px;
+    //width: 50%;
+    //margin: auto;
+  }
+  .start-content-inner {
+    font-size: 0.8em;
+    line-height: 25px;
+  }
+  .start-title {
+    font-size: 1.5em;
+    font-style: normal;
+  }
+}
+@media only screen and (max-width: 525px) {
+  #start {
+    margin-top: 123px;
+  }
+}
+@media only screen and (max-width: 420px) {
+  .start-content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
+// trial mobile start
+.introduce-image {
+  //width: 70%;
+  height: 368px;
+}
+.survey {
+  display: inline-flex;
+}
+
+.img-mobile {
+  //min-width: 250px;
+}
+
+// css footer
+.content {
+  max-width: 450px;
+}
+
+.company-name {
+  color: #0054A5;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.commpany-address {
+  font-size: 14px;
+}
+
+.footer-top {
+  justify-content: center;
+}
+
+.info-container {
+  justify-content: center;
+}
+
+.info-contact ul {
+  list-style-type: none;
+}
+
+.contact-margin {
+  margin-left: 50px;
+}
+
+.icon-contact {
+  display: block;
+  padding: 5px;
+  text-align: center;
+  width: 50px;
+  margin-top: 15px;
+  margin-right: 10px;
+  justify-content: center;
+}
+
+.title-contact {
+  color: #0054A5;
+  margin-top: 18px;
+  font-weight: 600;
+}
+
+.text-contact-contanier {
+  text-align: right;
+  margin-left: 14px;
+}
+
+.text-contact {
+  font-size: 16px;
+  text-align: right !important;
+  color: #EC1A3B;
+  font-weight: 500;
+}
+
+.info-contact li {
+  margin-left: 50px !important;
+}
+
+.ul-custom {
+  justify-content: end;
+}
+
+.copy-right {
+  margin-bottom: 20px;
+}
+
+.h2-custom {
+  font-size: 2rem ;
+  color: rgba(0,0,0,.85);
+  font-weight: 500;
+}
+
+.h5-custom {
+  color: rgba(0,0,0,.85);
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+.p-custom {
+  font-size: 16px;
+}
+
+.mobie-tag {
+  display: none !important;
+}
+
+@media only screen and (max-width: 1600px) {
+
+  //nz-carousel {
+  //  height: 550px;
+  //  width: 100%;
+  //}
+}
+
+@media only screen and (max-width: 1420px) {
+
+  //nz-carousel {
+  //  height: 500px;
+  //  width: 100%;
+  //}
+
+}
+
+@media only screen and (max-width: 1366px) {
+
+  //nz-carousel {
+  //  height: 460px;
+  //  width: 100%;
+  //}
+
+  #introduce-content {
+    padding: 50px 130px;
+  }
+
+}
+
+@media only screen and (max-width: 1250px) {
+  #download .bg-mobile {
+    width: 450px;
+  }
+
+  // #header {
+  //   position: initial;
+  // }
+}
+
+@media only screen and (max-width: 1200px) {
+
+  //nz-carousel {
+  //  height: 420px;
+  //  width: 100%;
+  //}
+
+  .slick-track {
+    width: 1200px !important;
+  }
+
+  .survey {
+    display: block;
+  }
+
+  // #header {
+  //   position: initial;
+  // }
+
+  .survey-mobile-margin {
+    margin: 20px 0;
+  }
+
+  #nav li {
+    display: inline-block;
+    color: #0054A5;
+    padding: 0 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    position: relative;
+  }
+
+  #introduce-content {
+    padding: 50px 20px;
+  }
+
+}
+
+@media only screen and (max-width: 1024px) {
+
+  // #header {
+  //   position: initial;
+  // }
+
+  #download {
+    height: auto;
+  }
+
+  .h2-custom {
+    font-size: 1.2rem;
+  }
+
+  .h5-custom {
+    font-size: 1rem;
+  }
+
+  .p-custom {
+    font-size: 12px;
+  }
+
+  .download-box {
+    margin-top: 5% !important;
+  }
+
+  #download .bg-mobile {
+    width: 400px;
+  }
+
+  // .card-app-store {
+  //   width: 90px;
+  // }
+
+  // .card-google-play {
+  //   width: 90px;
+  // }
+
+  // .card-app-store img {
+  //   width: 80px;
+  // }
+
+  // .card-google-play img {
+  //   width: 80px;
+  // }
+
+  .policy {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .logo-margin {
+    margin-bottom: 20px;
+  }
+
+  .icon-contact {
+    padding: 5px 5px 5px 0;
+    display: block;
+    text-align: left;
+    width: 30px;
+    margin-top: 15px;
+    margin-right: 10px;
+    justify-content: left;
+  }
+
+  .info-container {
+    justify-content: left;
+  }
+
+  .text-contact-contanier {
+    text-align: left;
+    margin-left: 0;
+  }
+
+  .contact-margin {
+    margin-left: 0;
+  }
+
+  .contact-margin-right {
+    margin-right: 50px !important;
+  }
+
+  .li-custom {
+    margin-left: 0;
+  }
+
+  .bg-mobile-container {
+    justify-content: center;
+  }
+
+  .btn-language {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 786px) {
+
+  //nz-carousel {
+  //  height: 380px;
+  //  width: 100%;
+  //}
+
+  //#introduce-content {
+  //  display: none;
+  //}
+
+  // #download .bg-mobile {
+  //   display: none;
+  // }
+
+  #download {
+    background: #f7f7f7;
+  }
+
+  .btn-language {
+    display: none;
+  }
+
+  #download .bg-mobile {
+    width: auto;
+  }
+
+  .qr-code {
+    display: none;
+  }
+
+  .display {
+    display: none;
+  }
+
+  .download-container {
+    justify-content: center;
+  }
+
+  .policy {
+    display: none;
+  }
+
+  // .h2-1024 {
+  //   font-size: 14px;
+  // }
+
+  .mobie-tag {
+    display: block !important;
+    margin-bottom: 30px;
+  }
+
+  .bg-mobile-container {
+    margin-top: 50px;
+  }
+
+  .card-app-store {
+    width: 150px;
+  }
+
+  .card-app-store img {
+    width: 140px;
+  }
+
+  .card-google-play {
+    width: 150px;
+  }
+
+  .card-google-play img {
+    width: 140px;
+  }
+
+  .copy-right {
+    margin-bottom: 5px;
+  }
+
+  .footer {
+    background: #F8F9FE;
+  }
+}
+
+@media only screen and (max-width: 580px) {
+  .footer{
+    padding-left: 15px;
+    padding-right: 10px;
+  }
+
+  #download .bg-mobile {
+    width: 450px;
+  }
+}
+
+@media only screen and (max-width: 524px) {
+  #header {
+    height: auto;
+  }
+
+  #header .header-logo, #header .header-nav {
+    float: initial;
+  }
+
+  #download {
+    margin-top: 100px;
+  }
+
+  .bg-mobile-container {
+    margin-top: 75px;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+
+  #header {
+    height: auto;
+  }
+
+  #header .header-logo, #header .header-nav {
+    float: initial;
+  }
+
+  //nz-carousel {
+  //  height: 200px;
+  //  width: 100%;
+  //}
+
+
+
+  .btn-login {
+    //margin-left: 20px;
+  }
+
+  .download-box .col-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .qr-box {
+    display: contents;
+  }
+
+  .btn-language {
+    display: none;
+  }
+
+  #download .bg-mobile {
+    width: 400px;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .btn-login {
+    margin-left: 5px;
+  }
+
+  #download .bg-mobile {
+    width: 370px;
+  }
+  .btn-login {
+    margin-left: 0;
+  }
+
+  ::ng-deep .ant-divider-vertical {
+    margin: 0 6px !important;
+  }
+
+  ::ng-deep .ant-btn {
+    font-size: 14px !important;
+    min-width: 80px;
+    height: 36px !important;
+  }
+}
+
+//@media only screen and (max-width: 375px) {
+//  .btn-login {
+//    margin-left: 0;
+//  }
+//
+//  ::ng-deep .ant-divider-vertical {
+//    margin: 0px 6px !important;
+//  }
+//
+//  ::ng-deep .ant-btn {
+//    font-size: 14px !important;
+//    min-width: 80px;
+//    height: 36px !important;
+//  }
+//}
+
+.clear {
+  clear: both;
+}
+
+//  Hệ thống quản lý MB AMC
+
+
+.introduce-content-bottom div {
+  text-align: center;
+}
+
+.content-introduce {
+  margin-top: 20px;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 24px;
+  color: #0054A5;
+}
+
+.btn-language {
+  border: none;
+  outline: none;
+  position: relative;
+  min-width: 0;
+  padding: 5px 10px;
+  top: -2px;
+}
+
+::ng-deep .ant-btn {
+  box-shadow: none !important;
+}
+.language-form {
+  cursor: pointer;
+}
+
+::ng-deep.ant-popover-inner {
+  border-radius: 7px !important;
+}
+// Một số chức năng moi Mobile
+.text-title {
+  font-weight: 600;
+  font-size: 32px;
+  font-style: normal;
+  line-height: 44.5px;
+}
+
+.some-future {
+  background-image: url("../../../assets/images/bg-future.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding: 50px 180px 20px 180px;
+}
+
+.sub-title {
+  font-weight: 500;
+  font-size: 20px;
+  font-style: normal;
+  line-height: 30px;
+  color: #0054A5;
+
+}
+
+.future-content {
+  width: 60%;
+}
+
+.request-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.survey-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+//.mobile-preview {
+//  background-image: url("../../../assets/images/bg-mobile2.svg");
+//}
+
+.introduce-content-bottom img {
+  height: 100px;
+  width: 100px;
+}
+@media only screen and (max-width: 1200px) {
+  .some-future {
+    padding: 50px 150px 10px 150px;
+  }
+  .future-content {
+    width: 70%;
+  }
+}
+
+@media only screen and (max-width: 990px) {
+  .some-future {
+    padding: 50px 100px 10px 100px;
+  }
+  .future-content {
+    width: 80%;
+  }
+}
+
+@media only screen and (min-width: 990px) {
+  .text-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 12px;
+    padding: 10px 0;
+  }
+
+}
+
+@media only screen and (max-width: 786px) {
+
+  .some-future {
+    padding: 20px 20px;
+  }
+  .future-content {
+    width: 100%;
+  }
+}
+// trải nghiệm
+#trialApp {
+  background-color: #FFFFFF;
+}
+#trialApp .trial-content {
+  padding: 100px 140px 100px 160px;
+}
+.trial-inner-content {
+  width: 100%;
+}
+.label-trial {
+  font-weight: 500;
+  font-style: normal;
+  font-size: 18px;
+}
+.trial-high-light {
+  font-size: 24px;
+  line-height: 24px;
+  color: #0054A5;
+}
+.trial-box-image {
+  display: flex;
+  width: 100%;
+}
+.trial-box-mobile {
+  display: none;
+  padding: 70px 39px;
+}
+@media only screen and (max-width: 990px){
+  #trialApp .trial-box-desktop {
+    display: none;
+  }
+
+  .trial-box-mobile {
+    display: block;
+  }
+}
+//@media only screen and (max-width: 475px) {
+//  .trial-box-mobile {
+//    padding: 20px;
+//  }
+//}
+

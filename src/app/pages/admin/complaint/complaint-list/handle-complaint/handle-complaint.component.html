@@ -1,0 +1,51 @@
+<div class="content">
+    <div *nzModalTitle>
+      <span>{{ 'model.complaint.updateComplaintFromCenter' | translate }}</span>
+    </div>
+    <div class="row mt-n4">
+        <form [formGroup]="form">
+         <ng-container>
+          <div class="row">
+            <div class="col-12 mb-2">
+              <label>{{ 'model.complaint.complaint-list.status' | translate }}: <b class="margin">{{ 'model.complaint.complaint-list.waiting' | translate }}</b></label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 mb-2">
+              <label>{{ 'model.complaint.complaint-list.type' | translate }}: <b class="margin">{{ 'model.complaint.complaint-list.misclassification' | translate }}</b></label>  
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 mb-2">
+              <label>{{ 'model.complaint.serviceFeedback' | translate }}<span class="text-danger">*</span>:</label>  
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 mb-2">
+              <textarea 
+              nz-input
+              formControlName="feedback" 
+              placeholder="{{'model.complaint.serviceFeedbackPlace' | translate}}"
+              [maxlength]="2000"
+              rows="5">
+
+              </textarea>
+            </div>
+          </div>
+         </ng-container>
+        </form>
+    </div>
+    <div class="row">
+      <div class="col-12 text-center" *nzModalFooter>
+        <button nz-button nzType="default" (click)="onCancel()">
+          {{ 'action.cancel' | translate }}
+        </button>
+        <button nz-button nzType="primary"
+                [disabled]="form.invalid"
+                (click)="onSubmit()">
+          {{ 'action.update' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+  

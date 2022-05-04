@@ -1,0 +1,62 @@
+.file {
+  margin: 5px 0 8px 0;
+  background: #F8F8F8;
+  mix-blend-mode: normal;
+  border-radius: 16px;
+  padding: 5px;
+}
+
+.fileName {
+  color: #171717;
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 10px;
+  max-width: 80%;
+}
+
+.icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.download {
+  cursor: pointer;
+}
+
+.image {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background-color: white;
+}
+
+.image image{
+  border-radius: 5px;
+}
+
+.image-custom {
+  object-fit: contain;
+  border: 1px solid #d9d9d9;
+}
+
+.remove {
+  position: absolute;
+  right: 7px;
+  top: 5px;
+  color: red;
+  font-weight: bold;
+}
+
+#icon-remove{
+  cursor: pointer;
+}
+
+#icon-remove:hover {
+  color: red;
+}
+
+#image {
+  width: 110px;
+  height: 110px;
+  border-radius: 5px;
+}

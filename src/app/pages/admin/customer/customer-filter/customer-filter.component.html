@@ -1,0 +1,48 @@
+<div class="advanced-search">
+  <div *nzModalTitle>
+    <span>{{ 'common.advancedSearch' | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+<!--          <div class="col-6 mb-2">-->
+<!--            <label>{{ 'model.customer.foundingDate' | translate }}</label>-->
+<!--            <div class="date-picker">-->
+<!--              <nz-date-picker formControlName="incorporationDate"-->
+<!--                              (keyup.enter)="enterDatePicker($event)"-->
+<!--                              [nzFormat]="'dd/MM/yyyy'"-->
+<!--                              #datePicker-->
+<!--                              nzPlaceHolder="{{ 'DD/MM/YYYY' | translate }}">-->
+<!--              </nz-date-picker>-->
+<!--            </div>-->
+<!--          </div>-->
+          <div class="col-12 mb-2">
+            <label>{{ 'common.status' | translate }}</label>
+            <nz-select nzPlaceHolder="{{ 'common.status' | translate }}"
+                       nzAllowClear removeOptionTitle
+                       formControlName="status">
+              <nz-option *ngFor="let item of statusList" [nzCustomContent]="true"
+                         [nzLabel]="(item?.label || '') | translate"
+                         [nzValue]="item.value">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(item?.label || '') | translate">{{(item?.label || '') | translate}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onReset()">
+        {{ 'action.reset' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSearch()">
+        {{ 'common.search' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

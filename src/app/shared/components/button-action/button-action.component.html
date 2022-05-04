@@ -1,0 +1,2 @@
+<img *ngIf="isShow" class="btn-action" [ngClass]="action + ' ' + className + ' ' + ( isRoot ? 'opacity' : '')"
+[src]="getSource()" [style.opacity]="disable? 0.5:1" [style.cursor]="disable? 'unset':''" alt="action">

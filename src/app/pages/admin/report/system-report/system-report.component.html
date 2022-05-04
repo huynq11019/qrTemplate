@@ -1,0 +1,200 @@
+<div class="content">
+  <div class="row">
+    <mb-table-title class="col" [title]="this.getTranslate('title')"></mb-table-title>
+
+  </div>
+  <section class="mt-3">
+
+    <div class="row">
+      <div class="col-6">
+        <div class="row ">
+          <div class="col d-flex">
+            <mb-button [iconResource]="'filter'" class="mr-2"
+                       (click)="this.openAdvancedSearch()"
+                      ></mb-button>
+            <!--            <nz-input-group nzPrefixIcon="search" >-->
+            <!--              <input type="text" nz-input-->
+            <!--                     [placeholder]="'action.search' | translate"/>-->
+            <!--            </nz-input-group>-->
+            <div class="col-2 pt-2 pr-0">
+              <p class="text-right">{{this.getTranslate('startDate')}}</p>
+            </div>
+            <div class="col-4">
+              <nz-date-picker
+                [nzFormat]="dateFormat"
+                [(ngModel)]="startDate"
+                [nzPlaceHolder]="'DD/MM/YYYY'"
+                [nzDisabledDate]="disabledStartDate"
+                #startDatePicker
+                (keyup.enter)="enterStartDatePicker($event)"
+                (ngModelChange)="onStartDateChange($event)">
+              </nz-date-picker>
+            </div>
+            <div class="col-2 pt-2 pr-0">
+              <p class="text-right">{{this.getTranslate('endDate')}}</p>
+            </div>
+            <div class="col-4">
+              <nz-date-picker
+                [nzFormat]="dateFormat"
+                [nzPlaceHolder]="'DD/MM/YYYY'"
+                [nzDisabledDate]="disabledEndDate"
+                [(ngModel)]="endDate"
+                #endDatePicker
+                (keyup.enter)="enterEndDatePicker($event)"
+                (ngModelChange)="onEndDateChange($event)">
+              </nz-date-picker>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <nz-table
+        [nzData]="buildings"
+        [nzTableLayout]="'auto'"
+        [nzNoResult]="noDataResult"
+        (nzQueryParams)="this.onQueryParamsChange($event)"
+      >
+        <thead>
+        <tr>
+          <th nzAlign="center">{{'common.index' | translate}}</th>
+          <th class="col-buildingCode" nzAlign="left">{{this.getTranslate('building')}}</th>
+          <th nzAlign="center">{{this.getTranslate('totalRequest')}}</th>
+          <th nzAlign="center">{{this.getTranslate('requestWaiting')}}</th>
+          <th nzAlign="center">{{this.getTranslate('requestAccepted')}}</th>
+          <th nzAlign="center">{{this.getTranslate('requestProcessing')}}</th>
+          <th nzAlign="center">{{this.getTranslate('expiredTicket')}}</th>
+          <th nzAlign="center">{{this.getTranslate('requestProcessed')}}</th>
+          <th class="w40" nzAlign="center"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of buildings; index as i">
+          <tr>
+            <td nzAlign="center">{{this.getIndex(i)}}</td>
+            <td nzAlign="left" nz-tooltip="{{item.buildingName}}">{{this.limitText(item.buildingName, 100)}}</td>
+            <td nzAlign="center"><span class="point"
+                                       (click)="getDetailReport(TOTAL, item)">{{item.statistical?.totalTicket || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point"
+                                       (click)="getDetailReport(OPEN, item)">{{item.statistical?.totalOpenTicket || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point"
+                                       (click)="getDetailReport(RECEIVED, item)">{{item.statistical?.totalReceivedTicket || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point"
+                                       (click)="getDetailReport(IN_PROGRESS, item, OVER_DUE)">{{item.statistical?.totalInProgressTicket || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point"
+                                      (click)="getDetailReport(IN_PROGRESS, item, IN_PROGRESS)">{{item.statistical?.totalOverdueTicket || 0}}</span>
+            </td>
+            <td nzAlign="center"><span class="point"
+                                       (click)="getDetailReport(CLOSED, item)">{{item.statistical?.totalCloseTicket || 0}}</span>
+            </td>
+            <td><i (click)="this.openChart(item)" nz-icon [nzType]="item.checked ? 'down' : 'right'"
+                   nzTheme="outline"></i></td>
+          </tr>
+          <tr *ngIf="!!item.checked">
+            <td colspan="4">
+              <div echarts [options]="item.chartOptions" (chartInit)="chartInit($event)"
+                   class="report-chart"></div>
+            </td>
+            <td colspan="5">
+              <div class="align-content-center">
+                <div class="row">
+                  <div class="col-md-12 col-lg-6">
+                    <div class="col">
+                      <div class="row">
+                        <div class="col">
+                         <img class="icon-status" src="../../../../assets/images/icon/waiting.png">
+                          <span class="ml-2">{{this.getTranslate('requestWaitingChart')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.totalOpenTicket || 0, item.statistical?.totalTicket || 0)}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <hr/>
+                    <div class="col">
+                      <div class="row">
+                        <div class="col">
+                          <img class="icon-status" src="../../../../assets/images/icon/accepted.png">
+                          <span class="ml-2">{{this.getTranslate('requestAcceptedChart')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span>
+                            {{this.getRatio(item.statistical?.totalReceivedTicket || 0, item.statistical?.totalTicket || 0)}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <hr/>
+
+                    <div class="col">
+                      <div class="row">
+                        <div class="col">
+                          <img class="icon-status" src="../../../../assets/images/icon/expired.png">
+                          <span class="ml-2">{{this.getTranslate('expiredTicketChart')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span>
+                            {{this.getRatio(item.statistical?.totalOverdueTicket || 0, item.statistical?.totalTicket || 0)}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col col-md-12 col-lg-6">
+                    <div class="col">
+                      <div class="row">
+                        <div class="col">
+                          <img class="icon-status" src="assets/images/icon/processing.png">
+                          <span class="ml-2">{{this.getTranslate('requestProcessingChart')}}</span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                        {{this.getRatio(item.statistical?.totalInProgressTicket || 0, item.statistical?.totalTicket || 0)}}
+                        </span>
+                        </div>
+                      </div>
+                    </div>
+                    <hr/>
+                    <div class="col">
+                      <div class="row">
+                        <div class="col">
+                       <img class="icon-status" src="assets/images/icon/processed.png">
+                          <span class="ml-2">
+                            {{this.getTranslate('requestProcessedChart')}}
+                          </span>
+                        </div>
+                        <div class="col-4 text-right">
+                          <span class="">
+                            {{this.getRatio(item.statistical?.totalCloseTicket || 0, item.statistical?.totalTicket || 0)}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <mb-pagination [pageIndex]="this.buildingSearchRequest.pageIndex"
+                     [pageSize]="this.buildingSearchRequest.pageSize"
+                     [total]="this.buildingSearchRequest.total"
+                     (onChange)="onQuerySearchBuilding($event)">
+      </mb-pagination>
+    </div>
+  </section>
+</div>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

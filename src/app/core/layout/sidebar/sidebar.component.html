@@ -1,0 +1,29 @@
+<ng-container>
+  <ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+    <ng-container *ngFor="let menu of sidebar">
+      <ng-container *ngIf="!menu.root">
+        <li nz-submenu [ngClass]="isCollapsed ? 'ant-menu-item-custom-selected' : ''"
+            *hasRoles="menu.authorities"
+            [nzTitle]="menu.title | translate"
+            [nzIcon]="menu.icon">
+          <ul>
+            <ng-container *ngFor="let item of menu.submenu">
+              <li nz-menu-item nzMatchRouter class="li-padding-left"
+                  [ngClass]="isCollapsed ? 'ant-menu-item-custom-selected' : ''"
+                  *hasRoles="item.authorities">
+                <a [routerLink]="item.path">{{ item.title | translate }}</a>
+              </li>
+            </ng-container>
+          </ul>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="menu.root">
+        <li nz-menu-item nzMatchRouter [ngClass]="isCollapsed ? 'ant-menu-item-custom-selected' : ''"
+            *hasRoles="menu.authorities">
+          <i nz-icon [nzType]="menu.icon + ''" *ngIf="menu?.icon"></i>
+          <span><a [routerLink]="menu.path">{{ menu.title | translate }}</a></span>
+        </li>
+      </ng-container>
+    </ng-container>
+  </ul>
+</ng-container>

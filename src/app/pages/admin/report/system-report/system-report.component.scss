@@ -1,0 +1,57 @@
+.w40 {
+  width: 40px;
+}
+.report-chart {
+  width: 100%;
+  height: 250px;
+}
+.rq-circle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 0;
+  top: calc(50% - 14px/2 + 0.48px);
+  border-radius: 50%;
+  margin-right: 5px;
+  //background: #3E7EFF;
+}
+.circle-core {
+  width: 4.67px;
+  height: 4.67px;
+  left: 4.67px;
+  top: calc(50% - 4.67px / 2 + 0.48px);
+  border-radius: 50%;
+  background: #FFFFFF;
+}
+
+.waiting-color {
+  background: #0054A5;
+
+}
+.confirmRequest-color {
+  background: #246bdc;
+}
+.progressing-color {
+  background: #2e65a4;
+}
+
+.processed-color {
+  background: #6574d0;
+}
+
+.point {
+  cursor: pointer;
+}
+
+.point:hover {
+  background-color: #f7f7f7;
+}
+
+.icon-status {
+  width: 14px;
+  height: 14px;
+}
+
+.col-buildingCode {
+  width: 20rem;
+}

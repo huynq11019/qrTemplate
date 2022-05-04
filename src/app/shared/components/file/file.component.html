@@ -1,0 +1,58 @@
+<ng-container *ngIf="type === 'default'">
+  <div class="file" *ngFor="let file of filesOrigin; let index = index">
+    <div class="row align-items-center">
+      <div class="col-10">
+        <img src="assets/images/button/file.png" alt="file">
+        <span class="fileName">{{ file?.originalName }}</span>
+      </div>
+      <div class="col-2 text-right">
+        <i *ngIf="isRemove" nz-icon nzType="close" nzTheme="outline" class="icon" (click)="remove(file, index, 'origin')"></i>
+        <img *ngIf="isDownload"
+             src="assets/images/button/download.png"
+             alt="download-file"
+             class="download"
+             nzTooltipTitle="{{'action.download' | translate}}"
+             nzTooltipPlacement="top"
+             nz-tooltip
+             (click)="download(file)">
+      </div>
+    </div>
+  </div>
+  <div class="file" *ngFor="let file of filesUpload; let index = index">
+    <div class="row align-items-center">
+      <div class="col-10">
+        <img src="assets/images/button/file.png" alt="file">
+        <span class="fileName">{{ file?.name }}</span>
+      </div>
+      <div class="col-2 text-right">
+        <i *ngIf="isRemove" nz-icon nzType="close" nzTheme="outline" class="icon" (click)="remove(file, index, 'upload')"></i>
+        <img *ngIf="isDownload"
+             src="assets/images/button/download.png"
+             alt="download-file"
+             class="download"
+             nzTooltipTitle="{{'action.download' | translate}}"
+             nzTooltipPlacement="top"
+             nz-tooltip
+             (click)="download(file)">
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<!-- phần ảnh -->
+<ng-container *ngIf="type === 'image'">
+  <ng-container *ngIf="imageUrls.length > 0">
+          <div class="image file d-inline-flex" *ngFor="let file of filesUpload; let index = index; let item of imageUrls">
+            <img class="image-custom" id="image" [src]="item" alt="action">
+            <div class="remove">
+              <i id="icon-remove" *ngIf="isRemove"
+                       nz-tooltip="{{'action.delete' | translate}}"
+                       nz-icon
+                       nzType="close"
+                       nzTheme="outline"
+                       (click)="remove(file, index, 'upload')"></i>
+            </div>
+          </div>
+  </ng-container>
+</ng-container>
+

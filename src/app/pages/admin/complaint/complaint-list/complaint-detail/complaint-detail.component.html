@@ -1,0 +1,297 @@
+<div class="content">
+  <mb-table-title
+    [showBack]="true"
+    [title]="'model.complaint.complaint-detail.title'"
+  ></mb-table-title>
+  <section class="content mt-3 pl-2 pr-2">
+    <div class="row pl-3">
+      <div class="col-4">
+        <div class="row">
+          <div class="col-4">
+            <label>{{ this.getTranslate("code") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{complaint?.code}}</span>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-4">
+            <label>{{ this.getTranslate("rating") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{this.getRating(complaint?.satisfied)}}</span>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-4">
+            <label>{{ this.getTranslate("name") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value" [nzTooltipTitle]="complaint?.fullName"
+                  nzTooltipPlacement="top"
+                  nz-tooltip>{{getLimitLength(complaint?.fullName!)}}</span>
+          </div>
+        </div>
+        <div *ngIf="this.complaint?.email" class="row mt-2">
+          <div class="col-4">
+            <label>{{ this.getTranslate("complaintDate") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{complaint?.createdAt | date: 'dd/MM/yyyy'}}</span>
+          </div>
+        </div>
+        <div class="row mt-2" *ngIf="complaint?.complaintType === complaintType.SERVICE_QUALITY.value && ticket?.code && !this.complaint?.email">
+          <div class="col-4">
+            <label>{{ this.getTranslate("ticketCode") }}:</label>
+          </div>
+          <div class="col-8">
+            <span
+              *ngIf="this.hasAuthority(['ticket:view']); else nonLink"
+                  class="ticket-value">
+              <a class="link-text"
+                 (click)="linkTicket(complaint?.ticketId)"> {{ticket?.code}} </a></span>
+            <ng-template #nonLink>
+              <span class="ticket-value">
+                {{ticket?.code}}
+              </span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="row">
+          <div class="col-4">
+            <label>{{ this.getTranslate("buildingCode") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{complaint?.buildingCode}}</span>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-4">
+            <label>{{ this.getTranslate("category") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{getComplaintType(complaint?.complaintType)}}</span>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-4">
+            <label>{{ this.getTranslate("phoneNumber") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{complaint?.phoneNumber}}</span>
+          </div>
+        </div>
+        <div class="row mt-2" *ngIf="complaint?.complaintType === complaintType.SERVICE_QUALITY.value && ticket?.code && this.complaint?.email">
+          <div class="col-4">
+            <label>{{ this.getTranslate("ticketCode") }}:</label>
+          </div>
+          <div class="col-8">
+            <span
+              *ngIf="this.hasAuthority(['ticket:view']); else nonLink"
+                  class="ticket-value">
+              <a class="link-text"
+                 (click)="linkTicket(complaint?.ticketId)"> {{ticket?.code}} </a></span>
+            <ng-template #nonLink>
+              <span class="ticket-value">
+                {{ticket?.code}}
+              </span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="row">
+          <div class="col-4">
+            <label>{{ this.getTranslate("floor") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{complaint?.floorName}}</span>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-4">
+            <label>{{ this.getTranslate("status") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{getTranslateList(format(complaint?.status))}}</span>
+          </div>
+        </div>
+        <div *ngIf="!this.complaint?.email" class="row mt-2">
+          <div class="col-4">
+            <label>{{ this.getTranslate("complaintDate") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{complaint?.createdAt | date: 'dd/MM/yyyy'}}</span>
+          </div>
+        </div>
+        <div *ngIf="this.complaint?.email" class="row mt-2">
+          <div class="col-4">
+            <label>{{ this.getTranslate("email") }}:</label>
+          </div>
+          <div class="col-8">
+            <span class="ticket-value">{{complaint?.email}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row pl-2 pr-2 mt-3">
+      <div class="col">
+        <label
+          >{{ this.getTranslate("content") }}
+          <span class="text-danger">*</span></label
+        >
+        <textarea
+          class="content ticket"
+          rows="4"
+          nz-input
+          placeholder="{{ 'model.complaint.complaint-detail.content' | translate }}"
+          required
+          [disabled]="true"
+          >{{complaint?.content}}</textarea
+        >
+      </div>
+    </div>
+    <div class="row pl-2 pr-2 mt-3">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <label>{{ this.getTranslate("image") }}</label>
+          </div>
+        </div>
+        <!-- <p class="sub-title pr-2">Upload tối đa 5 ảnh</p> -->
+        <nz-image-group>
+          <ng-container *ngIf="this.illustrationsFiles?.length === 0">
+            <!-- <div class="img-container"> -->
+              <img
+              nz-image
+              class="img-item"
+              [nzSrc]="noImage"
+              [nzFallback]="fallback"
+              />
+            <!-- </div> -->
+          </ng-container>
+          <ng-container *ngFor="let item of this.illustrationsFiles">
+            <!-- <div class="img-container"> -->
+            <img
+              nz-image
+              class="img-item"
+              nzSrc="{{ this.addTokenToFile(item?.viewUrl, item.id) }}"
+              [nzFallback]="fallback"
+              alt=""
+            />
+            <!-- </div> -->
+          </ng-container>
+        </nz-image-group>
+      </div>
+    </div>
+    <div *ngIf="this.complaint.status === this.complaintStatus.OPEN.value && this.complaint.complaintType === this.complaintType.MIS_CLASSIFICATION.value">
+      <div class="row pl-2 pr-2 mt-3">
+        <div class="col">
+          <label
+          >{{ this.getTranslate("reasonInvalid") }}
+          </label
+          >
+          <textarea
+            class="content ticket"
+            rows="4"
+            nz-input
+            placeholder="{{ 'model.complaint.complaint-detail.reasonInvalid' | translate }}"
+            required
+            [disabled]="true"
+          >{{complaint?.invalidReason}}</textarea
+          >
+        </div>
+      </div>
+      <div class="row pl-2 pr-2 mt-3">
+        <div class="col">
+          <label
+            >{{ this.getTranslate("noteCenter") }}
+            <span class="text-danger"></span
+          ></label>
+          <textarea
+            class="content ticket"
+            rows="4"
+            nz-input
+            placeholder="{{ 'model.complaint.complaint-detail.noteCenter' | translate }}"
+            required
+            disabled="true"
+            >{{complaint?.feedback}}</textarea
+          >
+        </div>
+      </div>
+    </div>
+    <div *ngIf="this.complaint.complaintType === this.complaintType.SPAM.value">
+      <div class="row pl-2 pr-2 mt-3">
+        <div class="col">
+          <label
+          >{{ this.getTranslate("reasonInvalid") }}
+          </label
+          >
+          <textarea
+            class="content ticket"
+            rows="4"
+            nz-input
+            placeholder="{{ 'model.complaint.complaint-detail.reasonInvalid' | translate }}"
+            required
+            [disabled]="true"
+          >{{complaint?.invalidReason}}</textarea
+          >
+        </div>
+      </div>
+    </div>
+    <div *ngIf="this.complaint.closedNote">
+      <div class="row pl-2 pr-2 mt-3">
+        <div class="col">
+          <label
+          >{{ this.getTranslate("note") }}
+          </label
+          >
+          <textarea
+            class="content ticket"
+            rows="4"
+            nz-input
+            required
+            [disabled]="true"
+          >{{complaint?.closedNote}}</textarea
+          >
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12 text-center mt-4">
+      <button class="mr-4 close-btn" nz-button nzType="default" (click)="onCancel()">
+        {{ "model.ticket.ticketDetail.close" | translate }}
+      </button>
+      <ng-container *ngIf="this.isMarkSpam && currentUser?.userLevel == USER_LEVEL_LEADER_MANAGEMENT">
+        <button  *hasRoles="['complaint:review']" class="mr-4 spam-btn" nz-button nzType="default" (click)="openMarkSpamComplaint2(this.complaint)">
+          {{ "model.complaint.complaint-type.spam" | translate }}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="this.isCreateTicket && currentUser?.userLevel == USER_LEVEL_LEADER_MANAGEMENT">
+        <button *hasRoles="['ticket:create']" class="mr-4 create-ticket-btn" nz-button nzType="default" (click)="openConfirmCreateTicket()">
+          {{ "model.complaint.createTicket" | translate }}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="this.isComplete && currentUser?.userLevel == USER_LEVEL_LEADER_MANAGEMENT">
+        <button *hasRoles="['ticket:create']" class="mr-4 complete-btn" nz-button nzType="default" (click)="openCloseComplaint(this.complaint)">
+          {{ "model.complaint.complete" | translate }}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="this.isServiceFeedback && currentUser?.userLevel == USER_LEVEL_CENTER">
+        <button *hasRoles="['complaint:audit']" class="mr-4 complete-btn" nz-button nzType="default" (click)="openServiceFeedback(this.complaint)">
+          {{ "model.complaint.updateFeedback" | translate }}
+        </button>
+      </ng-container>
+    </div>
+  </section>
+</div>
+<mb-modal
+  [title]="groupPopup.title"
+  [content]="groupPopup.content"
+  [okText]="groupPopup.okText"
+  [btnCentered]="true"
+  [isVisible]="isVisible"
+  (emitter)="handleAction($event)"
+>
+</mb-modal>

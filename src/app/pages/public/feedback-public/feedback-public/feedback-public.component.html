@@ -1,0 +1,188 @@
+<div class="container p-0" style="position: relative">
+  <section class="content default-content">
+    <div class="title ml-0 row mt-2 mb-2">
+      <!-- <div class="col-2 text-left title mt-auto mb-auto btn" *ngIf="page === 0">
+        <img src="assets/images/button/back.png" alt="back" (click)="onBack()">
+      </div> -->
+      <div class="d-flex justify-content-center" [ngClass]="page !== 0? 'col-12' : 'col-10 center-logo'">
+        <span class="btn" (click)="toHome()">
+          <img src="assets/images/amc-logo-public.svg" class="image-amc" alt="logo" style="height: auto;">
+        </span>
+      </div>
+    </div>
+    <!-- Feedback page -->
+    <ng-container *ngIf="page===-1">
+      <div class="row text-center">
+        <div class="title"
+          [innerHTML]="displayContent('complaint-public.welcome', this.complaintTemplate?.buildingName)">
+        </div>
+      </div>
+      <div class="row align-items-center">
+        <div class="col-12 d-flex justify-content-center mt-5 mb-5">
+          <img src="assets/images/mailbox-public.svg" class="image" alt="logo" style="height: auto;">
+        </div>
+      </div>
+      <div class="row text-center mb-4">
+        <p class="text-content">
+          {{this.complaintTemplate?.content}}
+        </p>
+      </div>
+      <div class="row">
+        <form [formGroup]="form" class="mb-2 mt-4">
+          <div class="row mb-3">
+            <div class="col-12">
+              <nz-input-group nzPrefixIcon="user">
+                <input type="text" nz-input formControlName="fullName"
+                  [maxLength]="LENGTH_VALIDATOR.NAME_MAX_LENGTH.MAX"
+                  [placeholder]="'complaint-public.fullName' | translate" />
+              </nz-input-group>
+              <ng-container *ngIf="form.get('fullName')?.touched || form.get('fullName')?.dirty">
+                <span class="text-danger" *ngIf="form.get('fullName')?.hasError('required')">
+                  <mb-not-blank [value]="'complaint-public.fullName'"></mb-not-blank>
+                </span>
+                <span class="text-danger" *ngIf="form.get('fullName')?.hasError('pattern')">
+                  <small>{{ 'common.pattern' | translate }}</small>
+                </span>
+              </ng-container>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-12">
+              <nz-input-group nzPrefixIcon="phone">
+                <input type="text" nz-input formControlName="phoneNumber"
+                  [maxLength]="LENGTH_VALIDATOR.PHONE_MAX_LENGTH.MAX" (keydown.space)="$event.preventDefault();"
+                  (keydown.tab)="$event.preventDefault()" [placeholder]="'complaint-public.phoneNumber' | translate" />
+              </nz-input-group>
+              <ng-container *ngIf="form.get('phoneNumber')?.touched || form.get('phoneNumber')?.dirty">
+                <span class="text-danger" *ngIf="form.get('phoneNumber')?.hasError('required')">
+                  <mb-not-blank [value]="'complaint-public.phoneNumber'"></mb-not-blank>
+                </span>
+                <span class="text-danger" *ngIf="form.get('phoneNumber')?.hasError('pattern')">
+                  <small>{{ 'common.pattern' | translate }}</small>
+                </span>
+              </ng-container>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-12">
+              <nz-input-group nzPrefixIcon="mail">
+                <input type="text" nz-input formControlName="email" [maxLength]="LENGTH_VALIDATOR.EMAIL_MAX_LENGTH.MAX"
+                  [placeholder]="'complaint-public.email' | translate" />
+              </nz-input-group>
+              <ng-container *ngIf="form.get('email')?.touched || form.get('email')?.dirty">
+                <span class="text-danger" *ngIf="form.get('email')?.hasError('pattern')">
+                  <small>{{ 'common.pattern' | translate }}</small>
+                </span>
+              </ng-container>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="text-center">
+              <div class="enter-mail">
+                <p>{{ 'complaint-public.enter-email' | translate }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="feeling text-center">
+              <p>{{ 'complaint-public.feelingCustomer' | translate }}</p>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-6 text-center">
+              <mb-button-action (click)="changeSatisfied(SATISFIED)" [class]="(opacity === 1 ? 'opacity-btn' : '')"
+                [action]="turnSaOn ? 'satisfied-on' : 'satisfied-off'">
+              </mb-button-action>
+            </div>
+            <div class="col-6 text-center">
+              <mb-button-action (click)="changeSatisfied()" [class]="(opacity === 2 ? 'opacity-btn' : '')"
+                [action]="turnUnsaOn ? 'unsatisfied-on' : 'unsatisfied-off'">
+              </mb-button-action>
+            </div>
+          </div>
+          <ng-container *ngIf="display">
+            <div class="row mb-3">
+              <div class="col-12 mb-2 mt-5">
+                <label class="text">{{'complaint-public.content' | translate}}<span class="text-danger">*</span>:
+                </label>
+                <textarea class="content" formControlName="content" rows="7" nz-input
+                  placeholder="{{'complaint-public.fillContent' | translate}}"
+                  [maxLength]="LENGTH_VALIDATOR.CONTENT_MAX_LENGTH.MAX"></textarea>
+              </div>
+              <ng-container *ngIf="form.get('content')?.touched || form.get('content')?.dirty">
+                <span class="text-danger" *ngIf="form.get('content')?.hasError('required')">
+                  <mb-not-blank [value]="'complaint-public.textContent'"></mb-not-blank>
+                </span>
+                <span class="text-danger" *ngIf="form.get('content')?.hasError('pattern')">
+                  <small>{{ 'common.pattern' | translate }}</small>
+                </span>
+              </ng-container>
+            </div>
+            <div class="row mb-3">
+              <div class="col-12 mb-2">
+                <label class="text-upload">{{'complaint-public.illustration' | translate}}: </label>
+                <br>
+                <label class="text-upload-title">{{'complaint-public.uploadTitle' | translate}} </label>
+                <div [ngClass]="filesUpload.length > 0 ? 'd-flex' : ''" class="imageUpload">
+                  <div>
+                    <mb-file-public class="mb-2" [type]="'image'" [imageUrls]="imageUrls!" [filesOrigin]="files"
+                      [filesUpload]="filesUpload" (onChangeFilesOrigin)="getFilesOrigin($event)"
+                      (onChangeFilesUpload)="getFiles($event)">
+                    </mb-file-public>
+                  </div>
+                  <div [ngClass]="filesUpload.length > 0 ? 'mt-1' : ''" *ngIf="filesUpload.length === 0">
+                    <mb-upload-simple [type]="'image'" [easyUpload]="false" [multiple]="true"
+                      [titleUpload]="getTitleUpload()" [maxFileUpload]="maxFileUpload"
+                      [disabled]="filesUpload.length > 5" [filesUpload]="filesUpload" [acceptTypeFiles]="['image']"
+                      (emitter)="getFiles($event)">
+                    </mb-upload-simple>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div class="row mt-4">
+            <div class="col-12 text-center">
+              <button *ngIf="!display" nz-button nzType="primary" class="btn-action-page typeBtnOff"
+                (click)="onSubmit()" [disabled]="!form.valid">
+                {{'complaint-public.buttonSend' | translate}}
+              </button>
+              <button *ngIf="display" nz-button nzType="primary" class="btn-action-page" (click)="onSubmit()"
+                [disabled]="!form.valid">
+                {{'complaint-public.buttonSend' | translate}}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </ng-container>
+    <!-- End Page -->
+    <ng-container *ngIf="page===2">
+      <div class="row align-items-center">
+        <div class="col-12 d-flex justify-content-center mt-4 mb-2">
+          <img src="assets/images/end-page-public.png" class="image" alt="logo" style="height: auto;">
+        </div>
+      </div>
+      <div class="row text-center mb-5">
+        <p class="text-content-end-page">
+          {{'complaint-public.textEndPageFirst' | translate}}
+        </p>
+        <p class="text-content-end-page">
+          {{'complaint-public.textEndPageLast' | translate}}
+        </p>
+      </div>
+    </ng-container>
+    <!-- Maintain Page -->
+    <ng-container *ngIf="page===3">
+      <div class="row align-items-center">
+        <div class="col-12 d-flex justify-content-center mt-5 mb-2">
+          <img src="assets/images/maintenance-public.svg" class="image" alt="logo" style="height: auto;">
+        </div>
+      </div>
+      <div class="row text-center mb-5 mt-5">
+        <p class="text-content-end-page" [innerHTML]="'complaint-public.contentInactive' | translate">
+        </p>
+      </div>
+    </ng-container>
+  </section>
+</div>

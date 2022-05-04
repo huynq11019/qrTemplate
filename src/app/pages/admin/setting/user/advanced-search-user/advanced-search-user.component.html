@@ -1,0 +1,49 @@
+<div class="advanced-search">
+  <div *nzModalTitle>
+    <span>{{ 'common.advancedSearch' | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-6 mb-2">
+            <label>{{ 'model.user.accountType' | translate }}</label>
+            <nz-select formControlName="accountType" nzAllowClear removeOptionTitle
+                       nzPlaceHolder="{{ 'model.user.accountType' | translate }}">
+              <nz-option *ngFor="let temp of acountType" [nzLabel]="temp.label | translate"
+                         [nzValue]="temp.value" [nzCustomContent]="true">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(temp?.label!) | translate">{{(temp?.label!) | translate}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="col-6 mb-2">
+            <label>{{ 'model.user.status' | translate }}</label>
+            <br>
+            <nz-select formControlName="status" nzAllowClear removeOptionTitle
+                       nzPlaceHolder="{{ 'model.user.service.selectStatus' | translate }}">
+              <nz-option *ngFor="let service of userStatus" [nzLabel]="service.label | translate"
+                         [nzValue]="service.value" [nzCustomContent]="true">
+                <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="(service?.label!) | translate">{{(service?.label!) | translate}}</div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onCancel()">
+        {{ 'action.reset' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSubmit()"
+      >
+        {{ ('common.search') | translate }}
+      </button>
+    </div>
+  </div>
+</div>

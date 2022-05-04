@@ -1,0 +1,21 @@
+i {
+  cursor: pointer;
+}
+
+.mb-button-upload-image {
+  position: absolute;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.gender {
+  border: none !important;
+  height: 38px;
+}

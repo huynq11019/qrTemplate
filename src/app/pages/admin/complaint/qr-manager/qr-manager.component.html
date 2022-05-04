@@ -1,0 +1,150 @@
+<div class="content">
+  <mb-table-title [title]="'model.qr-manager.qr-list.title'"></mb-table-title>
+  <ng-container>
+    <div class="row mt-3">
+      <div class="col-3 d-flex">
+        <mb-button [iconResource]="'filter'" (click)="this.filter()" class="mr-2"></mb-button>
+        <nz-input-group nzPrefixIcon="search">
+          <input
+            type="text"
+            nz-input
+            [(ngModel)]="this.complaintSearchRequest.keyword"
+            (keyup.enter)="searchQrCode()"
+            [placeholder]="'action.search' | translate"
+          />
+        </nz-input-group>
+      </div>
+      <div class="col-9 d-flex justify-content-end"
+           *hasRoles="['complaint_template:create']">
+        <mb-button
+          id="createBuilding"
+          [type]="'primary'"
+          [icon]="'plus'"
+          [text]="'action.create'"
+          (click)="this.toCreateQrCode()"
+        >
+          {{ "action.create" | translate }}
+        </mb-button>
+      </div>
+    </div>
+  </ng-container>
+  <div class="row mt-3">
+    <nz-table
+      #table
+      [nzData]="this.qrList"
+      [nzNoResult]="noDataResult"
+      [nzTableLayout]="'auto'"
+      (nzQueryParams)="onChangeQueryParams($event)"
+    >
+      <thead>
+      <tr>
+        <th nzAlign="center">{{ "common.index" | translate }}</th>
+        <th nzAlign="center">{{ this.getTranslate('buildingCode') }}</th>
+        <th nzAlign="center">{{ this.getTranslate('floorName') }}</th>
+        <th nzAlign="left" nzColumnKey="title" [nzSortFn]="true">
+          {{ this.getTranslate('qr-name') }}
+        </th>
+        <th nzAlign="left" nzColumnKey="createdAt" [nzSortFn]="true">
+          {{this.getTranslate('createdAt')}}
+        </th>
+        <th
+          class="col-buildingArea"
+          nzAlign="left"
+        >
+          {{this.getTranslate('createdBy')}}
+        </th>
+        <th nzAlign="center" nzColumnKey="lastModifiedAt" [nzSortFn]="true">
+          {{this.getTranslate('updateAt')}}
+        </th>
+        <th nzAlign="center">
+          {{this.getTranslate('status')}}
+        </th>
+        <th class="qr-action" nzAlign="center">
+          {{ "action.msg" | translate }}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of this.qrList; let i = index">
+        <tr>
+          <td [nzAlign]="'center'">
+            {{getIndex(i)}}
+          </td>
+          <td nzAlign="center">
+            {{this.limitText(item?.buildingCode,20)}}
+          </td>
+          <td nzAlign="center">
+            {{this.limitText(item.floorName,15)}}
+          </td>
+          <td nzAlign="left" nz-tooltip="{{item.title}}">
+            {{this.limitText(item.title, 20)}}
+          </td>
+          <td nzAlign="left">
+            {{item.createdAt | date: 'dd/MM/yyyy'}}
+          </td>
+          <td nzAlign="left">
+            {{item.createdUserName}}
+          </td>
+          <td nzAlign="center">
+            {{item.lastModifiedAt | date: 'dd/MM/yyyy'}}
+          </td>
+          <td nzAlign="center">
+            <mb-badge
+              [hover]="true"
+              [color]="
+                  item.status === this.qrStatus.ACTIVE.value
+                    ? 'badge-info'
+                    : 'badge-secondary'"
+              [text]="format(item.status)"
+            >
+            </mb-badge>
+          </td>
+          <td nzAlign="center" >
+            <mb-button-action
+              [action]="'edit'"
+              nzTooltipTitle="{{ 'action.update' | translate }}"
+              nzTooltipPlacement="top"
+              nz-tooltip
+              (click)="toCreateQrCode(item.id)"
+            >
+            </mb-button-action>
+            <mb-button-action
+              *hasRoles="['complaint_template:update']"
+              [action]="item.status === this.qrStatus.ACTIVE.value ? 'lock' : 'unlock'"
+              nzTooltipTitle="{{ (item.status === this.qrStatus.ACTIVE.value ? 'action.lock' : 'action.unlock') | translate }}"
+              nzTooltipPlacement="top"
+              nz-tooltip
+              (click)="this.showLockConfirm(item)"
+            >
+            </mb-button-action>
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </nz-table>
+    <mb-pagination
+      [pageIndex]="this.complaintSearchRequest.pageIndex"
+      [pageSize]="this.complaintSearchRequest.pageSize"
+      [total]="total"
+      (onChange)="onQuerySearch($event)"
+    >
+    </mb-pagination>
+  </div>
+</div>
+
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>
+
+<!--<mb-modal-->
+<!--  [title]="qrGroupModal.title"-->
+<!--  [content]="qrGroupModal.content"-->
+<!--  [okText]="qrGroupModal.okText"-->
+<!--  [btnCentered]="true"-->
+<!--  [isVisible]="isVisible"-->
+<!--  [callBack]="this.qrGroupModal.callBack"-->
+<!--  (emitter)="handleConfirmInvalidBuilding($event)"-->
+<!--  [width]="'30%'"-->
+<!--&gt;-->
+<!--</mb-modal>-->

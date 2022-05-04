@@ -1,0 +1,63 @@
+<div class="customer-leasing">
+  <div *nzModalTitle>
+    <span>{{ (isUpdate ? 'model.customer.updateContact' : 'model.customer.createContact') | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="col-12 mb-2">
+            <label>{{ 'model.user.fullName' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="fullName" nz-input [maxLength]="LENGTH_VALIDATOR.NAME_MAX_LENGTH.MAX"
+                   placeholder="{{ 'model.user.fullName' | translate }}">
+            <ng-container *ngIf="form.get('fullName')?.touched || form.get('fullName')?.dirty">
+            <span class="text-danger" *ngIf="form.get('fullName')?.hasError('required')">
+              <mb-not-blank [value]="'model.user.fullName'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('fullName')?.hasError('pattern')">
+              <small>{{ 'common.pattern' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-12 mb-2">
+            <label>{{ 'common.phoneNumber' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="phoneNumber" nz-input [maxLength]="LENGTH_VALIDATOR.PHONE_MAX_LENGTH.MAX"
+                   placeholder="{{ 'common.phoneNumber' | translate }}">
+            <ng-container *ngIf="form.get('phoneNumber')?.touched || form.get('phoneNumber')?.dirty">
+            <span class="text-danger" *ngIf="form.get('phoneNumber')?.hasError('required')">
+              <mb-not-blank [value]="'common.phoneNumber'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('phoneNumber')?.hasError('pattern')">
+              <small>{{ 'error.phoneNumber' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+          <div class="col-12 mb-2">
+            <label>{{ 'common.email' | translate }} <span class="text-danger">*</span></label>
+            <input formControlName="email" nz-input [maxLength]="LENGTH_VALIDATOR.EMAIL_MAX_LENGTH.MAX"
+                   placeholder="{{ 'common.email' | translate }}">
+            <ng-container *ngIf="form.get('email')?.touched || form.get('email')?.dirty">
+            <span class="text-danger" *ngIf="form.get('email')?.hasError('required')">
+              <mb-not-blank [value]="'common.email'"></mb-not-blank>
+            </span>
+              <span class="text-danger" *ngIf="form.get('email')?.hasError('pattern')">
+              <small>{{ 'error.email' | translate }}</small>
+            </span>
+            </ng-container>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onCancel()">
+        {{ 'action.cancel' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSubmit()"
+              [disabled]="!form.valid">
+        {{ 'action.save' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

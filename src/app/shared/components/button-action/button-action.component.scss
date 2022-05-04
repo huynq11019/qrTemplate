@@ -1,0 +1,224 @@
+.btn-action {
+  margin: 0 3px;
+}
+
+.opacity {
+  opacity: 0.5;
+}
+
+.btn-action:hover {
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.dollar {
+  border-radius: 8px;
+  padding: 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.received {
+  border-radius: 8px;
+  padding: 6px 7px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.check {
+  border-radius: 8px;
+  padding: 9px 8px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.file-export {
+  border-radius: 8px;
+  padding: 4px 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.trash {
+  border-radius: 8px;
+  padding: 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.reset {
+  border-radius: 8px;
+  padding: 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.add {
+  border-radius: 8px;
+  padding: 8px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.edit {
+  border-radius: 8px;
+  padding: 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.permission {
+  border-radius: 8px;
+  padding: 7px 6px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.key {
+  border-radius: 8px;
+  padding: 12px 7px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.lock {
+  border-radius: 8px;
+  padding: 4px 4px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.unlock {
+  border-radius: 8px;
+  padding: 6px 8px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.view {
+  border-radius: 8px;
+  padding: 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+
+.three-point {
+  border-radius: 8px;
+  padding: 14px 6px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.send {
+  border-radius: 8px;
+  padding: 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.delete {
+  border-radius: 8px;
+  padding: 4px 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.feedback {
+  border-radius: 8px;
+  padding: 6px 6px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.tag {
+  border-radius: 8px;
+  padding: 4px 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.create-ticket {
+  border-radius: 8px;
+  padding: 4px 5px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.mark-spam {
+  border-radius: 8px;
+  padding: 6px 6px;
+  background: #FAFBFD;
+  border: 0.6px solid #CECECE;
+}
+
+.camera {
+  position: absolute;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.first {
+  //border-radius: 8px 0 0 8px !important;
+}
+
+.last {
+  //border-radius: 0 8px 8px 0 !important;;
+}
+
+.center {
+  //border-radius: 0 !important;
+}
+
+.satisfied-off {
+  border-radius: 8px;
+  padding: 5px;
+  background: white;
+  border: none;
+}
+
+.unsatisfied-off {
+  border-radius: 8px;
+  padding: 5px;
+  background: white;
+  border: none;
+}
+
+.satisfied-on {
+  border-radius: 8px;
+  padding: 5px;
+  background: white;
+  border: none;
+}
+
+.unsatisfied-on {
+  border-radius: 8px;
+  padding: 5px;
+  background: white;
+  border: none;
+}
+
+@media (max-width: 366px) {
+  .satisfied-off {
+   max-width: 120px;
+  }
+  
+  .unsatisfied-off {
+    max-width: 120px;
+  }
+  
+  .satisfied-on {
+    max-width: 120px;
+  }
+  
+  .unsatisfied-on {
+    max-width: 120px;
+  }
+}

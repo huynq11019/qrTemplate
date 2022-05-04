@@ -1,0 +1,104 @@
+<div class="advanced-search">
+  <div *nzModalTitle>
+    <span>{{ 'common.advancedSearch' | translate }}</span>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <label>{{ 'model.unit.filter.building' | translate }}</label>
+      <nz-select nzAllowClear
+                 [nzShowArrow]="true"
+                 maxlength="100"
+                 nzShowSearch
+                 nzServerSearch
+                 [nzAutoClearSearchValue]="true"
+                 [nzMaxTagCount]="1"
+                 nzPlaceHolder="{{'model.building.filter' | translate}}"
+                 [(ngModel)]="this.filterRequest.buildingIds"
+                 (ngModelChange)="onChangeBuilding($event)"
+                 removeOptionTitle
+                 nzMode="multiple"
+                 (nzOnSearch)="loadDataBuilding($event)"
+      >
+        <!--        debounceKeyUp-->
+        <!--        (onEvent)="this.loadDataBuilding($event.target?.value)"-->
+        <nz-option *ngFor="let s of this.buildings" [nzCustomContent]="true"
+                   [nzValue]="s?.id" [nzLabel]="this.limitText(s?.code||  '',20 )">
+          <div container="body" [animation]="false"
+               [openDelay]="100"
+               [closeDelay]="0" [ngbTooltip]="s?.name">{{s.code}} - {{this.limitText(s?.name || '', 20)}}</div>
+        </nz-option>
+      </nz-select>
+    </div>
+    <div class="col-6">
+      <label>{{ 'model.unit.filter.floor' | translate }}</label>
+      <nz-select nzAllowClear
+                 [nzDisabled]="(this.filterRequest.buildingIds?.length || 0) > 1 || this.filterRequest.buildingIds?.length == 0"
+                 [nzShowArrow]="true"
+                 maxlength="100"
+                 nzServerSearch
+                 [nzMaxTagCount]="1"
+                 [nzAutoClearSearchValue]="true"
+                 [(ngModel)]="this.filterRequest.floorIds"
+                 debounceKeyUp removeOptionTitle
+                 (onEvent)="this.loadFloors($event.target?.value)"
+                 nzPlaceHolder="{{'model.unit.filter.selectFloor' | translate}}"
+                 nzMode="multiple"
+      >
+        <nz-option *ngFor="let f of this.floorsList" [nzCustomContent]="true"
+                   [nzValue]="f?.id" [nzLabel]="this.limitText(f?.name||'',20)">
+          <div container="body" [animation]="false"
+                     [openDelay]="100"
+                     [closeDelay]="0" [ngbTooltip]="f?.name">{{this.limitText(f?.name||  '',20 )}}</div>
+        </nz-option>
+      </nz-select>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-6">
+      <label>{{ 'model.unit.filter.unitType' | translate }}</label>
+      <nz-select nzAllowClear
+                 [nzShowArrow]="true"
+                 maxlength="100"
+                 nzShowSearch removeOptionTitle
+                 [nzMaxTagCount]="1"
+                 [(ngModel)]="filterRequest.UnitTypes"
+                 nzPlaceHolder="{{'model.unit.filter.selectType' | translate}}"
+                 nzMode="multiple">
+        <nz-option *ngFor="let type of unitTypeList" [nzCustomContent]="true"
+                   [nzValue]="type?.value" [nzLabel]="(type?.label || '') | translate">
+          <div container="body" [animation]="false"
+               [openDelay]="100" ngbTooltip="{{(type?.label || '') | translate}}">{{(type?.label || '') | translate}}</div>
+        </nz-option>
+      </nz-select>
+    </div>
+    <div class="col-6">
+      <label>{{ 'model.unit.filter.leasingStatus' | translate }}</label>
+      <nz-select nzAllowClear
+                 [nzShowArrow]="true"
+                 maxlength="100"
+                 nzShowSearch removeOptionTitle
+                 [nzMaxTagCount]="1"
+                 nzPlaceHolder="{{'model.unit.selectLeasing' | translate}}"
+                 [(ngModel)]="this.filterRequest.leasingStatus"
+                 (ngModelChange)="onChangeLeasingStatus($event)"
+                 nzMode="multiple">
+        <nz-option *ngFor="let s of this.leasingStatusList"
+                   [nzValue]="s?.value" [nzCustomContent]="true"
+                   [nzLabel]="s.label | translate">
+          <div container="body" [animation]="false"
+               [openDelay]="100" [ngbTooltip]="s.label | translate">{{s.label | translate}}</div>
+        </nz-option>
+      </nz-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="text-center" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onReset()">
+        {{ 'action.reset' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="onSearch()">
+        {{ 'common.search' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

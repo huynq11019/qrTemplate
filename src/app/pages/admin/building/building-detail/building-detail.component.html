@@ -1,0 +1,320 @@
+<div class="title mb-3">
+  <mb-table-title [showBack]="true"
+                  [title]="!!this.building ?'model.building.detail.detailInformation': 'model.building.createAction'">
+  </mb-table-title>
+</div>
+<section class="content">
+  <nz-tabset [(nzSelectedIndex)]="selectedIndex">
+    <nz-tab [nzTitle]="'model.building.detail.information' | translate">
+      <div class="row mt-3">
+        <div class="col-12">
+          <form [formGroup]="form" *ngIf="!!form">
+            <div class="row">
+              <div class="col-6 mb-2">
+                <label>{{ 'model.building.code' | translate }} <span class="text-danger">*</span></label>
+                <input formControlName="code" nz-input [maxLength]="LENGTH_VALIDATOR.CODE_MAX_LENGTH.MAX" class=""
+                       placeholder="{{ 'model.building.placeHolder.inputCode' | translate }}" required>
+                <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'code'" [form]="this.form">
+                </mb-validate-message>
+              </div>
+              <div class="col-6 mb-2">
+                <label>{{ 'model.building.name' | translate }} <span class="text-danger">*</span></label>
+                <input formControlName="name" nz-input [maxLength]="LENGTH_VALIDATOR.NAME_MAX_LENGTH.MAX" class=""
+                       placeholder="{{ 'model.building.placeHolder.inputName' | translate }}" required>
+                <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'name'" [form]="this.form">
+                </mb-validate-message>
+                <!--                <ng-container *ngIf="form.get('name')?.touched || form.get('name')?.dirty">-->
+                <!--              <span class="text-danger" *ngIf="form.get('name')?.hasError('required')">-->
+                <!--                <small>{{ 'model.building.error.buildingName' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                  <span class="text-danger" *ngIf="form.get('name')?.hasError('pattern')">-->
+                <!--                <small>{{ 'common.pattern' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                </ng-container>-->
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6 mb-2">
+                <label>{{ 'model.building.totalFloor' | translate }} <span class="text-danger">*</span></label>
+                <input formControlName="totalFloor" nz-input [min]="1" numberFormatter [maxValue]="200"
+                       (onMaxValue)="onMaxValue($event)" class=""
+                       placeholder="{{ 'model.building.placeHolder.inputTotalFloor' | translate }}" required>
+                <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'totalFloor'"
+                                     [form]="this.form">
+                </mb-validate-message>
+                <!--                <ng-container *ngIf="form.get('totalFloor')?.touched || form.get('totalFloor')?.dirty">-->
+                <!--              <span class="text-danger" *ngIf="form.get('totalFloor')?.hasError('required')">-->
+                <!--                <small>{{ 'common.required' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                  <span class="text-danger" *ngIf="form.get('totalFloor')?.hasError('max')">-->
+                <!--                <small>{{ 'model.building.error.floorMax' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                  <span class="text-danger" *ngIf="form.get('totalFloor')?.hasError('min')">-->
+                <!--                <small>{{ 'common.pattern' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                </ng-container>-->
+              </div>
+              <div class="col-6 mb-2">
+                <label>{{ 'model.building.area' | translate }} (m<sup>2</sup>) <span
+                  class="text-danger">*</span></label>
+                <input formControlName="area" nz-input class="" DecimalFormatter
+                       [maxValue]="this.maxArea" (onMaxValue)="this.onMaxAreaBuilding($event)"
+                       placeholder="{{ 'model.building.placeHolder.inputArea' | translate }}" required>
+                <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'area'" [form]="this.form">
+                </mb-validate-message>
+                <!--                <ng-container *ngIf="form.get('area')?.touched || form.get('area')?.dirty">-->
+                <!--              <span class="text-danger" *ngIf="form.get('area')?.hasError('required')">-->
+                <!--                <small>{{ 'common.required' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                  <span class="text-danger" *ngIf="form.get('area')?.hasError('min')">-->
+                <!--                <small>{{ 'model.building.error.minArea' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                  <span class="text-danger" *ngIf="form.get('area')?.hasError('max')">-->
+                <!--                <small>{{ 'model.building.error.maxArea' | translate: {maxArea: this.maxArea} }}</small>-->
+                <!--              </span>-->
+                <!--                </ng-container>-->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 mb-2">
+                <label>{{ 'model.building.address' | translate }} <span class="text-danger">*</span></label>
+                <input formControlName="address" nz-input [maxLength]="LENGTH_VALIDATOR.ADDRESS_MAX_LENGTH.MAX" class=""
+                       placeholder="{{ 'model.building.placeHolder.inputAddress' | translate }}" required>
+                <mb-validate-message [errorMessages]="this.validateMessages" [fieldName]="'address'" [form]="this.form">
+                </mb-validate-message>
+                <!--                <ng-container *ngIf="form.get('address')?.touched || form.get('address')?.dirty">-->
+                <!--              <span class="text-danger" *ngIf="form.get('address')?.hasError('required')">-->
+                <!--                <small>{{ 'common.required' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                  <span class="text-danger" *ngIf="form.get('address')?.hasError('pattern')">-->
+                <!--                <small>{{ 'common.pattern' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                </ng-container>-->
+              </div>
+              <div class="col-6 mb-2">
+                <label>{{this.getTranslateManager('status.title')}}<span class="text-danger">*</span></label>
+                <nz-select formControlName="status" removeOptionTitle
+                           [nzDisabled]="!hasUserLevel()"
+                           nzPlaceHolder="{{this.getTranslateManager('status.title')}}">
+                  <nz-option [nzValue]="this.buildingStatus.ACTIVE.value" [nzCustomContent]="true"
+                             nzLabel="{{this.getTranslateManager('status.active')}}">
+                    <div container="body" [animation]="false"
+                         [openDelay]="100"
+                         [closeDelay]="0" [ngbTooltip]="this.getTranslateManager('status.active')">{{this.getTranslateManager('status.active')}}</div>
+                  </nz-option>
+                  <nz-option [nzValue]="this.buildingStatus.INACTIVE.value" [nzDisabled]="!this.hasUserLevel()" [nzCustomContent]="true"
+                             nzLabel="{{this.getTranslateManager('status.inActive')}}">
+                    <div container="body" [animation]="false"
+                         [openDelay]="100"
+                         [closeDelay]="0" [ngbTooltip]="this.getTranslateManager('status.inActive')">{{this.getTranslateManager('status.inActive')}}</div>
+                  </nz-option>
+                </nz-select>
+                <mb-validate-message
+                  [errorMessages]="this.validateMessages"
+                  [fieldName]="'status'" [form]="this.form">
+                </mb-validate-message>
+                <!--                <ng-container *ngIf="form.get('status')?.touched || form.get('status')?.dirty">-->
+                <!--              <span class="text-danger" *ngIf="form.get('status')?.hasError('required')">-->
+                <!--                <small>{{ 'common.required' | translate }}</small>-->
+                <!--              </span>-->
+                <!--                </ng-container>-->
+              </div>
+            </div>
+
+            <div class="row mb-2 mt-2">
+              <div class="col">
+                <label>{{ 'model.building.note' | translate }}
+                </label>
+                <!--            <textarea formControlName="note" rows="4" nz-input [maxLength]="1000"-->
+                <!--                      placeholder="{{ 'model.building.note' | translate }}"-->
+                <!--                      required></textarea>-->
+                <textarea
+                rows="5"
+                formControlName="note"
+                placeholder="{{ 'model.building.placeHolder.inputNote' | translate }}"
+                nz-input
+                [maxLength]="LENGTH_VALIDATOR.NOTE_MAX_LENGTH.MAX"
+              ></textarea>
+                <ng-container *ngIf="form.get('note')?.touched || form.get('note')?.dirty">
+                  <span class="text-danger" *ngIf="form.get('note')?.hasError('maxLength')">
+                    <small>{{ 'model.building.error.noteMaxLength' | translate }}</small>
+                  </span>
+                </ng-container>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row text-center mt-5">
+        <div class="col-12">
+          <button class="mr-2" nz-button nzType="default" (click)="onCancel()">
+            {{ 'action.cancel' | translate }}
+          </button>
+
+          <ng-template #btnUpdate>
+            <button nz-button nzType="primary" [disabled]="this.form.invalid"
+                    (click)="openConfirm(ACTION_TYPE.UPDATE_BUILDING)">
+              {{ ('action.update') | translate }}
+            </button>
+          </ng-template>
+          <button nz-button nzType="primary" [disabled]="this.form.invalid"
+                  (click)="openConfirm(ACTION_TYPE.CREATE_BUILDING)" *ngIf="!this.isUpdate; else btnUpdate">
+            {{ ('action.create') | translate }}
+          </button>
+        </div>
+      </div>
+    </nz-tab>
+    <!-- Thông tin ban quản lý toàn nhà -->
+    <nz-tab [nzTitle]="this.getTranslateManager('title')" [nzDisabled]="!isUpdate">
+      <div class="content">
+        <div class="row">
+          <div class="col-12">
+            <nz-table #table [nzTitle]="managerTitle" [nzTableLayout]="'auto'" [nzData]="buildingManagers"
+                      [nzNoResult]="noDataResult" (nzQueryParams)="onQueryParamsChange($event, this.detailTab.manager)">
+              <thead>
+              <tr>
+                <th nzAlign="center">{{'common.index'| translate}}</th>
+                <th nzAlign="left" nzColumnKey="employeeCode" [nzSortFn]="true">
+                  {{this.getTranslateManager('employeeCode')}}
+                </th>
+                <th nzAlign="left" nzColumnKey="fullName" [nzSortFn]="true">
+                  {{this.getTranslateManager('fullName')}}
+                </th>
+                <th nzAlign="left">
+                  {{this.getTranslateManager('department')}}
+                </th>
+                <th nzAlign="left" nzColumnKey="title" [nzSortFn]="true">
+                  {{this.getTranslateManager('employeeTitle')}}
+                </th>
+                <th nzAlign="center">
+                  {{this.getTranslateManager('phoneNumber')}}
+                </th>
+                <th nzAlign="left">
+                  {{this.getTranslateManager('email')}}
+                </th>
+                <th nzAlign="center">{{'action.msg' | translate}}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngFor="let item of this.buildingManagers; let i = index">
+                <tr>
+                  <td nzAlign="center">{{ this.getIndex(i, this.managerQuery.pageIndex, this.managerQuery.pageSize)}}
+                  </td>
+                  <td nzAlign="left">{{ item.employeeCode }}</td>
+                  <td nzAlign="left">{{ item.fullName }}</td>
+                  <td nzAlign="left">{{ item?.departmentName }}</td>
+                  <td nzAlign="left">{{ item.title }}</td>
+                  <td nzAlign="center">{{ item.phoneNumber }}</td>
+                  <td nzAlign="left">{{ item.email }}</td>
+                  <td nzAlign="center">
+                    <mb-button-action [action]="'edit'" nzTooltipTitle="{{'action.detail' | translate}}"
+                                      nzTooltipPlacement="top" nz-tooltip
+                                      (click)="redirectToUpdateAccount(item?.id, item?.accountType)">
+                    </mb-button-action>
+                  </td>
+                </tr>
+              </ng-container>
+              </tbody>
+            </nz-table>
+            <mb-pagination [pageIndex]="this.managerQuery.pageIndex" [pageSize]="this.managerQuery.pageSize"
+                           [total]="totalManager" (onChange)="onQuerySearch($event, this.detailTab.manager)">
+            </mb-pagination>
+          </div>
+        </div>
+      </div>
+    </nz-tab>
+    <!-- FLOOR -->
+    <nz-tab [nzTitle]="'model.floor.title' | translate" [nzDisabled]="!isUpdate">
+      <div class="content">
+        <div class="row pl-2 pr-2">
+          <nz-table #table [nzData]="floors" [nzNoResult]="noDataResult" [nzTitle]="floorTitle" [nzTableLayout]="'auto'"
+                    (nzQueryParams)="onQueryParamsChange($event, this.detailTab.floor)">
+            <thead>
+            <tr>
+              <th nzColumnKey="floorNumber" [nzSortFn]="true" nzAlign="center">{{'model.floor.floorNumber' |
+                translate}}
+              </th>
+              <th class="col-floorName" nzColumnKey="name" [nzSortFn]="true" nzAlign="left">
+                {{'model.floor.name' | translate}}
+              </th>
+              <th class=" " nzColumnKey="totalArea" [nzSortFn]="true" nzAlign="right">
+                {{'model.floor.totalArea' | translate}}</th>
+              <th nzAlign="right">{{'model.floor.RentedArea' | translate}}</th>
+              <th class="col-availableArea" nzAlign="right" nzColumnKey="availableArea" [nzSortFn]="true">
+                {{'model.floor.availableArea' | translate}}</th>
+              <th nzAlign="center" class="floor-action" *ngIf="this.building.status != buildingStatus.INACTIVE.value">
+                {{'action.msg' | translate}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let item of floors; let i = index">
+              <tr>
+                <td nzAlign="center" class="w-stt">{{ item.floorNumber }}</td>
+                <td nzAlign="left">{{ item.name }}</td>
+                <td nzAlign="right">{{ item.totalArea?.toFixed(2) }} (m<sup>2</sup>)</td>
+                <td nzAlign="right">{{ (+item?.usedArea!)?.toFixed(2) }}(m<sup>2</sup>)</td>
+                <td nzAlign="right">{{ (+item?.totalArea! - item?.usedArea!)?.toFixed(2) }} (m<sup>2</sup>)</td>
+                <td nzAlign="center" *ngIf="this.building.status != buildingStatus.INACTIVE.value">
+                  <mb-button-action [className]="'first'" [action]="'edit'"
+                                    nzTooltipTitle="{{'action.detail' | translate}}" nzTooltipPlacement="top" nz-tooltip
+                                    (click)="updateFloor(item)">
+                  </mb-button-action>
+                  <mb-button-action [action]="'delete'" [className]="'last'"
+                                    nzTooltipTitle="{{'action.delete' | translate}}" nzTooltipPlacement="top" nz-tooltip
+                                    (click)="confirmDeleteFloor(item)">
+                  </mb-button-action>
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </nz-table>
+          <mb-pagination [pageIndex]="this.floorQuery.pageIndex" [pageSize]="this.floorQuery.pageSize"
+                         [total]="totalFloor" (onChange)="onQuerySearch($event, this.detailTab.floor)">
+          </mb-pagination>
+        </div>
+      </div>
+    </nz-tab>
+  </nz-tabset>
+</section>
+
+<mb-modal [title]="groupConfirmBuilding.title" [content]="groupConfirmBuilding.content"
+          [okText]="groupConfirmBuilding.okText" [btnCentered]="true" [isVisible]="isVisible"
+          [callBack]="this.groupConfirmBuilding.callBack" (emitter)="handleConfirm($event)">
+</mb-modal>
+
+<ng-template #floorTitle>
+  <div class="row mt-3 mb-4">
+    <div class="col-3">
+      <nz-input-group [nzPrefix]="suffixIconSearch">
+        <input type="text" nz-input (keyup.enter)="searchFloor($event)" [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </div>
+    <div class="col-9 d-flex justify-content-end" *ngIf="this.building.status !== buildingStatus.INACTIVE.value">
+      <mb-button *hasRoles="['building:update']" [type]="'primary'" [icon]="'plus'" [text]="'action.create'"
+                 (click)="createFloor()">
+        {{ 'action.create' | translate }}
+      </mb-button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #managerTitle>
+  <div class="row mt-3 mb-4">
+    <div class="col-3">
+      <nz-input-group [nzPrefix]="suffixIconSearch">
+        <input type="text" nz-input (keyup.enter)="searchManager($event)" [placeholder]="'action.search' | translate"/>
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noDataResult>
+  <mb-no-data></mb-no-data>
+</ng-template>

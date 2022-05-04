@@ -1,0 +1,36 @@
+.time-label {
+  font-size: 17px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 20px;
+}
+
+.icon-status {
+  width: 14px;
+  height: 14px;
+}
+
+//::ng-deep .complaint-table .ant-table-thead.ng-star-inserted th {
+//  border: solid 0.1px rgba(206, 206, 206, 0.5) !important;
+//}
+
+.waiting-color {
+  color: #EC1A3B;
+}
+.processing-color {
+  color: #0054A5;
+}
+.processed-color {
+  color: #67ADFF;
+}
+.ratio-item{
+  border-bottom: solid 1px rgba(176, 176, 176, 0.5);
+  //padding-bottom: 5px;
+  padding: 10px 0;
+}
+.pd-10 {
+  padding: 10px 0;
+}
+.right-border {
+  border-right: solid 3px rgba(255, 255, 255, 1);
+}

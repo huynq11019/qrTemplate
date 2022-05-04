@@ -1,0 +1,86 @@
+<div class="content">
+  <div *nzModalTitle>
+    <span *ngIf="isReceive === true">{{
+      "model.ticket.receiveRequest" | translate
+    }}</span>
+    <span *ngIf="isReceive === false">{{
+      "model.ticket.handleRequest" | translate
+    }}</span>
+  </div>
+  <div class="row">
+    <form [formGroup]="form">
+      <!-- handle -->
+      <ng-container *ngIf="isReceive === false">
+        <div class="row">
+          <div class="col-12 mb-2">
+            <label
+              >{{ "model.ticket.estimatedCompletionDate" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <div class="date-picker">
+              <nz-date-picker
+                formControlName="expectedFinishAt"
+                (keyup.enter)="enterDatePicker($event)"
+                [nzDisabledDate]="disabledBeforeToday"
+                [nzFormat]="'dd/MM/yyyy'"
+                #datePicker
+                nzPlaceHolder="{{ 'DD/MM/YYYY' | translate }}"
+              >
+              </nz-date-picker>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <!-- receive -->
+      <ng-container *ngIf="isReceive === true">
+        <div class="row">
+          <div class="col-12 mb-2">
+            <label
+              >{{ "model.ticket.service.name" | translate }}
+              <span class="text-danger">*</span></label
+            >
+            <br />
+            <nz-select
+              formControlName="serviceType"
+              nzAllowClear
+              removeOptionTitle
+              nzPlaceHolder="{{ 'model.ticket.chooseService' | translate }}"
+            >
+              <nz-option
+                *ngFor="let item of TICKET_SERVICES"
+                [nzLabel]="item.label | translate"
+                [nzCustomContent]="true"
+                [nzValue]="item.value"
+              >
+                <div
+                  container="body"
+                  [animation]="false"
+                  [openDelay]="100"
+                  [closeDelay]="0"
+                  [ngbTooltip]="item?.label! | translate"
+                >
+                  {{ item?.label! | translate }}
+                </div>
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </ng-container>
+    </form>
+  </div>
+  <div class="row">
+    <div class="col-12 text-center" *nzModalFooter>
+      <button nz-button nzType="default" (click)="onCancel()">
+        {{ "action.cancel" | translate }}
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        [disabled]="form.invalid"
+        (click)="onSubmit()"
+      >
+        {{ "action.save" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

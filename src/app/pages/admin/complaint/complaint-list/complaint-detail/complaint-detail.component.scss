@@ -1,0 +1,72 @@
+.content.ticket {
+  min-height: 200px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500px;
+  line-height: 20px;
+}
+
+.sub-title {
+  font-size: 0.7rem;
+  font-weight: normal;
+  color: #848484;
+  position: relative;
+  top: -10px;
+}
+
+.img-item {
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  margin: 0px 10px;
+  object-fit: contain;
+  border: 1px solid #d9d9d9;
+}
+
+.img-item {
+  cursor: pointer;
+}
+
+.title-content {
+  font-size: 1.1rem;
+  //font-weight: 700;
+  color: #000000;
+}
+
+.word {
+  font-size: 12px;
+}
+.ticket-value {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.link-text{
+  color: cornflowerblue;
+  text-decoration: underline;
+}
+
+.close-btn {
+  border-radius: 8px;
+}
+
+.create-ticket-btn {
+  background-color: #D0DDEA;
+  border-radius: 8px;
+  border-color: #D0DDEA;
+}
+
+.spam-btn {
+  background-color: rgba(236, 26, 59, 0.5);
+  border-radius: 8px;
+  color: #EC1A3B;
+  border-color: #D0DDEA;
+}
+
+.complete-btn {
+  background-color: #0054a5;
+  border-radius: 8px;
+  color: #FFFFFF;
+}
+

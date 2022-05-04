@@ -1,0 +1,15 @@
+<div>
+  <div class="image">
+    <img [ngClass]="action + ' ' + className" [src]="getSource()" alt="action">
+    <div class="camera">
+      <label for="file-input">
+        <img id="img-camera" [src]="getSourceAvatar()" alt="">
+      </label>
+      <input [accept]="acceptFiles" (change)="handleChange($event)" id="file-input" type="file"/>
+    </div>
+  </div>
+</div>
+
+
+
+

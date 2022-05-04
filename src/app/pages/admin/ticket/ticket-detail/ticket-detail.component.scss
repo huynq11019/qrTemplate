@@ -1,0 +1,49 @@
+.content.ticket {
+  min-height: 200px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500px;
+  line-height: 20px;
+}
+
+.sub-title {
+  font-size: 0.7rem;
+  font-weight: normal;
+  color: #848484;
+  position: relative;
+  top: -10px;
+}
+
+.img-item {
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  margin: 0px 10px;
+  object-fit: contain;
+  border: 1px solid #d9d9d9;
+}
+
+.img-item {
+  cursor: pointer;
+}
+
+.title-content {
+  font-size: 1.1rem;
+  //font-weight: 700;
+  color: #000000;
+}
+
+.word {
+  font-size: 12px;
+}
+
+.ticket-value {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.link-text {
+  color: #0054A5;
+  text-decoration: underline;
+}
