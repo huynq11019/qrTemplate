@@ -8,8 +8,8 @@
             <div class="col-12 logo">
               <img src="assets/images/login-logo.png" alt="login">
             </div>
-            <div class="col-12 mt-2 mb-2 text-left">
-              <label>{{ 'model.login.username' | translate }}:</label>
+            <div class="text-left-important col-12 mt-2 mb-2 text-left">
+              <label class="mb-2">{{ 'model.login.username' | translate }}:</label>
               <input type="text" nz-input formControlName="userName" [maxLength]="LENGTH_VALIDATOR.USERNAME_MAX_LENGTH.MAX"
                      [placeholder]="'model.login.placeholder.username' | translate"/>
               <ng-container *ngIf="loginForm.get('userName')?.touched || loginForm.get('userName')?.dirty">
@@ -18,8 +18,8 @@
                 </span>
               </ng-container>
             </div>
-            <div class="col-12 mt-2 mb-2 text-left">
-              <label>{{ 'model.login.password' | translate }}:</label>
+            <div class="text-left-important col-12 mt-2 mb-2 text-left">
+              <label class="mb-2">{{ 'model.login.password' | translate }}:</label>
               <nz-input-group [nzSuffix]="suffixTemplate">
                 <input formControlName="password" nz-input
                        [type]="passwordVisible ? 'text' : 'password'"
@@ -35,7 +35,7 @@
                 </span>
               </ng-container>
             </div>
-            <div class="col-12 mt-2 mb-2 text-left">
+            <div class="text-left-important col-12 mt-2 mb-2 text-left">
               <label nz-checkbox formControlName="rememberMe">
                 <span>{{ 'model.login.remember' | translate }}</span>
               </label>

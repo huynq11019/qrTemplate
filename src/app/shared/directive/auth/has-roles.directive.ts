@@ -13,7 +13,7 @@ import { AuthService } from '@shared/services/auth/auth.service';
  * ```
  */
 @Directive({
-  selector: '[appHasRoles]',
+  selector: '[hasRoles]',
 })
 export class HasRolesDirective {
   private authorities: string[] = [];

@@ -22,6 +22,7 @@
   "tslint.validateWithDefaultConfig": true,
   "cSpell.words": [
     "Ngxs"
-  ]
+  ],
+  "angular.enable-strict-mode-prompt": false
 }
 

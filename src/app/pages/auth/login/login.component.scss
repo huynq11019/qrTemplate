@@ -1,7 +1,7 @@
 .login {
   width: 100%;
   height: 100%;
-  background-image: url("../../../../assets/images/login.png");
+  background-image: url("./../../../../assets/images/login.png");
   background-color: #ffffff;
 }
 
@@ -19,6 +19,10 @@ section.content {
   padding: 60px;
   width: 50%;
   margin: 0 auto;
+}
+
+.text-left-important {
+  text-align: left !important;
 }
 
 @media only screen and (max-width: 1000px) {

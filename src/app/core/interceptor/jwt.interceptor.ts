@@ -2,7 +2,7 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest,
+  HttpRequest
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
@@ -10,7 +10,7 @@ import { LANGUAGES_CONST, PUBLIC_PATH } from '@shared/constants/base.constant';
 import { HTTP_HEADERS } from '@shared/constants/http.constants';
 import {
   LOCAL_STORAGE,
-  SESSION_STORAGE,
+  SESSION_STORAGE
 } from '@shared/constants/local-session-cookies.constants';
 import { AuthService } from '@shared/services/auth/auth.service';
 import CommonUtil from '@shared/utils/common-utils';
@@ -66,7 +66,7 @@ export class JwtInterceptor implements HttpInterceptor {
             `${HTTP_HEADERS.AUTHORIZATION_TYPE}${decodeAccessToken}`
           )
           .set(HTTP_HEADERS.LOCALE, lang),
-        withCredentials: true,
+        withCredentials: false,
       });
     }
 
