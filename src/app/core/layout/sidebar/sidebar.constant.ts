@@ -33,26 +33,26 @@ export const SidebarConstant = [
   //   root: true,
   //   authorities: ['organization:view'],
   // },
-  // {
-  //   title: 'sidebar.survey',
-  //   icon: 'form',
-  //   root: false,
-  //   authorities: ['survey:view', 'survey:report'],
-  //   submenu: [
-  //     {
-  //       // path: '/survey/list',
-  //       path: `${ROUTER_UTILS.survey.root}/${ROUTER_UTILS.survey.list}`,
-  //       title: 'sidebar.survey-list',
-  //       authorities: ['survey:view'],
-  //     },
-  //     {
-  //       // path: '/survey/result',
-  //       path: `${ROUTER_UTILS.survey.root}/${ROUTER_UTILS.survey.result}`,
-  //       title: 'sidebar.survey-result',
-  //       authorities: ['survey:report'],
-  //     },
-  //   ]
-  // },
+  {
+    title: 'sidebar.survey',
+    icon: 'form',
+    root: false,
+    authorities: ['survey:view', 'survey:report'],
+    submenu: [
+      {
+        // path: '/survey/list',
+        path: `${ROUTER_UTILS.survey.root}/${ROUTER_UTILS.survey.list}`,
+        title: 'sidebar.survey-list',
+        authorities: ['survey:view'],
+      },
+      {
+        // path: '/survey/result',
+        path: `${ROUTER_UTILS.survey.root}/${ROUTER_UTILS.survey.result}`,
+        title: 'sidebar.survey-result',
+        authorities: ['survey:report'],
+      },
+    ]
+  },
   // {
   //   title: 'sidebar.ticket',
   //   icon: 'tags',
@@ -95,13 +95,13 @@ export const SidebarConstant = [
   //     },
   //   ]
   // },
-  // {
-  //   path: '/notification',
-  //   title: 'sidebar.notification',
-  //   icon: 'bell',
-  //   root: true,
-  //   authorities: ['notification:view'],
-  // },
+  {
+    path: '/notification',
+    title: 'sidebar.notification',
+    icon: 'bell',
+    root: true,
+    authorities: ['notification:view'],
+  },
   {
     title: 'sidebar.settings',
     icon: 'setting',

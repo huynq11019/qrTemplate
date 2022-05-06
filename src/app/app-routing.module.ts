@@ -24,20 +24,20 @@ const routes: Routes = [
             (m) => m.DashboardModule
           ),
       },
-      {
-        path: ROUTER_UTILS.ticket.root,
-        loadChildren: () =>
-          import('@pages/admin/ticket/ticket.module').then(
-            (m) => m.TicketModule
-          ),
-      },
-      {
-        path: ROUTER_UTILS.complaint.root,
-        loadChildren: () =>
-          import('@pages/admin/complaint/complaint.module').then(
-            (m) => m.ComplaintModule
-          ),
-      },
+      // {
+      //   path: ROUTER_UTILS.ticket.root,
+      //   loadChildren: () =>
+      //     import('@pages/admin/ticket/ticket.module').then(
+      //       (m) => m.TicketModule
+      //     ),
+      // },
+      // {
+      //   path: ROUTER_UTILS.complaint.root,
+      //   loadChildren: () =>
+      //     import('@pages/admin/complaint/complaint.module').then(
+      //       (m) => m.ComplaintModule
+      //     ),
+      // },
       {
         path: ROUTER_UTILS.survey.root,
         loadChildren: () =>
@@ -45,13 +45,13 @@ const routes: Routes = [
             (m) => m.SurveyModule
           ),
       },
-      {
-        path: ROUTER_UTILS.building.root,
-        loadChildren: () =>
-          import('@pages/admin/building/building.module').then(
-            (m) => m.BuildingModule
-          ),
-      },
+      // {
+      //   path: ROUTER_UTILS.building.root,
+      //   loadChildren: () =>
+      //     import('@pages/admin/building/building.module').then(
+      //       (m) => m.BuildingModule
+      //     ),
+      // },
       {
         path: ROUTER_UTILS.partnerContract.root,
         loadChildren: () =>
@@ -59,13 +59,13 @@ const routes: Routes = [
             (m) => m.PartnerContractModule
           ),
       },
-      {
-        path: ROUTER_UTILS.customer.root,
-        loadChildren: () =>
-          import('@pages/admin/customer/customer.module').then(
-            (m) => m.CustomerModule
-          ),
-      },
+      // {
+      //   path: ROUTER_UTILS.customer.root,
+      //   loadChildren: () =>
+      //     import('@pages/admin/customer/customer.module').then(
+      //       (m) => m.CustomerModule
+      //     ),
+      // },
       {
         path: ROUTER_UTILS.notification.root,
         loadChildren: () =>
@@ -85,13 +85,13 @@ const routes: Routes = [
       //   loadChildren: () =>
       //     import('@pages/admin/survey/survey.module').then((m) => m.SurveyModule),
       // },
-      {
-        path: ROUTER_UTILS.report.root,
-        loadChildren: () =>
-          import('@pages/admin/report/report.module').then(
-            (m) => m.ReportModule
-          ),
-      },
+      // {
+      //   path: ROUTER_UTILS.report.root,
+      //   loadChildren: () =>
+      //     import('@pages/admin/report/report.module').then(
+      //       (m) => m.ReportModule
+      //     ),
+      // },
       {
         path: ROUTER_UTILS.error.permissionDenied,
         component: Page403Component,
@@ -118,14 +118,14 @@ const routes: Routes = [
         (m) => m.PrivacyPolicyModule
       ),
   },
-  {
-    path: ROUTER_UTILS.feedback.public,
-    component: AuthLayoutComponent,
-    loadChildren: () =>
-      import('@pages/public/feedback-public/feedback-public.module').then(
-        (m) => m.FeedbackPublicModule
-      ),
-  },
+  // {
+  //   path: ROUTER_UTILS.feedback.public,
+  //   component: AuthLayoutComponent,
+  //   loadChildren: () =>
+  //     import('@pages/public/feedback-public/feedback-public.module').then(
+  //       (m) => m.FeedbackPublicModule
+  //     ),
+  // },
   { path: ROUTER_UTILS.error.permissionDenied, component: Page403Component },
   { path: ROUTER_UTILS.error.notFound, component: Page404Component },
   { path: ROUTER_UTILS.base.freeRoute, component: Page404Component },

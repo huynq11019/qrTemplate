@@ -28,12 +28,12 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CoreModule } from './core/core.module';
-import { ErrorInterceptor } from './core/interceptor/error.interceptor';
-import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
-import { LoadingInterceptor } from './core/interceptor/loading.interceptor';
+import { CoreModule } from '@core/core.module';
+import { ErrorInterceptor } from '@core/interceptor';
+import { JwtInterceptor } from '@core/interceptor';
+import { LoadingInterceptor } from '@core/interceptor';
 import { IconsProviderModule } from './icons-provider.module';
-import { SharedModule } from './shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 
 registerLocaleData(vi);
 

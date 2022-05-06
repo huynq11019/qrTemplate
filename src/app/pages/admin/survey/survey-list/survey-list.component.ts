@@ -8,7 +8,6 @@ import { SURVEY_STATUS } from '@shared/constants/survey.constants';
 import { Pageable } from '@shared/models/pageable.model';
 import { SurveyRequest } from '@shared/models/request/survey-request.model';
 import { ISurvey, Survey } from '@shared/models/survey.model';
-import { BuildingService } from '@shared/services/building.service';
 import { ToastService } from '@shared/services/helpers/toast.service';
 import { SurveyService } from '@shared/services/survey.service';
 import CommonUtil from '@shared/utils/common-utils';
@@ -55,7 +54,6 @@ export class SurveyListComponent implements OnInit {
     private toast: ToastService,
     private modalService: NzModalService,
     private surveyService: SurveyService,
-    private buildingService: BuildingService,
     private route: Router
   ) {}
 

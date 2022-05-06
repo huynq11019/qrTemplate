@@ -1,41 +1,32 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavigationExtras, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { PAGINATION } from '@shared/constants/pagination.constants';
-import {
-  SURVEY_COMPANY,
-  SURVEY_STAGE,
-} from '@shared/constants/survey.constants';
-import {
-  USER_LEVEL_CENTER,
-  USER_LEVEL_LEADER_MANAGEMENT,
-} from '@shared/constants/user.constant';
-import {
-  BuildingSurvey,
-  IBuildingSurvey,
-} from '@shared/models/building-survey.model';
-import { IBuilding } from '@shared/models/building.model';
-import { ChartSurvey } from '@shared/models/chart-survey.model';
-import { ICriteria } from '@shared/models/criteria.model';
-import { Pageable } from '@shared/models/pageable.model';
-import { IQuestion } from '@shared/models/question.model';
-import { SurveyResultSearchRequest } from '@shared/models/request/survey-result-search-request.model';
-import { SurveyResult } from '@shared/models/survey-result.model';
-import { ISurvey } from '@shared/models/survey.model';
-import { User } from '@shared/models/user.model';
-import { AccountService } from '@shared/services/account.service';
-import { AuthService } from '@shared/services/auth/auth.service';
-import { BuildingService } from '@shared/services/building.service';
-import { ToastService } from '@shared/services/helpers/toast.service';
-import { QuestionGroupService } from '@shared/services/question-group.service';
-import { SurveyService } from '@shared/services/survey.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NavigationExtras, Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+import {PAGINATION} from '@shared/constants/pagination.constants';
+import {SURVEY_COMPANY, SURVEY_STAGE, } from '@shared/constants/survey.constants';
+import {USER_LEVEL_CENTER, USER_LEVEL_LEADER_MANAGEMENT, } from '@shared/constants/user.constant';
+import {BuildingSurvey, IBuildingSurvey, } from '@shared/models/building-survey.model';
+import {IBuilding} from '@shared/models/building.model';
+import {ChartSurvey} from '@shared/models/chart-survey.model';
+import {ICriteria} from '@shared/models/criteria.model';
+import {Pageable} from '@shared/models/pageable.model';
+import {IQuestion} from '@shared/models/question.model';
+import {SurveyResultSearchRequest} from '@shared/models/request/survey-result-search-request.model';
+import {SurveyResult} from '@shared/models/survey-result.model';
+import {ISurvey} from '@shared/models/survey.model';
+import {User} from '@shared/models/user.model';
+import {AuthService} from '@shared/services/auth/auth.service';
+import {ToastService} from '@shared/services/helpers/toast.service';
+import {QuestionGroupService} from '@shared/services/question-group.service';
+import {SurveyService} from '@shared/services/survey.service';
 import CommonUtil from '@shared/utils/common-utils';
 import * as moment from 'moment';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { SurveyResultAdvanceSearchComponent } from './survey-result-advance-search/survey-result-advance-search.component';
-import { SurveyResultExportComponent } from './survey-result-export/survey-result-export.component';
+import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
+import {NzTableQueryParams} from 'ng-zorro-antd/table';
+import {
+  SurveyResultAdvanceSearchComponent
+} from './survey-result-advance-search/survey-result-advance-search.component';
+import {SurveyResultExportComponent} from './survey-result-export/survey-result-export.component';
 
 @Component({
   selector: 'app-survey-result',
@@ -241,9 +232,7 @@ export class SurveyResultComponent implements OnInit {
     private surveyService: SurveyService,
     private authService: AuthService,
     private toast: ToastService,
-    private buildingService: BuildingService,
     private questionGroupService: QuestionGroupService,
-    private accountService: AccountService,
     private modalService: NzModalService
   ) {
     const tabIndex =

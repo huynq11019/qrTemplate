@@ -28,10 +28,7 @@ import { ICustomer } from '@shared/models/customer.model';
 import { IRole } from '@shared/models/role.model';
 import { IUserLevel } from '@shared/models/user-level.models';
 import { User } from '@shared/models/user.model';
-import { AccountService } from '@shared/services/account.service';
 import { AuthService } from '@shared/services/auth/auth.service';
-import { BuildingService } from '@shared/services/building.service';
-import { CustomerService } from '@shared/services/customer.service';
 import { FileService } from '@shared/services/file.service';
 import { LoadingService } from '@shared/services/helpers/loading.service';
 import { ToastService } from '@shared/services/helpers/toast.service';
@@ -95,13 +92,10 @@ export class UpdateUserComponent implements OnInit {
     private fb: FormBuilder,
     private translate: TranslateService,
     private userService: UserService,
-    private buildingService: BuildingService,
     private roleService: RoleService,
-    private customerService: CustomerService,
     // private modalRef: NzModalRef,
     private toast: ToastService,
     private fileService: FileService,
-    private accountService: AccountService,
     private router: ActivatedRoute,
     private routerLink: Router,
     private loadingService: LoadingService,
@@ -150,8 +144,8 @@ export class UpdateUserComponent implements OnInit {
   // Load data
   initData(): void {
     this.getDataParam();
-    this.searchBuilding(true);
-    this.searchCompany(true);
+    // this.searchBuilding(true);
+    // this.searchCompany(true);
     this.findId();
     this.getUserLevel(true);
   }
@@ -359,10 +353,10 @@ export class UpdateUserComponent implements OnInit {
       this.contact = true;
     }
     if (this.contactObject?.organizationId) {
-      this.searchBuildingsByOrganizationId(
-        this.contactObject?.organizationId,
-        true
-      );
+      // this.searchBuildingsByOrganizationId(
+      //   this.contactObject?.organizationId,
+      //   true
+      // );
     }
     this.initForm();
     this.clearValid();
@@ -387,7 +381,7 @@ export class UpdateUserComponent implements OnInit {
         this.userLevelRole = this.user.userLevel || '';
         this.searchRoles(this.keyword, true);
         if (this.user?.organizationId) {
-          this.searchBuildingsByOrganizationId(this.user?.organizationId, true);
+          // this.searchBuildingsByOrganizationId(this.user?.organizationId, true);
         }
         this.initForm();
         this.clearValid();
@@ -404,10 +398,11 @@ export class UpdateUserComponent implements OnInit {
 
   // Lấy thông tin building fill ra ô select building **/
   searchBuilding(isLoading = false): void {
+    console.log('searchBuilding');
     if (!this.contact && !this.isLdap) {
-      this.accountService.getBuildings(isLoading).subscribe((res: any) => {
-        this.buildings = res.body?.data;
-      });
+      // this.accountService.getBuildings(isLoading).subscribe((res: any) => {
+      //   this.buildings = res.body?.data;
+      // });
     }
   }
 
@@ -425,43 +420,43 @@ export class UpdateUserComponent implements OnInit {
   }
 
   // Lấy thông tin company fill ra ô select company **/
-  searchCompany(isLoading = false): void {
-    this.customerService.findByCurrentUser(isLoading).subscribe((res: any) => {
-      this.customers = res.body?.data;
-    });
-  }
+  // searchCompany(isLoading = false): void {
+  //   this.customerService.findByCurrentUser(isLoading).subscribe((res: any) => {
+  //     this.customers = res.body?.data;
+  //   });
+  // }
 
   // Lấy thông tin building search theo công ty **/
-  searchBuildingsByOrganizationId(id: string, isLoading = false): void {
-    if (this.contact) {
-      this.customerService
-        .findBuildingsByOrganizationId(id, isLoading)
-        .subscribe((res: any) => {
-          this.buildings = res.body?.data;
-          if (this.buildings.length === 1) {
-            this.form
-              .get('buildingIds')
-              ?.setValue(this.buildings.map((item) => item.id));
-          }
-        });
-    } else {
-      if (this.user?.buildings) {
-      } else {
-        this.form.get('buildingIds')?.reset();
-      }
-      this.form.get('buildingIds')?.enable();
-      this.customerService
-        .findBuildingsByOrganizationId(id, isLoading)
-        .subscribe((res: any) => {
-          this.buildings = res.body?.data;
-          if (this.buildings.length === 1) {
-            this.form
-              .get('buildingIds')
-              ?.setValue(this.buildings.map((item) => item.id));
-          }
-        });
-    }
-  }
+  // searchBuildingsByOrganizationId(id: string, isLoading = false): void {
+  //   if (this.contact) {
+  //     this.customerService
+  //       .findBuildingsByOrganizationId(id, isLoading)
+  //       .subscribe((res: any) => {
+  //         this.buildings = res.body?.data;
+  //         if (this.buildings.length === 1) {
+  //           this.form
+  //             .get('buildingIds')
+  //             ?.setValue(this.buildings.map((item) => item.id));
+  //         }
+  //       });
+  //   } else {
+  //     if (this.user?.buildings) {
+  //     } else {
+  //       this.form.get('buildingIds')?.reset();
+  //     }
+  //     this.form.get('buildingIds')?.enable();
+  //     this.customerService
+  //       .findBuildingsByOrganizationId(id, isLoading)
+  //       .subscribe((res: any) => {
+  //         this.buildings = res.body?.data;
+  //         if (this.buildings.length === 1) {
+  //           this.form
+  //             .get('buildingIds')
+  //             ?.setValue(this.buildings.map((item) => item.id));
+  //         }
+  //       });
+  //   }
+  // }
 
   getUserLevel(isLoading = false): void {
     this.userService.findUserLevel(isLoading).subscribe((res: any) => {

@@ -6,9 +6,6 @@ import { IBuilding } from '@shared/models/building.model';
 import { ICustomerContact } from '@shared/models/customer-contact.model';
 import { ICustomer } from '@shared/models/customer.model';
 import { SurveyResultSearchRequest } from '@shared/models/request/survey-result-search-request.model';
-import { AccountService } from '@shared/services/account.service';
-import { BuildingService } from '@shared/services/building.service';
-import { CustomerService } from '@shared/services/customer.service';
 import { ToastService } from '@shared/services/helpers/toast.service';
 import CommonUtil from '@shared/utils/common-utils';
 import { differenceInCalendarDays } from 'date-fns';
@@ -42,9 +39,6 @@ export class SurveyResultAdvanceSearchComponent implements OnInit {
     private modalRef: NzModalRef,
     private toast: ToastService,
     private translateService: TranslateService,
-    private buildingService: BuildingService,
-    private accountService: AccountService,
-    private organizationService: CustomerService
   ) {
     this.initData();
   }
@@ -79,33 +73,33 @@ export class SurveyResultAdvanceSearchComponent implements OnInit {
   initData(): void {
     this.surveyResultRequest =
       this.modalRef?.getConfig()?.nzComponentParams || {};
-    this.accountService.getBuildings().subscribe((res: any) => {
-      this.buildings = res?.body?.data;
-    });
+    // this.accountService.getBuildings().subscribe((res: any) => {
+    //   this.buildings = res?.body?.data;
+    // });
 
-    this.organizationService
-      .search({ sortBy: 'name.asc' })
-      .subscribe((res: any) => {
-        this.organizations = res?.body?.data;
-        if (!!this?.surveyResultRequest?.organizationIds) {
-          const ids = this?.surveyResultRequest?.organizationIds?.filter(
-            (item) =>
-              !this.organizations
-                ?.map((organization) => organization?.id)
-                ?.includes(item)
-          );
-          if (!(!!ids && ids?.length > 0)) {
-            return;
-          }
-          this.organizationService
-            .findIds({ ids: ids || [] })
-            .subscribe((rs: any) => {
-              if (rs?.body?.success && !!rs?.body?.data) {
-                this.organizations = [...this.organizations, ...rs?.body?.data];
-              }
-            });
-        }
-      });
+    // this.organizationService
+    //   .search({ sortBy: 'name.asc' })
+    //   .subscribe((res: any) => {
+    //     this.organizations = res?.body?.data;
+    //     if (!!this?.surveyResultRequest?.organizationIds) {
+    //       const ids = this?.surveyResultRequest?.organizationIds?.filter(
+    //         (item) =>
+    //           !this.organizations
+    //             ?.map((organization) => organization?.id)
+    //             ?.includes(item)
+    //       );
+    //       if (!(!!ids && ids?.length > 0)) {
+    //         return;
+    //       }
+    //       this.organizationService
+    //         .findIds({ ids: ids || [] })
+    //         .subscribe((rs: any) => {
+    //           if (rs?.body?.success && !!rs?.body?.data) {
+    //             this.organizations = [...this.organizations, ...rs?.body?.data];
+    //           }
+    //         });
+    //     }
+    //   });
   }
 
   searchOrganizations(event: any): void {
@@ -113,9 +107,9 @@ export class SurveyResultAdvanceSearchComponent implements OnInit {
       keyword: event?.target?.value?.trim(),
       sortBy: 'name.asc',
     };
-    this.organizationService.search(option).subscribe((res: any) => {
-      this.organizations = res?.body?.data;
-    });
+    // this.organizationService.search(option).subscribe((res: any) => {
+    //   this.organizations = res?.body?.data;
+    // });
   }
 
   disabledBeforeStartAt(current: Date): boolean {
@@ -194,13 +188,13 @@ export class SurveyResultAdvanceSearchComponent implements OnInit {
     this.form?.controls.buildingIds?.valueChanges.subscribe((value) => {
       this.form?.get('organizationIds')?.setValue([]);
       if (!!value && value?.length > 0) {
-        this.organizationService
-          .findCustomers({ ids: value }, true)
-          .subscribe((response: any) => {
-            if (!!response && response?.body?.success) {
-              this.organizations = response?.body?.data;
-            }
-          });
+        // this.organizationService
+        //   .findCustomers({ ids: value }, true)
+        //   .subscribe((response: any) => {
+        //     if (!!response && response?.body?.success) {
+        //       this.organizations = response?.body?.data;
+        //     }
+        //   });
       } else {
         this.searchOrganizations('');
       }

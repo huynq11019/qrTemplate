@@ -20,9 +20,6 @@ import {
   SurveyTemplate,
 } from '@shared/models/survey-template.model';
 import { ISurvey, Survey } from '@shared/models/survey.model';
-import { AccountService } from '@shared/services/account.service';
-import { BuildingService } from '@shared/services/building.service';
-import { CustomerService } from '@shared/services/customer.service';
 import { ToastService } from '@shared/services/helpers/toast.service';
 import { QuestionGroupService } from '@shared/services/question-group.service';
 import { SurveyTemplateService } from '@shared/services/survey-template.service';
@@ -69,13 +66,10 @@ export class UpdateSurveyComponent implements OnInit {
     private modalService: NzModalService,
     private toast: ToastService,
     private surveyService: SurveyService,
-    private buildingService: BuildingService,
     private surveyTemplateService: SurveyTemplateService,
-    private customerService: CustomerService,
     private questionGroupService: QuestionGroupService,
     private router: ActivatedRoute,
     private route: Router,
-    private accountService: AccountService
   ) {
     this.router.paramMap.subscribe((response) => {
       this.id = response.get('id') || '';
@@ -223,9 +217,9 @@ export class UpdateSurveyComponent implements OnInit {
   }
 
   initData(): void {
-    this.accountService.getBuildings(true).subscribe((res: any) => {
-      this.buildings = res?.body?.data;
-    });
+    // this.accountService.getBuildings(true).subscribe((res: any) => {
+    //   this.buildings = res?.body?.data;
+    // });
     if (this.isDetail) {
       // this.buildings.push(this.s)
     }
@@ -335,14 +329,14 @@ export class UpdateSurveyComponent implements OnInit {
         this.isUpdate = false;
       }
       this.handleMapFormToSurvey(response.body?.data);
-      this.customerService
-        .findIds({ ids: response.body?.data?.organizationIds }, true)
-        .subscribe((res: any) => {
-          if (res?.body?.data && res?.body?.data?.length > 0) {
-            const data = res.body.data;
-            this.organizations = [...this.organizations, ...data];
-          }
-        });
+      // this.customerService
+      //   .findIds({ ids: response.body?.data?.organizationIds }, true)
+      //   .subscribe((res: any) => {
+      //     if (res?.body?.data && res?.body?.data?.length > 0) {
+      //       const data = res.body.data;
+      //       this.organizations = [...this.organizations, ...data];
+      //     }
+      //   });
       // this.surveyTemplateService.search({}, true).subscribe((res: any) => {
       //   this.surveyTemplates = res?.body?.data;
       // });
@@ -448,11 +442,11 @@ export class UpdateSurveyComponent implements OnInit {
       keyword: event?.target?.value.trim(),
       sortBy: 'name.asc',
     };
-    this.buildingService
-      .searchFloorByBuilding(this.form?.get('buildingIds')?.value, option, true)
-      .subscribe((response: any) => {
-        this.floors = response?.body?.data;
-      });
+    // this.buildingService
+    //   .searchFloorByBuilding(this.form?.get('buildingIds')?.value, option, true)
+    //   .subscribe((response: any) => {
+    //     this.floors = response?.body?.data;
+    //   });
   }
 
   // searchOrganization(keyword: any): void {
@@ -793,28 +787,28 @@ export class UpdateSurveyComponent implements OnInit {
 
   valueChangesForm(): void {
     this.form?.controls.buildingIds?.valueChanges?.subscribe((value) => {
-      let floorTmp = this.form.get('floorIds')?.value;
-      let orgTmp = this.form.get('organizationIds')?.value as Array<string>;
+      const floorTmp = this.form.get('floorIds')?.value;
+      const orgTmp = this.form.get('organizationIds')?.value as Array<string>;
       // this.form.get('floorIds')?.reset();
       // this.form.get('organizationIds')?.reset();
       if (value?.length === 1) {
-        this.buildingService
-          .searchFloorByBuilding(
-            this.form?.get('buildingIds')?.value,
-            { sortBy: 'name.asc' },
-            true
-          )
-          .subscribe((response: any) => {
-            this.floors = response?.body?.data;
-            floorTmp = floorTmp?.filter((item: string) => {
-              return response?.body?.data
-                ?.map((floor: IFloor) => {
-                  return floor?.id;
-                })
-                ?.includes(item);
-            });
-            this.form.get('floorIds')?.setValue(floorTmp);
-          });
+        // this.buildingService
+        //   .searchFloorByBuilding(
+        //     this.form?.get('buildingIds')?.value,
+        //     { sortBy: 'name.asc' },
+        //     true
+        //   )
+        //   .subscribe((response: any) => {
+        //     this.floors = response?.body?.data;
+        //     floorTmp = floorTmp?.filter((item: string) => {
+        //       return response?.body?.data
+        //         ?.map((floor: IFloor) => {
+        //           return floor?.id;
+        //         })
+        //         ?.includes(item);
+        //     });
+        //     this.form.get('floorIds')?.setValue(floorTmp);
+        //   });
         // this.customerService.findCustomers({ids: value}, true).subscribe((res: any) => {
         //   this.organizations = res?.body?.data;
         //   orgTmp = orgTmp?.filter((item: string) => {
@@ -826,19 +820,19 @@ export class UpdateSurveyComponent implements OnInit {
         // });
       } else {
         this.form.controls?.floorIds?.setValue([]);
-        this.customerService
-          .findCustomers({ ids: value }, true)
-          .subscribe((res: any) => {
-            this.organizations = res?.body?.data;
-            orgTmp = orgTmp?.filter((item: string) => {
-              return res?.body?.data
-                ?.map((org: ICustomer) => {
-                  return org?.id;
-                })
-                ?.includes(item);
-            });
-            this.form.get('organizationIds')?.setValue(orgTmp);
-          });
+        // this.customerService
+        //   .findCustomers({ ids: value }, true)
+        //   .subscribe((res: any) => {
+        //     this.organizations = res?.body?.data;
+        //     orgTmp = orgTmp?.filter((item: string) => {
+        //       return res?.body?.data
+        //         ?.map((org: ICustomer) => {
+        //           return org?.id;
+        //         })
+        //         ?.includes(item);
+        //     });
+        //     this.form.get('organizationIds')?.setValue(orgTmp);
+        //   });
         this.floors = [];
       }
     });
@@ -846,35 +840,35 @@ export class UpdateSurveyComponent implements OnInit {
       let orgTmp = this.form.get('organizationIds')?.value;
       // this.form.get('organizationIds')?.reset();
       if (value?.length > 0) {
-        this.customerService
-          .findFloors({ ids: value })
-          .subscribe((res: any) => {
-            this.organizations = res?.body?.data;
-            orgTmp = orgTmp?.filter((item: string) => {
-              return res?.body?.data
-                ?.map((org: ICustomer) => {
-                  return org?.id;
-                })
-                ?.includes(item);
-            });
-            this.form.get('organizationIds')?.setValue(orgTmp);
-          });
+        // this.customerService
+        //   .findFloors({ ids: value })
+        //   .subscribe((res: any) => {
+        //     this.organizations = res?.body?.data;
+        //     orgTmp = orgTmp?.filter((item: string) => {
+        //       return res?.body?.data
+        //         ?.map((org: ICustomer) => {
+        //           return org?.id;
+        //         })
+        //         ?.includes(item);
+        //     });
+        //     this.form.get('organizationIds')?.setValue(orgTmp);
+        //   });
       } else {
         orgTmp = this.form.get('organizationIds')?.value;
         const buildingIds = this.form?.controls.buildingIds.value;
-        this.customerService
-          .findCustomers({ ids: buildingIds }, true)
-          .subscribe((res: any) => {
-            this.organizations = res?.body?.data;
-            orgTmp = orgTmp?.filter((item: string) => {
-              return res?.body?.data
-                ?.map((org: ICustomer) => {
-                  return org?.id;
-                })
-                ?.includes(item);
-            });
-            this.form.get('organizationIds')?.setValue(orgTmp);
-          });
+        // this.customerService
+        //   .findCustomers({ ids: buildingIds }, true)
+        //   .subscribe((res: any) => {
+        //     this.organizations = res?.body?.data;
+        //     orgTmp = orgTmp?.filter((item: string) => {
+        //       return res?.body?.data
+        //         ?.map((org: ICustomer) => {
+        //           return org?.id;
+        //         })
+        //         ?.includes(item);
+        //     });
+        //     this.form.get('organizationIds')?.setValue(orgTmp);
+        //   });
       }
     });
 

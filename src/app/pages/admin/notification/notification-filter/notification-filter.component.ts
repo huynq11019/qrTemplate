@@ -13,9 +13,6 @@ import { Building } from '@shared/models/building.model';
 import { Customer } from '@shared/models/customer.model';
 import { Floor } from '@shared/models/floor.model';
 import { User } from '@shared/models/user.model';
-import { AccountService } from '@shared/services/account.service';
-import { BuildingService } from '@shared/services/building.service';
-import { CustomerService } from '@shared/services/customer.service';
 import { UserService } from '@shared/services/user.service';
 import CommonUtil from '@shared/utils/common-utils';
 import { differenceInCalendarDays } from 'date-fns';
@@ -62,14 +59,11 @@ export class NotificationFilterComponent implements OnInit {
 
   constructor(
     private modalRef: NzModalRef,
-    private accountService: AccountService,
-    private buildingService: BuildingService,
-    private customerService: CustomerService,
     private userService: UserService,
     private changeDetectorRef: ChangeDetectorRef,
     private fb: FormBuilder
   ) {
-    this.getBuildings();
+    // this.getBuildings();
   }
 
   ngOnInit(): void {
@@ -77,12 +71,12 @@ export class NotificationFilterComponent implements OnInit {
     this.valueChanges();
     this.getCustomersFromBuilding();
   }
-
-  getBuildings(): void {
-    this.accountService.getBuildings(true).subscribe((res) => {
-      this.buildings = res?.body?.data as Array<Building>;
-    });
-  }
+  //
+  // getBuildings(): void {
+  //   this.accountService.getBuildings(true).subscribe((res: { body: { data: Building[]; }; }) => {
+  //     this.buildings = res?.body?.data as Array<Building>;
+  //   });
+  // }
 
   initForm(): void {
     this.form = this.fb.group({
@@ -100,16 +94,16 @@ export class NotificationFilterComponent implements OnInit {
   getExitedData(): void {
     if (this.form.get('buildingIds')?.value) {
       const buildingId = this.form.get('buildingIds')?.value;
-      this.buildingService
-        .searchFloorByBuilding(buildingId, {}, true)
-        .subscribe((response: any) => {
-          this.floors = response?.body?.data;
-        });
-      this.customerService
-        .findCustomers({ ids: buildingId })
-        .subscribe((res: any) => {
-          this.organizations = res?.body?.data;
-        });
+      // this.buildingService
+      //   .searchFloorByBuilding(buildingId, {}, true)
+      //   .subscribe((response: any) => {
+      //     this.floors = response?.body?.data;
+      //   });
+      // this.customerService
+      //   .findCustomers({ ids: buildingId })
+      //   .subscribe((res: any) => {
+      //     this.organizations = res?.body?.data;
+      //   });
     }
   }
 
@@ -190,16 +184,16 @@ export class NotificationFilterComponent implements OnInit {
             pageIndex: PAGINATION.PAGE_DEFAULT,
             pageSize: PAGINATION.MAX_SIZE_DEFAULT,
           };
-          this.buildingService
-            .searchFloorByBuilding(buildingId, request, true)
-            .subscribe((response: any) => {
-              this.floors = response?.body?.data;
-            });
-          this.customerService
-            .findCustomers({ ids: value })
-            .subscribe((res: any) => {
-              this.organizations = res?.body?.data;
-            });
+          // this.buildingService
+          //   .searchFloorByBuilding(buildingId, request, true)
+          //   .subscribe((response: any) => {
+          //     this.floors = response?.body?.data;
+          //   });
+          // this.customerService
+          //   .findCustomers({ ids: value })
+          //   .subscribe((res: any) => {
+          //     this.organizations = res?.body?.data;
+          //   });
           this.form?.get('floorIds')?.setValue(null);
           this.form?.get('organizationIds')?.setValue(null);
         }
@@ -212,11 +206,11 @@ export class NotificationFilterComponent implements OnInit {
         }
       } else if (value && value.length > 1) {
         if (this.type === CUSTOMER) {
-          this.customerService
-            .findCustomers({ ids: value })
-            .subscribe((res: any) => {
-              this.organizations = res?.body?.data;
-            });
+          // this.customerService
+          //   .findCustomers({ ids: value })
+          //   .subscribe((res: any) => {
+          //     this.organizations = res?.body?.data;
+          //   });
           this.floors = [];
           this.form?.get('floorIds')?.setValue(null);
           this.form?.get('organizationIds')?.setValue(null);
@@ -234,21 +228,21 @@ export class NotificationFilterComponent implements OnInit {
       if (this.type === CUSTOMER) {
         if (value) {
           if (value && value.length > 0) {
-            this.customerService
-              .findFloors({ ids: value })
-              .subscribe((res: any) => {
-                this.organizations = res?.body?.data;
-                this.form?.get('organizationIds')?.setValue(null);
-              });
+            // this.customerService
+            //   .findFloors({ ids: value })
+            //   .subscribe((res: any) => {
+            //     this.organizations = res?.body?.data;
+            //     this.form?.get('organizationIds')?.setValue(null);
+            //   });
           } else {
             const buildingIds = this.form?.controls.buildingIds?.value || [];
             if (buildingIds.length > 0) {
-              this.customerService
-                .findCustomers({ ids: buildingIds })
-                .subscribe((res: any) => {
-                  this.organizations = res?.body?.data;
-                  this.form?.get('organizationIds')?.setValue(null);
-                });
+              // this.customerService
+              //   .findCustomers({ ids: buildingIds })
+              //   .subscribe((res: any) => {
+              //     this.organizations = res?.body?.data;
+              //     this.form?.get('organizationIds')?.setValue(null);
+              //   });
             }
           }
         }

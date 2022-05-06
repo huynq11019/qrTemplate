@@ -21,10 +21,7 @@ import { Customer, ICustomer } from '@shared/models/customer.model';
 import { Floor, IFloor } from '@shared/models/floor.model';
 import { INotification, Notification } from '@shared/models/notification.model';
 import { IUser } from '@shared/models/user.model';
-import { AccountService } from '@shared/services/account.service';
 import { AuthService } from '@shared/services/auth/auth.service';
-import { BuildingService } from '@shared/services/building.service';
-import { CustomerService } from '@shared/services/customer.service';
 import { FileService } from '@shared/services/file.service';
 import { ToastService } from '@shared/services/helpers/toast.service';
 import { NotificationService } from '@shared/services/notification.service';
@@ -83,11 +80,8 @@ export class NotificationUpdateComponent implements OnInit, AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private translate: TranslateService,
-    private buildingService: BuildingService,
     private fileService: FileService,
     private notificationService: NotificationService,
-    private customerService: CustomerService,
-    private accountService: AccountService,
     private $localStorage: LocalStorageService,
     private authService: AuthService,
     private toast: ToastService
@@ -134,8 +128,6 @@ export class NotificationUpdateComponent implements OnInit, AfterViewInit {
     this.form?.controls.buildingIds?.valueChanges.subscribe((value) => {
       if (!this.isInternal) {
         if (value.length === 1) {
-          this.getFloorsByBuildings(value[0]);
-          this.getCustomersByBuildings(value);
         } else {
           this.form.controls.floorIds?.setValue(null);
           this.form.controls.customerIds?.setValue(null);
@@ -288,11 +280,11 @@ export class NotificationUpdateComponent implements OnInit, AfterViewInit {
             pageIndex: PAGINATION.PAGE_DEFAULT,
             pageSize: PAGINATION.MAX_SIZE_DEFAULT,
           };
-          this.buildingService
-            .searchFloorByBuilding(buildingIds[0], request)
-            .subscribe((res) => {
-              this.floors = res.body?.data as Array<Floor>;
-            });
+          // this.buildingService
+          //   .searchFloorByBuilding(buildingIds[0], request)
+          //   .subscribe((res) => {
+          //     this.floors = res.body?.data as Array<Floor>;
+          //   });
         } else {
           this.form.controls.floorIds?.setValue(null);
           this.floors = [];
@@ -475,24 +467,27 @@ export class NotificationUpdateComponent implements OnInit, AfterViewInit {
   }
 
   getBuildings(): void {
-    this.accountService.getBuildings(true).subscribe((res) => {
-      this.buildings = res?.body?.data as Array<Building>;
-    });
+    console.log('getBuildings');
+    // this.accountService.getBuildings(true).subscribe((res) => {
+    //   this.buildings = res?.body?.data as Array<Building>;
+    // });
   }
 
   getCustomersByFloors(ids: any): void {
-    this.customerService.findFloors(ids, true).subscribe((res: any) => {
-      this.customers = res.body?.data;
-    });
+    console.log('getCustomersByFloors');
+    // this.customerService.findFloors(ids, true).subscribe((res: any) => {
+    //   this.customers = res.body?.data;
+    // });
   }
 
   getCustomersByBuildings(ids: any): void {
     const request = {
       ids,
     };
-    this.customerService.findCustomers(request, true).subscribe((res: any) => {
-      this.customers = res.body?.data;
-    });
+    console.log('getCustomersByBuildings');
+    // this.customerService.findCustomers(request, true).subscribe((res: any) => {
+    //   this.customers = res.body?.data;
+    // });
   }
 
   getFloorsByBuildings(buildingId: string): void {
@@ -500,11 +495,11 @@ export class NotificationUpdateComponent implements OnInit, AfterViewInit {
       pageIndex: PAGINATION.PAGE_DEFAULT,
       pageSize: PAGINATION.MAX_SIZE_DEFAULT,
     };
-    this.buildingService
-      .searchFloorByBuilding(buildingId, request, true)
-      .subscribe((res) => {
-        this.floors = res.body?.data as Array<Floor>;
-      });
+    // this.buildingService
+    //   .searchFloorByBuilding(buildingId, request, true)
+    //   .subscribe((res) => {
+    //     this.floors = res.body?.data as Array<Floor>;
+    //   });
   }
 
   getNotificationById(notificationId: string): void {
@@ -528,11 +523,11 @@ export class NotificationUpdateComponent implements OnInit, AfterViewInit {
             );
             this.form.controls.buildingIds?.setValue(buildingIds);
           } else {
-            this.accountService.getBuildings(true).subscribe((reS) => {
-              this.buildings = reS?.body?.data || [];
-              const buildingIds = this.mappingBuildings(this.buildings);
-              this.form.controls.buildingIds?.setValue(buildingIds);
-            });
+            // this.accountService.getBuildings(true).subscribe((reS) => {
+            //   this.buildings = reS?.body?.data || [];
+            //   const buildingIds = this.mappingBuildings(this.buildings);
+            //   this.form.controls.buildingIds?.setValue(buildingIds);
+            // });
           }
         } else {
           if (
@@ -567,11 +562,11 @@ export class NotificationUpdateComponent implements OnInit, AfterViewInit {
             );
             this.getCustomersByBuildings(buildingIds);
           } else {
-            this.accountService.getBuildings(true).subscribe((response) => {
-              this.buildings = response?.body?.data as Array<Building>;
-              const buildingIds = this.mappingBuildings(this.buildings);
-              this.form.controls.buildingIds?.setValue(buildingIds);
-            });
+            // this.accountService.getBuildings(true).subscribe((response) => {
+            //   this.buildings = response?.body?.data as Array<Building>;
+            //   const buildingIds = this.mappingBuildings(this.buildings);
+            //   this.form.controls.buildingIds?.setValue(buildingIds);
+            // });
           }
         }
       }

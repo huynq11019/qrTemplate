@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   myAuthorities(userId: string): Observable<EntityResponseType> {
-    return this.http.get<any>(`${API_IAM}/users/${userId}/authorities`, {
+    return this.http.get<any>(`${API_IAM}/me/authorities`, {
       observe: 'response',
     });
   }
