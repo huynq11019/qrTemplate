@@ -141,3 +141,58 @@ nz-content {
   text-align: right !important;
   padding-right: 15px;
 }
+
+.btn-user {
+  border: 1px solid rgba(0, 84, 165, 0);
+  transition: border 0.5s ease-out;
+}
+
+.btn-user:hover {
+  border: 1px solid #0054A5;
+}
+
+.user-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 2rem 1rem;
+  background-color: #f9fafe;
+}
+
+.user-card .user-card__name {
+  flex-grow: 1;
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 500;
+  padding-left: 1rem;
+}
+
+::ng-deep .user-dropdown-menu {
+  width: 340px;
+}
+
+::ng-deep .user-dropdown-menu .dropdown-card {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  //border-radius: 15px;
+  -webkit-box-shadow: 0px 0px 50px 0px rgba(82, 63, 105, 0.15);
+}
+
+.cart-container {
+  background-color: #FFFFFF;
+}
+.card-item:hover {
+  background-color: rgb(190, 190, 190, 0.1);
+  color: #0054A5;
+}
+.notification__custom {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  border-top: 1px solid #f7f8fa;
+  padding: 1.6rem 1.5rem;
+}

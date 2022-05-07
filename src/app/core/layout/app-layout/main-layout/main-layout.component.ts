@@ -23,7 +23,8 @@ export class MainLayoutComponent implements OnInit {
   title = '';
   isDashboard = false;
   LANGUAGES_CONST = LANGUAGES_CONST;
-
+  VI = LANGUAGES_CONST.VI.code;
+  EN = LANGUAGES_CONST.EN.code;
   constructor(
     public loadingService: LoadingService,
     private authService: AuthService,
@@ -110,5 +111,10 @@ export class MainLayoutComponent implements OnInit {
 
   navigateDashboard(): void {
     this.router.navigate(['/dashboard']);
+  }
+
+  getImg(img: string): string {
+    // return this.currentUser.avatarFileId + '?token=' + this.authService.getToken();
+    return img + '?token=' + this.authService.getToken();
   }
 }

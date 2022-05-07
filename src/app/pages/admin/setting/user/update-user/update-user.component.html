@@ -25,9 +25,9 @@
             <div class="col-6 mb-5 pl-5">
               <div class="row mb-4">
                 <div class="col-12">
-                  <upload-image [action]="(imageUrl? imageUrl : null)" [acceptTypeFiles]="['image']" className="image"
+                  <app-upload-image [action]="(imageUrl? imageUrl : null)" [acceptTypeFiles]="['image']" className="image"
                     nzTooltipPlacement="top" (emitter)="getFiles($event)" nz-tooltip>
-                  </upload-image>
+                  </app-upload-image>
                 </div>
               </div>
 
@@ -374,3 +374,4 @@
 
 <mb-modal [title]="groupConfirmUser.title" [content]="groupConfirmUser.content" [okText]="groupConfirmUser.okText"
   [btnCentered]="true" [isVisible]="isVisible" [callBack]="groupConfirmUser.callBack" (emitter)="handleConfirm($event)">
+</mb-modal>

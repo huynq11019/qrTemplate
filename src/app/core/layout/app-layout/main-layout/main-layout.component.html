@@ -1,10 +1,15 @@
 <nz-layout class="app-layout" *ngIf="currentUser">
-  <nz-sider class="menu-sidebar ant-layout-sider-custom" nzCollapsible nzWidth="320px" nzBreakpoint="xxl"
-    [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+  <nz-sider class="menu-sidebar ant-layout-sider-custom"
+            nzCollapsible
+            nzWidth="320px"
+            nzBreakpoint="xxl"
+            [(nzCollapsed)]="isCollapsed"
+            [nzTrigger]="null">
     <div class="sidebar-logo">
       <a (click)="navigateDashboard()">
-        <img [ngClass]="isCollapsed ? 'sidebar-logo-default' : 'sidebar-logo-resize'" src="assets/images/amc-logo.svg"
-          alt="logo">
+        <img [ngClass]="isCollapsed ? 'sidebar-logo-default' : 'sidebar-logo-resize'"
+             src="assets/images/amc-logo.svg"
+             alt="logo">
       </a>
     </div>
     <app-sidebar [isCollapsed]="isCollapsed"></app-sidebar>
@@ -15,39 +20,105 @@
         <div class="d-flex">
           <div class="col">
             <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-              <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+              <i class="trigger"
+                 nz-icon
+                 [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+              ></i>
             </span>
             <span class="layout-header-title">
               {{ title | translate }}
             </span>
           </div>
-          <div class="col pr-3 text-right-header">
+          <div class="col pr-3 text-right">
             <div class="layout-header-information">
-              <button class="btn-language" nz-button nz-popover nzPopoverTrigger="click" [(nzPopoverVisible)]="visible"
-                [nzPopoverContent]="languageTemplate">
-                <img *ngIf="currentLanguage === LANGUAGES_CONST.VI.code" src="assets/images/icon/vietnam.png" alt="vi">
-                <img *ngIf="currentLanguage === LANGUAGES_CONST.EN.code" src="assets/images/icon/english.png" alt="en">
+              <button
+                class="btn-language"
+                nz-button
+                nz-popover
+                nzPopoverTrigger="click"
+                [(nzPopoverVisible)]="visible"
+                [nzPopoverContent]="languageTemplate"
+              >
+                <img *ngIf="currentLanguage === VI" src="assets/images/icon/vietnam.png" alt="vi">
+                <img *ngIf="currentLanguage === EN" src="assets/images/icon/english.png" alt="en">
               </button>
               <ng-template #languageTemplate>
                 <div class="language-form">
-                  <p (click)="onChangeLanguage(LANGUAGES_CONST.VI.code)"><img src="assets/images/icon/vietnam.png"
-                      alt="vi">
+                  <p (click)="onChangeLanguage(VI)"><img src="assets/images/icon/vietnam.png" alt="vi">
                     <span class="ml-2">{{ 'common.vi' | translate }}</span>
                   </p>
-                  <p (click)="onChangeLanguage(LANGUAGES_CONST.EN.code)"><img src="assets/images/icon/english.png"
-                      alt="en">
+                  <p (click)="onChangeLanguage(EN)"><img src="assets/images/icon/english.png" alt="en">
                     <span class="ml-2">{{ 'common.en' | translate }}</span>
                   </p>
                 </div>
               </ng-template>
-              <span>{{'common.hello' | translate}}</span>
-              <span class="font-weight-bold">{{getShortName(currentUser?.fullName)}}</span>
               <nz-divider nzType="vertical"></nz-divider>
-              <button class="btn-logout" nz-button nzType="default">
-                <a (click)="logout()">
-                  {{ 'model.logout.title' | translate }}
-                </a>
+              <button class="btn-user ant-btn"
+                      nz-dropdown [nzDropdownMenu]="menu1"
+                      [nzTrigger]="'click'"
+                      [nzOverlayClassName]="'user-dropdown-menu'"
+                      nzPlacement="bottomRight">
+                <span class="mr-1">{{'common.hello' | translate}}</span>
+                <span class="font-weight-bold"> {{getShortName(currentUser?.fullName)}}
+                  </span>
               </button>
+              <nz-dropdown-menu #menu1="nzDropdownMenu">
+                <!--                <ul nz-menu>-->
+                <!--                  <li nz-menu-item>Hồ sơ cá nhân </li>-->
+                <!--                  <li nz-menu-item (click)="logout()"> {{ 'model.logout.title' | translate }}</li>-->
+                <!--                </ul>-->
+                <div class="dropdown-card">
+                  <div class="user-card"
+                       style="background-image: url(/assets/images/bg-user-card.jpg);">
+                    <div class="user-card__avatar">
+                      <nz-avatar nzIcon="user" nzSize="large"
+                                 nzSrc="{{this.getImg('http://192.168.2.100:8013/api/files/'+this.currentUser?.avatarFileId+'/view')}}"></nz-avatar>
+                    </div>
+                    <div class="user-card__name">
+                      {{getShortName(currentUser?.fullName)}}
+                    </div>
+                  </div>
+                  <div class="cart-container">
+                    <div class="d-flex p-4 card-item ">
+                      <div class="col-2 pl-0">
+                        <i nz-icon nzType="profile" nzTheme="outline" style="font-size: 45px; color: #0054A5"></i>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-bold">
+                          Hồ sơ cá nhân
+                        </div>
+                        <p>Thông tin cá nhân</p>
+                      </div>
+                      <div class="col-1 m-auto">
+                        <i nz-icon nzType="right" nzTheme="outline"></i>
+                      </div>
+                    </div>
+                    <div class="d-flex p-4 card-item">
+                      <div class="col-2 pl-0">
+                        <i nz-icon nzType="profile" nzTheme="outline" style="font-size: 45px; color: #0054A5"></i>
+                      </div>
+                      <div class="col font-weight-bold m-auto">
+                        Đổi mật khẩu
+                      </div>
+                      <div class="col-1 m-auto">
+                        <i nz-icon nzType="right" nzTheme="outline"></i>
+                      </div>
+                    </div>
+                    <div class="notification__custom kt-space-between">
+                      <button nz-button nzType="primary"
+                              (click)="logout()"
+                      >
+                        {{ 'model.logout.title' | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </nz-dropdown-menu>
+              <!--              <button class="btn-logout" nz-button nzType="default">-->
+              <!--                <a (click)="logout()">-->
+              <!--                  {{ 'model.logout.title' | translate }}-->
+              <!--                </a>-->
+              <!--              </button>-->
             </div>
           </div>
         </div>
