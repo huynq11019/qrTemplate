@@ -11,15 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install NPM
+      - name:  setup nodejs
+        uses: actions/setup-node@v1
+          with:
+            node-version: "14.x"
+      - name: npm dependencies
         run: npm install
-      - name: Update Npm
-        run: npm update
-      - name: Typescript compiler
-        uses: iCrawl/action-tsc@v1
-      - name: NpM angular CLI
-        uses: npm install angular-cli
-      - name: Angular CLI build
+      - name: build and deploy
         run: npm run build:qa
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
