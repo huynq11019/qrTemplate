@@ -34,6 +34,12 @@ import { JwtInterceptor } from '@core/interceptor';
 import { LoadingInterceptor } from '@core/interceptor';
 import { IconsProviderModule } from './icons-provider.module';
 import { SharedModule } from '@shared/shared.module';
+import {environment} from '@env/environment';
+import {AngularFireDatabaseModule} from '@angular/fire/compat/database';
+import {AngularFireStorageModule} from '@angular/fire/compat/storage';
+import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
+import {AngularFireAuthModule} from '@angular/fire/compat/auth';
+import {AngularFireModule} from '@angular/fire/compat';
 
 registerLocaleData(vi);
 
@@ -69,6 +75,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
     NzFormModule,
     NzMenuModule,
     NzSpinModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule, // for firestore
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },

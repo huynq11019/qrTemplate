@@ -38,13 +38,13 @@ const routes: Routes = [
       //       (m) => m.ComplaintModule
       //     ),
       // },
-      {
-        path: ROUTER_UTILS.survey.root,
-        loadChildren: () =>
-          import('@pages/admin/survey/survey.module').then(
-            (m) => m.SurveyModule
-          ),
-      },
+      // {
+      //   path: ROUTER_UTILS.survey.root,
+      //   loadChildren: () =>
+      //     import('@pages/admin/survey/survey.module').then(
+      //       (m) => m.SurveyModule
+      //     ),
+      // },
       // {
       //   path: ROUTER_UTILS.building.root,
       //   loadChildren: () =>
@@ -52,13 +52,13 @@ const routes: Routes = [
       //       (m) => m.BuildingModule
       //     ),
       // },
-      {
-        path: ROUTER_UTILS.partnerContract.root,
-        loadChildren: () =>
-          import('@pages/admin/partner-contract/partner-contract.module').then(
-            (m) => m.PartnerContractModule
-          ),
-      },
+      // {
+      //   path: ROUTER_UTILS.partnerContract.root,
+      //   loadChildren: () =>
+      //     import('@pages/admin/partner-contract/partner-contract.module').then(
+      //       (m) => m.PartnerContractModule
+      //     ),
+      // },
       // {
       //   path: ROUTER_UTILS.customer.root,
       //   loadChildren: () =>
@@ -66,13 +66,13 @@ const routes: Routes = [
       //       (m) => m.CustomerModule
       //     ),
       // },
-      {
-        path: ROUTER_UTILS.notification.root,
-        loadChildren: () =>
-          import('@pages/admin/notification/notification.module').then(
-            (m) => m.NotificationModule
-          ),
-      },
+      // {
+      //   path: ROUTER_UTILS.notification.root,
+      //   loadChildren: () =>
+      //     import('@pages/admin/notification/notification.module').then(
+      //       (m) => m.NotificationModule
+      //     ),
+      // },
       {
         path: ROUTER_UTILS.setting.root,
         loadChildren: () =>

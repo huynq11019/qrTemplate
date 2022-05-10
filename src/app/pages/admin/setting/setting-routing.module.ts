@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@core/guard/auth.guard';
 import { ROUTER_UTILS } from '@shared/utils/router.utils';
-import { ActionLogDetailComponent } from './action-log/action-log-detail/action-log-detail.component';
-import { ActionLogComponent } from './action-log/action-log.component';
 import { RoleComponent } from './role/role.component';
 import { UpdateUserComponent } from './user/update-user/update-user.component';
 import { UserComponent } from './user/user.component';
@@ -45,24 +43,24 @@ const routes: Routes = [
       title: 'model.role.title',
     },
   },
-  {
-    path: ROUTER_UTILS.setting.actionLog,
-    component: ActionLogComponent,
-    canActivate: [AuthGuard],
-    data: {
-      authorities: ['action_log:view'],
-      title: 'model.action-log.title',
-    },
-  },
-  {
-    path: ROUTER_UTILS.setting.actionLogDetail,
-    component: ActionLogDetailComponent,
-    canActivate: [AuthGuard],
-    data: {
-      authorities: ['action_log:view'],
-      title: 'model.action-log.detail.title',
-    },
-  },
+  // {
+  //   path: ROUTER_UTILS.setting.actionLog,
+  //   component: ActionLogComponent,
+  //   canActivate: [AuthGuard],
+  //   data: {
+  //     authorities: ['action_log:view'],
+  //     title: 'model.action-log.title',
+  //   },
+  // },
+  // {
+  //   path: ROUTER_UTILS.setting.actionLogDetail,
+  //   component: ActionLogDetailComponent,
+  //   canActivate: [AuthGuard],
+  //   data: {
+  //     authorities: ['action_log:view'],
+  //     title: 'model.action-log.detail.title',
+  //   },
+  // },
 ];
 @NgModule({
   declarations: [],

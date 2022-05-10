@@ -10,8 +10,6 @@ import { AdvancedSearchUserComponent } from './user/advanced-search-user/advance
 import { ChangePasswordComponent } from './user/change-password/change-password.component';
 import { UpdateUserComponent } from './user/update-user/update-user.component';
 import { UserComponent } from './user/user.component';
-import { ActionLogComponent } from './action-log/action-log.component';
-import { ActionLogDetailComponent } from './action-log/action-log-detail/action-log-detail.component';
 
 @NgModule({
   declarations: [
@@ -23,16 +21,9 @@ import { ActionLogDetailComponent } from './action-log/action-log-detail/action-
     ChangePasswordComponent,
     AdvancedSearchUserComponent,
     AdvancedSearchRoleComponent,
-    ActionLogComponent,
-    ActionLogDetailComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    SettingRoutingModule,
-  ],
+  imports: [CommonModule, SharedModule, SettingRoutingModule],
   providers: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class SettingModule {
-}
+export class SettingModule {}
