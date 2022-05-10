@@ -11,11 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name:  setup nodejs
-        uses: actions/setup-node@v1
-          with:
-            node-version: "14.x"
-      - name: npm dependencies
         run: npm install
       - name: build and deploy
         run: npm run build:qa
